@@ -13,23 +13,22 @@ import '../models/login.dart';
 class AuthService extends ChangeNotifier {
   User? user;
 
-  login(Login login) async {
-    await DioClient(dio: new Dio())
-        .post("auth/me", body: login.toMap())
+  Future<User?> login(Login login) async {
+    return await DioClient(dio: new Dio())
+        .post("auth/login", body: login.toMap())
         .then((value) {
       log("$value");
       User? user = User.fromMap(value['user']);
       NetworkInfo.token = value["token"];
       FlutterSecureStorage storage = new FlutterSecureStorage();
       storage.write(key: "token", value: NetworkInfo.token);
-      if (user != null) {
-        this.user = user;
-      } else {
-        throw RequestException("Problème de réception de donnée");
-      }
+      this.user = user;
+      return user;
     }).onError((error, stackTrace) {
       log("Erreur de récupération de l'utilisateur courant",
           error: error, stackTrace: stackTrace);
+
+      throw error ?? "";
     });
   }
 
