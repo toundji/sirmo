@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from '../createDto/create-role.dto';
 import { Repository } from 'typeorm';
 import { Role } from '../entities/role.entity';
@@ -16,7 +16,14 @@ export class RoleService {
   }
 
   createAll(createRoleDto: CreateRoleDto[]) {
-    return this.roleRepository.save(createRoleDto);
+    try {
+      return this.roleRepository.save(createRoleDto);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
   }
 
   findAll() {
@@ -28,9 +35,9 @@ export class RoleService {
   }
 
   findOne(id: number) {
-    try{return this.roleRepository.findOneOrFail(id);}catch(e){
-      throw new NotFoundException("Recupération d'un rôle", e.message);
-    }
+    return this.roleRepository.findOneOrFail(id).catch((e)=>{
+      throw new NotFoundException("Le role spécifié n'existe pas");
+    });
   }
 
  

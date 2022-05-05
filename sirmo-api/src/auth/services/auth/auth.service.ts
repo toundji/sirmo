@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { compare } from "bcrypt";
 import { User } from "src/principale/entities/user.entity";
@@ -24,9 +31,8 @@ export class AuthService {
     const user = await this.userService.findOneByPseudo(username);
 
     if (!user) {
-      throw new HttpException(
-        "Impossible de trouver l'utilisateur avec le pseudo",
-        HttpStatus.UNAUTHORIZED,
+      throw new UnauthorizedException(
+        "Numéro de téléphone ou mot de passe invalide",
       );
     }
 

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateZemMotoDto } from '../createDto/create-zem-moto.dto';
@@ -9,6 +9,7 @@ import { ZemMoto } from '../entities/zem-moto.entity';
 import { Zem } from '../entities/zem.entity';
 import { MotoService } from './moto.service';
 import { ZemService } from './zem.service';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class ZemMotoService {
@@ -28,13 +29,25 @@ export class ZemMotoService {
     Object.keys(createZemMotoDto).forEach((cle) => {
       zemMoto[cle] = createZemMotoDto[cle];
     });
-    const zem: Zem = await this.zemService.findOne(createZemMotoDto.zem_id)
-    zemMoto.zem = zem;
-    if(zem.moto){}
+    let zem: Zem ;
+    try {
+      zem = await this.zemService.findOne(createZemMotoDto.zem_id)
+      zemMoto.zem = zem;
+      if(zem.moto){}
+    } catch (error) {
+      throw new NotFoundException("Le zem spécifier n'existe pas");
+    }
+ 
 
-    const moto: Moto = await this.motoService.findOne(createZemMotoDto.moto_id);
-    if(moto.zem){}
-    zemMoto.moto = moto;
+    let moto: Moto;
+    try {
+      moto = await this.motoService.findOne(createZemMotoDto.moto_id);
+      if(moto.zem){}
+      zemMoto.moto = moto;
+    } catch (error) {
+      throw new NotFoundException("La moto spécifiée n'existe pas");
+    }
+    
 
     moto.zem = zem;
     await this.motoService.edit(moto.id, moto);
@@ -48,7 +61,15 @@ export class ZemMotoService {
   createValidZemMoto(
     zemMoto: ZemMoto,
   ): Promise<ZemMoto> {
-    return this.zemMotoRepository.save(zemMoto);
+    try {
+      return this.zemMotoRepository.save(zemMoto);
+
+    } catch (error) {
+      console.log(error);
+
+      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
+   
+    }
   }
 
   findAll(): Promise<ZemMoto[]> {
@@ -58,40 +79,85 @@ export class ZemMotoService {
   }
 
   findOne(id: number): Promise<ZemMoto> {
-    return this.zemMotoRepository.findOne(id, {
-      relations:['moto', 'propprietaire'],
-    });
+    try {
+      return this.zemMotoRepository.findOne(id, {
+        relations:['moto', 'propprietaire'],
+      });
+    } catch (error) {
+      console.log(error);
+  
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );
+      
+    }
+    
   }
 
   findOneByZemAndMoto(zem_id: number, moto_id: number): Promise<ZemMoto> {
-    const moto:Moto =new Moto(); moto.id = moto_id;
-    const zem:Zem = new Zem(); zem.id = zem_id;
-    return this.zemMotoRepository.findOne( {
-      where:{
-        moto:moto,
-        zem:zem
-      },
-      order:{
-        create_at: "DESC"
-      },
-    });
+    try {
+      const moto:Moto =new Moto(); moto.id = moto_id;
+      const zem:Zem = new Zem(); zem.id = zem_id;
+      return this.zemMotoRepository.findOne( {
+        where:{
+          moto:moto,
+          zem:zem
+        },
+        order:{
+          create_at: "DESC"
+        },
+      });
+    } catch (error) {
+      console.log(error);
+  
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );
+    }
+   
   }
 
   update(id: number, updateZemMotoDto: ZemMoto) {
-    return this.zemMotoRepository.update(
-      id,
-      updateZemMotoDto,
-    );
+    try {
+      return this.zemMotoRepository.update(
+        id,
+        updateZemMotoDto,
+      );
+    } catch (error) {
+      console.log(error);
+  
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );
+    }
+    
   }
 
   patch(id: number, updateZemMotoDto: ZemMoto) {
-    return this.zemMotoRepository.update(
-      id,
-      updateZemMotoDto,
-    );
+    try {
+      return this.zemMotoRepository.update(
+        id,
+        updateZemMotoDto,
+      );
+    } catch (error) {
+      console.log(error);
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );
+    }
+    
   }
 
   remove(id: number) {
-    return this.zemMotoRepository.delete(id);
+    try {
+      return this.zemMotoRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+  
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );
+    }
   }
 }

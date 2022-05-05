@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, UploadedFile } from '@nestjs/common';
+import { BadRequestException, Injectable, UploadedFile } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMairieDto } from '../createDto/create-mairie.dto';
@@ -67,6 +67,11 @@ export class MairieService {
   }
 
   findOneWithImage(id: number) {
+    try {
+      
+    } catch (error) {
+      
+    }
     return this.mairieRepository.findOne(id, {relations:["image"]});
   }
 
@@ -79,7 +84,16 @@ export class MairieService {
   }
 
   update(id: number, mairie: Mairie) {
-    return this.mairieRepository.update(id, mairie);
+    this.findOne(id);
+    mairie.id = id;
+    try {
+      return this.mairieRepository.save( mairie);
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
+    
   }
 
   async updateProfile(id: number, @UploadedFile() profile, user:User) {
@@ -117,6 +131,13 @@ export class MairieService {
   }
 
   remove(id: number) {
-    return this.mairieRepository.delete(id);
+    try {
+      return this.mairieRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le mairie spécifiée n'existe pas");
+    
+    }
   }
 }

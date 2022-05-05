@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   BadRequestException,
   Injectable,
@@ -43,7 +44,9 @@ export class UserService {
       user.arrondissement = arrondisement;
       return this.userRepository.save(user);
     } catch (e) {
-      throw new BadRequestException(e, e.message);
+      console.log(e);
+      
+      throw new BadRequestException("Les données que nous avons récu ne sont pas celle que nous espérons");
     }
   }
 
@@ -82,7 +85,9 @@ export class UserService {
 
       return userSaved;
     } catch (e) {
-      throw new BadRequestException(e, e.message);
+      console.log(e);
+
+      throw new BadRequestException("Les données que nous avons réçues ne sont celle que nous espérons");
     }
   }
 
@@ -97,7 +102,14 @@ export class UserService {
     user.profile = profil;
     user.profiles ??= [];
     user.profiles.push(profil);
-    return this.userRepository.save(user);
+    try {
+      return this.userRepository.save(user);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
+
+    }
   }
 
   async createWithRole(
@@ -116,7 +128,8 @@ export class UserService {
       user.arrondissement = arrondisement;
       return this.userRepository.save(user);
     } catch (e) {
-      throw new BadRequestException(e, e.message);
+      console.log(e);
+      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
     }
   }
 
@@ -130,6 +143,8 @@ export class UserService {
         relations: ["roles", "arrondissement"],
       });
     } catch (e) {
+      console.log(e);
+
       throw new NotFoundException(
         "L'utilisateur avec l'id " + id + " est introuvable",
       );
@@ -138,16 +153,18 @@ export class UserService {
 
   findOneByPseudo(pseudo: string): Promise<any> {
     Logger.debug(pseudo);
-    try {
-      return this.userRepository.findOneOrFail({
-        relations: ["roles", "arrondissement"],
-        where: { phone: pseudo },
-      });
-    } catch (e) {
-      throw new NotFoundException(
-        "L'utilisateur avec l'pseudo " + pseudo + " est introuvable",
-      );
-    }
+    return this.userRepository.findOneOrFail({
+      where: { phone: pseudo },
+    }).catch(
+      (error)=>{
+        console.log(error);
+  
+        throw new NotFoundException(
+              "L'utilisateur avec l'pseudo " + pseudo + " est introuvable",
+            );
+      }
+    );
+  
   }
 
   change(id: number, updateUserDto: User) {
@@ -156,20 +173,46 @@ export class UserService {
     return this.userRepository.save(updateUserDto);
   }
   changeWithoutControle(updateUserDto: User) {
-    return this.userRepository.save(updateUserDto);
+    try {
+      return this.userRepository.save(updateUserDto);
+
+    } catch (error) {
+      console.log(error);
+
+      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
+    }
   }
 
   update(id: number, updateUserDto: User) {
-    return this.userRepository.update(id, updateUserDto);
+    try {
+          return this.userRepository.update(id, updateUserDto);
+  
+    } catch (error) {
+      console.log(error);
+
+      throw new NotFoundException("L'utilisateur spécifier n'existe pas");
+    }
+    
   }
 
   async updateAll() {
-    const users: User[] = await this.findAll();
-    return this.userRepository.save(users);
+   try{ const users: User[] = await this.findAll();
+    return this.userRepository.save(users);}catch(e){
+      console.log(e);
+
+      throw new BadRequestException("L'utilisateur spécifier n'existe pas");
+    }
   }
 
   remove(id: number) {
-    return this.userRepository.delete(id);
+    try {
+      return this.userRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+
+      throw new NotFoundException("L'utilisateur spécifier n'existe pas")
+    }
   }
 
   async initOneAdmin() {

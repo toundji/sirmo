@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAmandeDto } from '../createDto/create-amande.dto';
@@ -48,7 +48,15 @@ export class AmandeService {
     amande.montant = montant;
     amande.restant = montant;
 
-    return this.amandeRepository.save(amande);
+    try {
+      return this.amandeRepository.save(amande);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+
+    }
+
   }
   async payAmande(id:number, montant:number, user:User){
     const amande:Amande = await this.findOne(id);
@@ -66,18 +74,46 @@ export class AmandeService {
   }
 
   findOne(id: number):Promise<Amande> {
-    return this.amandeRepository.findOne(id, {relations:["commune"]});
+    try {
+      return this.amandeRepository.findOne(id, {relations:["commune"]});
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("L'amande spécifiée n'existe pas");
+
+    }
   }
 
   async update(id: number, amande: Amande) {
-    return this.amandeRepository.update(id,amande);
+    try {
+      return this.amandeRepository.update(id,amande);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("L'amande spécifiée n'existe pas");
+
+    }
   }
 
   patch(id: number, amande: Amande) {
-     return this.amandeRepository.update(id, amande);
+    try {
+      return this.amandeRepository.update(id, amande);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("L'amande spécifiée n'existe pas");
+
+    }
   }
 
   remove(id: number) {
+    try {
     return this.amandeRepository.delete(id);
+      
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("L'amande spécifiée n'existe pas ou dépend dautre données");
+
+    }
   }
 }

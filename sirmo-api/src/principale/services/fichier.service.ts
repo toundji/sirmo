@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, UploadedFile } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UploadedFile } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm/repository/Repository";
 import { Fichier } from "../entities/fichier.entity";
@@ -12,7 +12,15 @@ export class FichierService {
   ) {}
 
   create(createFichierDto: Fichier) {
-    return this.fichierRepository.save(createFichierDto);
+    try {
+      return this.fichierRepository.save(createFichierDto);
+
+    } catch (error) {
+      console.log(error);
+      
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+
+    }
   }
 
   findAll() {
@@ -35,21 +43,47 @@ export class FichierService {
   }
 
   findOne(id: number) {
-    return this.fichierRepository.findOne(id);
+    try {
+      return this.fichierRepository.findOne(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le fichier spécifié n'existe pas");
+    
+    }
   }
 
   edit(id: number, fichier: Fichier) {
     this.findOne(id);
     fichier.id = id;
 
-    return this.fichierRepository.save(fichier);
+    try {
+      return this.fichierRepository.save(fichier);
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le fichier spécifié n'existe pas");
+
+    }
   }
 
   update(id: number, fichier: Fichier) {
-    return this.fichierRepository.update(id, fichier);
+    try {
+      return this.fichierRepository.update(id, fichier);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le fichier spécifié n'existe pas");
+
+    }
   }
 
   remove(id: number) {
-    return this.fichierRepository.delete(id);
+    try {
+      return this.fichierRepository.delete(id);
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le fichier spécifié n'existe pas");
+
+    }
   }
 }

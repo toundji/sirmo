@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProprietaireMotoDto } from '../createDto/create-proprietaire-moto.dto';
@@ -39,56 +39,118 @@ export class ProprietaireMotosService {
     moto.proprietaire = user;
     await this.motoService.edit(moto.id, moto);
 
-    return this.proprietaireMotoRepository.save(proprietaireMoto);
+    try {
+      return this.proprietaireMotoRepository.save(proprietaireMoto);
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
+
   }
 
   createValidProprietaireMoto(
     moto: ProprietaireMoto,
   ): Promise<ProprietaireMoto> {
-    return this.proprietaireMotoRepository.save(moto);
+    try {
+      return this.proprietaireMotoRepository.save(moto);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
   }
 
   findOneByProprietaireAndMoto(proprietaire_id: number, moto_id: number): Promise<ProprietaireMoto> {
     const moto:Moto =new Moto(); moto.id = moto_id;
     const proprietaire:User = new User(); proprietaire.id = proprietaire_id;
-    return this.proprietaireMotoRepository.findOne( {
-      where:{
-        moto: moto,
-        proprietaire: proprietaire
-      },
-      order:{
-        create_at: "DESC"
-      },
-    });
+    try {
+      return this.proprietaireMotoRepository.findOne( {
+        where:{
+          moto: moto,
+          proprietaire: proprietaire
+        },
+        order:{
+          create_at: "DESC"
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(
+            "La réssource démander est introuvable est introuvable",
+          );
+    }
+    
   }
 
   findAll(): Promise<ProprietaireMoto[]> {
-    return this.proprietaireMotoRepository.find({
-      relations: ['moto', 'propprietaire'],
-    });
+    try {
+      return this.proprietaireMotoRepository.find({
+        relations: ['moto', 'propprietaire'],
+      });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(
+            "La réssource démander est introuvable est introuvable",
+          );
+    }
+   
   }
 
   findOne(id: number): Promise<ProprietaireMoto> {
-    return this.proprietaireMotoRepository.findOne(id, {
-      relations:['moto', 'propprietaire'],
-    });
+    try {
+      return this.proprietaireMotoRepository.findOne(id, {
+        relations:['moto', 'propprietaire'],
+      });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(
+            "La réssource démander est introuvable est introuvable",
+          );
+    }
+    
   }
 
   update(id: number, updateProprietaireMotoDto: UpdateProprietaireMotoDto) {
-    return this.proprietaireMotoRepository.update(
-      id,
-      updateProprietaireMotoDto,
-    );
+    try {
+      return this.proprietaireMotoRepository.update(
+        id,
+        updateProprietaireMotoDto,
+      );
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(
+            "La réssource démander est introuvable est introuvable",
+          );
+    }
+   
   }
 
   patch(id: number, updateProprietaireMotoDto: UpdateProprietaireMotoDto) {
-    return this.proprietaireMotoRepository.update(
-      id,
-      updateProprietaireMotoDto,
-    );
+    try {
+      return this.proprietaireMotoRepository.update(
+        id,
+        updateProprietaireMotoDto,
+      );
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(
+            "La réssource démander est introuvable est introuvable",
+          );
+    }
+    
   }
 
   remove(id: number) {
-    return this.proprietaireMotoRepository.delete(id);
+    try {
+      return this.proprietaireMotoRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(
+            "La réssource démander est introuvable est introuvable",
+          );
+    }
   }
 }

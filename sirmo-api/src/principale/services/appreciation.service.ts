@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAppreciationDto } from '../createDto/create-appreciation.dto';
@@ -31,7 +31,15 @@ export class AppreciationService {
 
     appreciation.createur_id = user?.id;
 
-    return this.appreciationRepository.save(appreciation);
+    try {
+      return this.appreciationRepository.save(appreciation);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+
+    }
+
   }
 
   createAll(createAppreciationDtos: CreateAppreciationDto[], user?:User) {
@@ -48,7 +56,15 @@ export class AppreciationService {
         appreciations.push(appreciation);
         return appreciation;
       });
-    return this.appreciationRepository.save([ ]);
+
+      try {
+        return this.appreciationRepository.save(appreciations);
+
+      } catch (error) {
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+
+      }
   }
 
   findAll() {
@@ -56,18 +72,47 @@ export class AppreciationService {
   }
 
   findOne(id: number):Promise<Appreciation> {
-    return this.appreciationRepository.findOne(id, {relations:["typeAppreciation"]});
+    try {
+      return this.appreciationRepository.findOne(id, {relations:["typeAppreciation"]});
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("L'appréciation spécifiée n'existe pas");
+
+    }
   }
 
   async update(id: number, appreciation: Appreciation) {
-    return this.appreciationRepository.update(id,appreciation);
+    try {
+      return this.appreciationRepository.update(id,appreciation);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("L'appréciation spécifiée n'existe pas");
+
+    }
   }
 
   patch(id: number, appreciation: Appreciation) {
-     return this.appreciationRepository.update(id,appreciation);
+    try {
+      return this.appreciationRepository.update(id,appreciation);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("L'appreciation spécifiée n'existe pas");
+
+    }
   }
 
   remove(id: number) {
-    return this.appreciationRepository.delete(id);
+    try {
+      return this.appreciationRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+
+      throw new NotFoundException("L'appréciation spécifiée n'existe pas ou depend d'autres données");
+
+    }
   }
 }

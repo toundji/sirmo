@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePoliceDto } from '../createDto/create-police.dto';
@@ -29,7 +29,14 @@ export class PoliceService {
     const user: User = await this.userService.createWithRole(createPoliceWithUserDto.user, [role]);
     police.user = user;
 
-    return this.policeRepository.save(police);
+    try {
+      return this.policeRepository.save(police);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
   }
 
   async createForUser(createPoliceDto: CreatePoliceDto): Promise<Police> {
@@ -49,8 +56,9 @@ export class PoliceService {
       police.user = user;
       return this.policeRepository.save(police);
     }catch(e){
-      Logger.debug(e);
-        throw e;
+      console.log(e);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
       }
 
   }
@@ -62,20 +70,45 @@ export class PoliceService {
   }
 
   findOne(id: number): Promise<Police> {
-    return this.policeRepository.findOneOrFail(id);
+    return this.policeRepository.findOneOrFail(id).catch((error)=>{
+      console.log(error);
+      throw new NotFoundException("Le policier spécifié n'existe pas");
+    
+    });
   }
 
   change(id: number, police: Police) {
-    this.findOne(id);
+    try {
+      this.findOne(id);
     police.id = id;
     return this.policeRepository.save(police);
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le policier spécifié n'existe pas");
+    
+    }
+    
   }
 
   update(id: number, updatePoliceDto: Police) {
-    return this.policeRepository.update(id, updatePoliceDto);
+    try {
+      return this.policeRepository.update(id, updatePoliceDto);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le policier spécifié n'existe pas");
+    
+    }
   }
 
   remove(id: number) {
-    return this.policeRepository.delete(id);
+    try {
+      return this.policeRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le policier spécifié n'existe pas");
+    
+    }
   }
 }

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateLicenceDto } from '../createDto/create-licence.dto';
@@ -12,6 +12,7 @@ import { ZemService } from './zem.service';
 import { MairieService } from './mairie.service';
 import { PayementService } from './payement.service';
 import { Payement } from './../entities/payement.entity';
+import { error } from 'console';
 
 @Injectable()
 export class LicenceService {
@@ -74,7 +75,13 @@ export class LicenceService {
       return licence;
 
     });
-    return this.licenceRepository.save(licences);
+    try {
+      return this.licenceRepository.save(licences);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    }
   }
 
   findAll() {
@@ -82,14 +89,34 @@ export class LicenceService {
   }
 
   findOne(id: number) {
-    return this.licenceRepository.findOne(id);
+    try {
+      return this.licenceRepository.findOne(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le localisation spécifié n'existe pas");
+    
+    }
   }
 
   update(id: number, updateLicenceDto: UpdateLicenceDto) {
-    return this.licenceRepository.update(id, updateLicenceDto);
+    try {
+      return this.licenceRepository.update(id, updateLicenceDto);
+
+     
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le localisation spécifié n'existe pas");
+    }
   }
 
   remove(id: number) {
-    return this.licenceRepository.delete(id);
+    try {
+      return this.licenceRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le localisation spécifié n'existe pas");
+    }
   }
 }

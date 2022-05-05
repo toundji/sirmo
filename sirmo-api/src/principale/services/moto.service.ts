@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { forwardRef, Inject, Injectable, UploadedFile } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, UploadedFile } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMotoDto } from '../createDto/create-moto.dto';
@@ -29,7 +29,6 @@ export class MotoService {
     private readonly zemMotoService:ZemMotoService,
     private readonly fichierService: FichierService,
 
-
   ) {}
 
   async create(createMotoDto: CreateMotoDto): Promise<Moto> {
@@ -43,7 +42,14 @@ export class MotoService {
     const zem: Zem = await this.zemService.findOne(createMotoDto.zem.zem_id)
     moto.zem = zem;
 
-     moto =await  this.motoRepository.save(moto);
+    try {
+      moto =await  this.motoRepository.save(moto);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
      
 
      //update ZemMoto if zem.moto is not null
@@ -55,10 +61,14 @@ export class MotoService {
      proprietaireMoto.moto = null;
 
     const zemMoto: ZemMoto = ZemMoto.fromMap({zem: zem, moto:moto, date_debut:createMotoDto.zem.date_debut, date_fin:createMotoDto.zem.date_fin})
-    await this.zemMotoService.createValidZemMoto(zemMoto);
+    
+      await this.zemMotoService.createValidZemMoto(zemMoto);
     zemMoto.moto = null;
     moto.zem.moto = null;
     return moto;
+    
+
+    
 
   }
 
@@ -69,9 +79,10 @@ export class MotoService {
   }
 
   findOne(id: number): Promise<Moto> {
-    try{return this.motoRepository.findOneOrFail(id);}catch(e){
-      throw new NotFoundException();
-    }
+    try{return this.motoRepository.findOne(id);}catch(e){
+      console.log(e);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+        }
   }
 
   edit(id: number, moto: Moto) {
@@ -91,14 +102,35 @@ export class MotoService {
     moto.image = image;
     moto.images ??= [];
     moto.images.push(image)
-    return await this.motoRepository.save(moto);
+    try {
+      return await this.motoRepository.save(moto);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+    
+    }
   }
 
   update(id: number, moto: Moto) {
-    return this.motoRepository.update(id, moto );
+    try {
+      return this.motoRepository.update(id, moto );
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+    
+    }
   }
 
   remove(id: number) {
-    return this.motoRepository.delete(id);
+    try {
+      return this.motoRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+    
+    }
   }
 }

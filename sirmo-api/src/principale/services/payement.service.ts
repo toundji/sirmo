@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePayementDto } from '../createDto/create-payement.dto';
@@ -30,15 +30,17 @@ export class PayementService {
     });
     payement.solde = payement.montant;
 
-    try{
+   
       const user: User = await this.userService.findOne(createPayementDto.payerParId);
       const compte: Compte = await this.compteService.credit(createPayementDto.compteId, createPayementDto.montant);
       payement.compte = compte;
       payement.solde = compte.montant;
+    try{
       return this.payementRepository.save(payement);
     }catch(e){
-      Logger.error(e);
-      throw e;
+      console.log(e);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
     }
   }
 
@@ -51,7 +53,13 @@ export class PayementService {
     const compte: Compte = await this.compteService.debit(zem.id, montant);
     payement.compte = compte;
     payement.solde = compte.montant;
-    return this.payementRepository.save(payement);
+    try {
+      return this.payementRepository.save(payement);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    }
   }
 
   async payAmande(montant:number,  zem: Zem, user?: User,){
@@ -63,7 +71,13 @@ export class PayementService {
     const compte: Compte = await this.compteService.debit(zem.id, montant);
     payement.compte = compte;
     payement.solde = compte.montant;
-    return this.payementRepository.save(payement);
+    try {
+      return this.payementRepository.save(payement);
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
   }
 
   findAll(): Promise<Payement[]> {
@@ -71,18 +85,45 @@ export class PayementService {
   }
 
   findOne(id: number): Promise<Payement> {
-    return this.payementRepository.findOne(id);
+    try {
+      return this.payementRepository.findOne(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+    
+    }
   }
 
   update(id: number, updatePayementDto: Payement) {
-    return this.payementRepository.update(id, updatePayementDto);
+    try {
+      return this.payementRepository.update(id, updatePayementDto);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+    
+    }
   }
 
   patch(id: number, updatePayementDto: Payement) {
-    return this.payementRepository.update(id, updatePayementDto);
+    try {
+      return this.payementRepository.update(id, updatePayementDto);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+    
+    }
   }
 
   remove(id: number) {
-    return this.payementRepository.delete(id);
+    try {
+      return this.payementRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+    }
   }
 }

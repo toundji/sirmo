@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { CreateLocalisationDto } from '../createDto/create-localisation.dto';
@@ -12,7 +12,14 @@ export class LocalisationService {
   ) {}
 
   create(createLocalisationDto: CreateLocalisationDto) {
-    return this.localisationRepository.save(createLocalisationDto);
+    try {
+      return this.localisationRepository.save(createLocalisationDto);
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    
+    }
   }
 
   findAll() {
@@ -22,20 +29,46 @@ export class LocalisationService {
   }
 
   findOne(id: number) {
-    return this.localisationRepository.findOne(id, {
-      relations: ['departement', 'arrondissements'],
-    });
+    try {
+      return this.localisationRepository.findOne(id, {
+        relations: ['departement', 'arrondissements'],
+      });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le localisation spécifié n'existe pas");
+    
+    }
+    
   }
 
   update(id: number, localisation: Localisation) {
-    return this.localisationRepository.update(id, localisation);
+    try {
+      return this.localisationRepository.update(id, localisation);
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le localisation spécifié n'existe pas");
+    
+    }
   }
 
   patch(id: number, localisation: Localisation) {
-    return this.localisationRepository.update(id, localisation);
+    try {
+      return this.localisationRepository.update(id, localisation);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le localisation spécifié n'existe pas");
+    
+    }
   }
 
   remove(id: number) {
-    return this.localisationRepository.delete(id);
+    try {
+      return this.localisationRepository.delete(id);
+
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException("Le localisation spécifié n'existe pas");
+    }
   }
 }
