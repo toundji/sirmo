@@ -1,17 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { Arrondissement } from "src/principale/entities/arrondissement.entity";
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 import { Role } from './role.entity';
-import { UpdateDateColumn } from 'typeorm';
 import { hash } from 'bcrypt';
 import { Fichier } from 'src/principale/entities/fichier.entity';
 import { Audit } from "./audit";
 
 
-@Entity()
+@Entity("users")
 export class User extends Audit{
-  static entityName  = "user";
+  static entityName  = "users";
 
   @PrimaryGeneratedColumn()
   id: number;

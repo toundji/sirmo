@@ -6,8 +6,10 @@ import { Zem } from './zem.entity';
 import { Payement } from './payement.entity';
 import { Audit } from './audit';
 
-@Entity()
+@Entity("licences")
 export class Licence extends Audit{
+  static  entityName  = "licences";
+
   @PrimaryGeneratedColumn()
   id: number;
 

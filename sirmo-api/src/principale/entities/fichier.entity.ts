@@ -3,8 +3,10 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { Audit } from './audit';
 import { User } from './user.entity';
 
-@Entity()
+@Entity("fichiers")
 export class Fichier extends Audit {
+  static  entityName  = "fichiers";
+
   @PrimaryGeneratedColumn()
   id: number;
 

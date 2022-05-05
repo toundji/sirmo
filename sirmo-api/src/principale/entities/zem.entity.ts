@@ -7,14 +7,14 @@ import { Appreciation } from './appreciation.entity';
 import { Amande } from './amande.entity';
 import { ZemMoto } from './zem-moto.entity';
 import { User } from './user.entity';
-import { v4 as uuidv4 } from 'uuid';
-import { Transform } from 'class-transformer';
-import { Commune } from './commune.entity';
+import { Audit } from './audit';
 
 
 
-@Entity()
-export class Zem {
+@Entity("zems")
+export class Zem extends Audit {
+  static entityName  = "zems";
+
   @OneToOne((type) => User, { nullable:false, eager:true , primary:true})
   @JoinColumn({ name: 'id'})
   user:User;
@@ -77,11 +77,7 @@ export class Zem {
   @OneToMany(type => Amande, amande  => amande.zem )
   amandes?: Amande[];
 
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
+ 
 
 
   

@@ -7,8 +7,10 @@ import { User } from "./user.entity";
 import { Zem } from "./zem.entity";
 
 
-@Entity()
+@Entity("zems_motos")
 export class ZemMoto extends Audit{
+  static entityName  = "zems_motos";
+
   @PrimaryGeneratedColumn()
   id: number;
 

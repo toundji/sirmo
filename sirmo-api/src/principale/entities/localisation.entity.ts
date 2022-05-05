@@ -6,6 +6,8 @@ import { User } from "./user.entity";
 
 @Entity("localisations")
 export class Localisation {
+  static  entityName  = "localisations";
+
     @PrimaryGeneratedColumn()
     id: number;
   

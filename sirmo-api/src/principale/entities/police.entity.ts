@@ -5,8 +5,10 @@ import { RelationId } from 'typeorm';
 import { OneToOne } from 'typeorm';
 import { Audit } from './audit';
 
-@Entity()
+@Entity("polices")
 export class Police extends Audit {
+  static entityName  = "polices";
+
   @OneToOne((type) => User, {primary:true, nullable:false, eager:true})
   @JoinColumn({ name: 'id' })
   user: User;

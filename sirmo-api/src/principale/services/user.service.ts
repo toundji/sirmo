@@ -202,7 +202,7 @@ export class UserService {
     user.genre = true;
     user.email = "Baba@gmail.com";
     user.password = "Baba@1234";
-    user.phone = "+22992920202";
+    user.phone = "+22994851785";
     user.date_naiss = new Date();
     this.userRepository.save(user);
   }

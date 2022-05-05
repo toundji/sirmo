@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Commune } from './commune.entity';
 
-@Entity()
+@Entity("arrondissements")
 export class Arrondissement {
   @PrimaryGeneratedColumn()
   id: number;

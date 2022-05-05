@@ -18,7 +18,7 @@ import { TypeAmande } from './type-amande.entity';
 import { Police } from './police.entity';
 import { Payement } from './payement.entity';
 
-@Entity()
+@Entity("amandes")
 export class Amande {
   @PrimaryGeneratedColumn()
   id: number;

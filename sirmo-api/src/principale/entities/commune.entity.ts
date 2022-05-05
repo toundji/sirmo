@@ -11,8 +11,10 @@ import {
 } from 'typeorm';
 import { Arrondissement } from './arrondissement.entity';
 
-@Entity()
+@Entity("communes")
 export class Commune {
+  static  entityName  = "communes";
+
   @PrimaryGeneratedColumn()
   id: number;
 

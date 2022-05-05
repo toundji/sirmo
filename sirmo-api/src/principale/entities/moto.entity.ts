@@ -19,9 +19,9 @@ import { ProprietaireMoto } from './proprietaire-moto.entity';
 import { ZemMoto } from './zem-moto.entity';
 import { Zem } from './zem.entity';
 
-@Entity()
+@Entity("motos")
 export class Moto extends Audit {
-  static entityName  = "moto";
+  static entityName  = "motos";
 
 
   @PrimaryGeneratedColumn()

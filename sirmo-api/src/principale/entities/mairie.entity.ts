@@ -13,6 +13,8 @@ import { Audit } from "./audit";
 export class Mairie extends Audit{
     
     static  entityName  = "mairies";
+
+    
     @PrimaryGeneratedColumn()
     id: number;
   

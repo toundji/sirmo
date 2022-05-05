@@ -5,8 +5,10 @@ import { Audit } from "./audit";
 import { Fichier } from './fichier.entity';
 import { User } from "./user.entity";
 
-@Entity()
+@Entity("types_amandes")
 export class TypeAmande extends Audit{
+  static entityName  = "types_amandes";
+
   @PrimaryGeneratedColumn()
   id: number;
 

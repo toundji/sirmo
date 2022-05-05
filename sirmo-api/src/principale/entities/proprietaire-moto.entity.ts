@@ -7,8 +7,10 @@ import { CreateDateColumn } from 'typeorm';
 import { Audit } from "./audit";
 
 
-@Entity()
+@Entity("proprietaires_motos")
 export class ProprietaireMoto extends Audit{
+  static entityName  = "proprietaires_motos";
+
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -16,8 +16,10 @@ import {
 import { Audit } from './audit';
 import { Compte } from './compte.entity';
 
-@Entity()
+@Entity("payements")
 export class Payement extends Audit{
+  static entityName  = "payements";
+
   @PrimaryGeneratedColumn()
   id: number;
 

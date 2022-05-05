@@ -4,8 +4,11 @@ import { Commune } from "src/principale/entities/commune.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./user.entity";
 
-@Entity()
+@Entity("departements")
 export class Departement {
+    static  entityName  = "departements";
+
+
     @PrimaryGeneratedColumn()
     id: number;
   

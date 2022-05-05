@@ -5,7 +5,7 @@ import { Zem } from './zem.entity';
 import { TypeAppreciation } from 'src/enums/type-appreciation';
 import { Fichier } from './fichier.entity';
 
-@Entity()
+@Entity("appreciations")
 export class Appreciation {
   @PrimaryGeneratedColumn()
   id: number;

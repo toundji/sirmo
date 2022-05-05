@@ -5,6 +5,8 @@ import { User } from './user.entity';
 
 @Entity("constantes")
 export class Constante extends Audit {
+  static  entityName  = "constantes";
+
   @PrimaryGeneratedColumn()
   id: number;
 

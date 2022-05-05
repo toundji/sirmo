@@ -11,8 +11,10 @@ import { Zem } from './zem.entity';
 import { OneToOne } from 'typeorm';
 
 
-@Entity()
+@Entity("comptes")
 export class Compte {
+  static  entityName  = "comptes";
+
 
   @OneToOne((type) => Zem, {primary:true, nullable:false})
   @JoinColumn({ name: 'id'})
