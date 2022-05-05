@@ -7,9 +7,10 @@ import { Licence } from './licence.entity';
 import { User } from "./user.entity";
 import { Commune } from "./commune.entity";
 import { Fichier } from 'src/principale/entities/fichier.entity';
+import { Audit } from "./audit";
 
 @Entity("mairies")
-export class Mairie {
+export class Mairie extends Audit{
     
     static  entityName  = "mairies";
     @PrimaryGeneratedColumn()
@@ -56,19 +57,5 @@ export class Mairie {
         inverseJoinColumn: { name: 'fichier_id', referencedColumnName: 'id'},
     })
     images?: Fichier[];
-
-    @Column()
-  createur_id:number;
-
-  
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
-
   
 }

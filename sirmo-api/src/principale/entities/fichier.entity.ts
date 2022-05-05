@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Audit } from './audit';
 import { User } from './user.entity';
 
 @Entity()
-export class Fichier {
+export class Fichier extends Audit {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,40 +20,13 @@ export class Fichier {
   @Column({ nullable: false})
   size: string;
 
-  @Column()
+  @Column({nullable:true})
   entity: string;
 
-  @Column()
+  @Column({nullable:true})
   entityId: number;
 
-  @Column()
-  createur_id:number;
-
   
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
-
-  get createur(){
-    return null;
-  };
-
-  set createur(editeur: User){
-    this.editeur_id=editeur.id;
-  }
-
-  get diteur(){
-    return null;
-  };
-
-  set editeur(editeur: User){
-    this.editeur_id=editeur.id;
-  }
 
 
   static  fromMap({nom, path, mimetype,size, entity}):Fichier{

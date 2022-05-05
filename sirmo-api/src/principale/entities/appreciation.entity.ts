@@ -13,11 +13,11 @@ export class Appreciation {
   @Column({nullable: false})
   typeAppreciation: TypeAppreciation;
 
-  @Column()
+  @Column({nullable:true})
   message:string;
 
   @Column({nullable:false})
-  tel:string;
+  phone:string;
 
   @JoinColumn({ name: 'zem_id',  })
   @ManyToOne((type) => Zem, {nullable:false, eager:true})
@@ -28,11 +28,11 @@ export class Appreciation {
   fichier: Fichier;
 
 
-  @Column()
+  @Column({nullable:true})
   createur_id:number;
 
   
-  @Column()
+  @Column({nullable:true})
   editeur_id: number;
 
   @CreateDateColumn()
@@ -40,21 +40,5 @@ export class Appreciation {
 
   @UpdateDateColumn()
   update_at:Date;
-
-  get createur(){
-    return null;
-  };
-
-  set createur(editeur: User){
-    this.editeur_id=editeur.id;
-  }
-
-  get diteur(){
-    return null;
-  };
-
-  set editeur(editeur: User){
-    this.editeur_id=editeur.id;
-  }
 
 }

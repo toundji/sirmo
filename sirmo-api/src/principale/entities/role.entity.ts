@@ -13,11 +13,11 @@ export class Role {
     @Column({ nullable: false, unique:true})
     nom: RoleName;
 
-    @Column()
+    @Column({default: 1})
   createur_id:number;
 
   
-  @Column()
+  @Column({nullable: true})
   editeur_id: number;
 
   @CreateDateColumn()

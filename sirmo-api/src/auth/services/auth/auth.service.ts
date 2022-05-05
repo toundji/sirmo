@@ -39,7 +39,7 @@ export class AuthService {
     }
 
     // return user;
-    const payload = { pseudo: user.tel, sub: user.id };
+    const payload = { pseudo: user.phone, sub: user.id };
     const token = this.jwtService.sign(payload);
     return { user: user, token: token };
   }

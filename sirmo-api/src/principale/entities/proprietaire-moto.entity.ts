@@ -4,10 +4,11 @@ import { User } from "src/principale/entities/user.entity";
 import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Entity } from "typeorm/decorator/entity/Entity";
 import { CreateDateColumn } from 'typeorm';
+import { Audit } from "./audit";
 
 
 @Entity()
-export class ProprietaireMoto {
+export class ProprietaireMoto extends Audit{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -26,19 +27,6 @@ export class ProprietaireMoto {
 
   @Column()
   date_fin: Date;
-
-  @Column()
-  createur_id:number;
-
-  
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
 
   
 

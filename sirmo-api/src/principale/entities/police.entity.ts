@@ -3,9 +3,10 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn,
 import { User } from './user.entity';
 import { RelationId } from 'typeorm';
 import { OneToOne } from 'typeorm';
+import { Audit } from './audit';
 
 @Entity()
-export class Police {
+export class Police extends Audit {
   @OneToOne((type) => User, {primary:true, nullable:false, eager:true})
   @JoinColumn({ name: 'id' })
   user: User;
@@ -19,19 +20,6 @@ export class Police {
 
   @Column({ nullable: false, unique: true })
   identifiant: string;
-
-  @Column()
-  createur_id:number;
-
-  
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
 
   
 }

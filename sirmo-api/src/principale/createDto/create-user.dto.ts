@@ -36,7 +36,7 @@ export class CreateUserDto {
 
     @ApiProperty({required:true})
     @IsPhoneNumber("BJ")
-    tel: string;
+    phone: string;
 
     @ApiProperty({isArray:true, })
     @IsNotEmpty({each:true})

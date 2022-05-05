@@ -6,10 +6,11 @@ import { Role } from './role.entity';
 import { UpdateDateColumn } from 'typeorm';
 import { hash } from 'bcrypt';
 import { Fichier } from 'src/principale/entities/fichier.entity';
+import { Audit } from "./audit";
 
 
 @Entity()
-export class User {
+export class User extends Audit{
   static entityName  = "user";
 
   @PrimaryGeneratedColumn()
@@ -27,24 +28,20 @@ export class User {
   @Column({ nullable: false })
   password: string;
 
-  @Column()
+  @Column({nullable:true})
   email: string;
 
-  @Column()
+  @Column({nullable:true})
   date_naiss: Date;
 
   @Column({unique:true, nullable:false})
-  tel: string;
+  phone: string;
 
 
   @Column({ nullable: false, unique: true })
   code?: string = uuidv4();
 
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
+  
 
   @ManyToMany(type=>Role, {eager:true})
   @JoinTable({

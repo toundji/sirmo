@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Audit } from "./audit";
 import { Fichier } from './fichier.entity';
 import { User } from "./user.entity";
 
 @Entity()
-export class TypeAmande {
+export class TypeAmande extends Audit{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,19 +22,5 @@ export class TypeAmande {
   @ManyToOne((type) => Fichier,{eager:true})
   @JoinColumn({ name: 'fichier_id' })
   document: Fichier;
-
-  @Column()
-  createur_id:number;
-
-  
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
-
 
 }

@@ -37,7 +37,7 @@ export class LicenceService {
     mairie.solde += licence.montant;
     await this.mairieService.update(mairie.id, mairie);
 
-    licence.createur = createur;
+    licence.createur_id = createur?.id;
 
     const payement: Payement = await this.payementService.payLicence(licence.montant, zem, createur);
     licence.payement = payement;
@@ -64,7 +64,7 @@ export class LicenceService {
       mairie.solde += licence.montant;
       await this.mairieService.update(mairie.id, mairie);
 
-      licence.createur = createur;
+      licence.createur_id = createur?.id;
 
       const payement: Payement = await this.payementService.payLicence(licence.montant, zem, createur);
       licence.payement = payement;

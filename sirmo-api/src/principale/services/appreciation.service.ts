@@ -29,7 +29,7 @@ export class AppreciationService {
     const zem: Zem = await this.zemService.findOne(createAppreciationDto.zem_id);
     appreciation.zem= zem;
 
-    appreciation.createur = user;
+    appreciation.createur_id = user?.id;
 
     return this.appreciationRepository.save(appreciation);
   }
@@ -41,8 +41,8 @@ export class AppreciationService {
         const appreciation : Appreciation = new Appreciation();
         const zem: Zem = new Zem();
         zem.id = body.zem_id;
-        appreciation.createur = user;
-        appreciation.tel =  body.tel;
+        appreciation.createur_id = user?.id;
+        appreciation.phone =  body.phone;
         appreciation.message = body.message;
         appreciation.typeAppreciation = body.typeAppreciation;
         appreciations.push(appreciation);

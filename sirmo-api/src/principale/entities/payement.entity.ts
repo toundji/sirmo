@@ -13,10 +13,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Audit } from './audit';
 import { Compte } from './compte.entity';
 
 @Entity()
-export class Payement {
+export class Payement extends Audit{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -39,18 +40,6 @@ export class Payement {
   compte: Compte;
 
 
-  @Column()
-  createur_id:number;
-
-  
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
 
 
 }

@@ -16,7 +16,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
   @ApiProperty({required:true})
   @IsPhoneNumber("BJ")
-  tel: string;
+  phone: string;
 
   @ApiProperty({required:true})
   @IsNumber({allowNaN:false}, {message:"Zem spécifié est inalide"})

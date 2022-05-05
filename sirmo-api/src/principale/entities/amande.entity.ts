@@ -23,7 +23,7 @@ export class Amande {
   @PrimaryGeneratedColumn()
   id: number;
   
-  @Column()
+  @Column({nullable:true})
   message: string;
 
   @Column()
@@ -32,7 +32,7 @@ export class Amande {
   @Column()
   date_limite:Date;
 
-  @Column({nullable:false})
+  @Column()
   restant:number;
 
   @ManyToMany(type=>TypeAmande, {eager:true})
@@ -69,12 +69,4 @@ export class Amande {
 
   @UpdateDateColumn()
   update_at:Date;
-
-  get diteur(){
-    return null;
-  };
-
-  set editeur(editeur: User){
-    this.editeur_id=editeur.id;
-  }
 }

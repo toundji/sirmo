@@ -13,13 +13,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Audit } from './audit';
 import { Fichier } from './fichier.entity';
 import { ProprietaireMoto } from './proprietaire-moto.entity';
 import { ZemMoto } from './zem-moto.entity';
 import { Zem } from './zem.entity';
 
 @Entity()
-export class Moto {
+export class Moto extends Audit {
   static entityName  = "moto";
 
 
@@ -67,16 +68,6 @@ export class Moto {
     inverseJoinColumn: { name: 'fichier_id', referencedColumnName: 'id'},
   })
   images?: Fichier[];
-  @Column()
-  createur_id:number;
 
-  
-  @Column()
-  editeur_id: number;
 
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
 }

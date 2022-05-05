@@ -141,7 +141,7 @@ export class UserService {
     try {
       return this.userRepository.findOneOrFail({
         relations: ["roles", "arrondissement"],
-        where: { tel: pseudo },
+        where: { phone: pseudo },
       });
     } catch (e) {
       throw new NotFoundException(
@@ -202,7 +202,7 @@ export class UserService {
     user.genre = true;
     user.email = "Baba@gmail.com";
     user.password = "Baba@1234";
-    user.tel = "+22992920202";
+    user.phone = "+22992920202";
     user.date_naiss = new Date();
     this.userRepository.save(user);
   }

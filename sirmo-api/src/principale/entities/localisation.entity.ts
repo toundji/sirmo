@@ -19,10 +19,7 @@ export class Localisation {
     altitude: number;
 
     @Column()
-    speed: number;
-
-    @Column()
-    accuracy:number;
+    place_id: number;
 
     @Column()
     entity:string;
@@ -30,32 +27,5 @@ export class Localisation {
     @Column()
     entityId:number;
 
-    @Column()
-  createur_id:number;
-
-  
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
-
-  get createur(){
-    return null;
-  };
-
-  set createur(editeur: User){
-    this.editeur_id=editeur.id;
-  }
-
-  get diteur(){
-    return null;
-  };
-
-  set editeur(editeur: User){
-    this.editeur_id=editeur.id;
-  }
+   
 }
