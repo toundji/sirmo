@@ -94,7 +94,7 @@ export class LicenceService {
 
     } catch (error) {
       console.log(error);
-      throw new NotFoundException("Le localisation spécifié n'existe pas");
+      throw new NotFoundException("Le licence spécifiée n'existe pas");
     
     }
   }
@@ -106,7 +106,7 @@ export class LicenceService {
      
     } catch (error) {
       console.log(error);
-      throw new NotFoundException("Le localisation spécifié n'existe pas");
+      throw new NotFoundException("Le licence spécifiée n'existe pas");
     }
   }
 
@@ -116,7 +116,7 @@ export class LicenceService {
 
     } catch (error) {
       console.log(error);
-      throw new NotFoundException("Le localisation spécifié n'existe pas");
+      throw new NotFoundException("Le licence spécifiée n'existe pas");
     }
   }
 }
