@@ -7,6 +7,8 @@ import { Fichier } from './fichier.entity';
 
 @Entity("appreciations")
 export class Appreciation {
+  static  entityName  = "arrondissements";
+
   @PrimaryGeneratedColumn()
   id: number;
 

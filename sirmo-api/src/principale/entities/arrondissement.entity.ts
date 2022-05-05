@@ -5,6 +5,8 @@ import { Commune } from './commune.entity';
 
 @Entity("arrondissements")
 export class Arrondissement {
+  static  entityName  = "arrondissements";
+
   @PrimaryGeneratedColumn()
   id: number;
 

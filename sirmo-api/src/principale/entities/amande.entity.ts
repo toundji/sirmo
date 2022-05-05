@@ -20,6 +20,9 @@ import { Payement } from './payement.entity';
 
 @Entity("amandes")
 export class Amande {
+
+  static  entityName  = "amandes";
+
   @PrimaryGeneratedColumn()
   id: number;
   
