@@ -34,26 +34,82 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (Responsive.isDesktop(context))
-              Expanded(child: Image.asset("assets/gifs/login.gif")),
-            Expanded(
-              child: ShakeTransition(
-                child: form,
+        body: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+              height: 200,
+              child: Image.asset(
+                "assets/images/logo_large.png",
+                fit: BoxFit.cover,
+              )),
+          Card(
+            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: Responsive.responsiveValue(context,
+                      mobile: MainAxisSize.min),
+                  children: [
+                    AppDecore.getTitle("Connexion"),
+                    const SizedBox(height: 10),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: Responsive.responsiveValue(context,
+                                mobile: 16.0, desktop: 24.0)),
+                        child: InternationalPhoneNumberInput(
+                          onInputValidated: (value) {
+                            log("$value");
+                            _phoneIsValide = value;
+                          },
+                          initialValue: phone,
+                          countries: ["BJ"],
+                          errorMessage: "Numméron de téléphone est invalide",
+                          spaceBetweenSelectorAndTextField: 0.0,
+                          validator: phoneValidator,
+                          onInputChanged: onPhoneChanged,
+                          inputDecoration: AppDecore.input("Téléphone * "),
+                          selectorConfig: SelectorConfig(
+                              leadingPadding: SizeConst.padding,
+                              setSelectorButtonAsPrefixIcon: true),
+                        )),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: Responsive.responsiveValue(context,
+                              mobile: 16.0, desktop: 24.0)),
+                      child: TextFormField(
+                        onChanged: onPasswordChanged,
+                        validator: passwordValidator,
+                        decoration: AppDecore.input("Password"),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(value: false, onChanged: (value) {}),
+                        Text("Se souvenir de moi")
+                      ],
+                    ),
+                    Text(
+                      errorText ?? "",
+                      style: TextStyle(color: ColorConst.error),
+                    ),
+                    const SizedBox(height: 10),
+                    AppDecore.button(context, "Valider", onSubmit)
+                  ],
+                ),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
-    );
+    ));
   }
 
   get form {
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
         vertical: Responsive.responsiveValue(context,
             mobile: 16.0, tablet: 50.0, desktop: 20.0),
@@ -78,67 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   vertical: Responsive.responsiveValue(context,
                       mobile: 50.0, tablet: 50.0, desktop: 50.0),
                 ),
-                child: Container(
-                  width: Responsive.responsiveValue(context,
-                      tablet: MediaQuery.of(context).size.width * 0.8),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: Responsive.responsiveValue(context,
-                          mobile: MainAxisSize.min),
-                      children: [
-                        AppDecore.getTitle("Connexion"),
-                        const SizedBox(height: 10),
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: Responsive.responsiveValue(context,
-                                    mobile: 16.0, desktop: 24.0)),
-                            child: InternationalPhoneNumberInput(
-                              onInputValidated: (value) {
-                                log("$value");
-                                _phoneIsValide = value;
-                              },
-                              initialValue: phone,
-                              countries: ["BJ"],
-                              errorMessage:
-                                  "Numméron de téléphone est invalide",
-                              spaceBetweenSelectorAndTextField: 0.0,
-                              validator: phoneValidator,
-                              onInputChanged: onPhoneChanged,
-                              inputDecoration:
-                                  AppDecore.input(label: "Téléphone * "),
-                              selectorConfig: SelectorConfig(
-                                  leadingPadding: SizeConst.padding,
-                                  setSelectorButtonAsPrefixIcon: true),
-                            )),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Responsive.responsiveValue(context,
-                                  mobile: 16.0, desktop: 24.0)),
-                          child: TextFormField(
-                            onChanged: onPasswordChanged,
-                            validator: passwordValidator,
-                            decoration:
-                                AppDecore.input(label: "Password", ph: 24),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(value: false, onChanged: (value) {}),
-                            Text("Se souvenir de moi")
-                          ],
-                        ),
-                        Text(
-                          errorText ?? "",
-                          style: TextStyle(color: ColorConst.error),
-                        ),
-                        const SizedBox(height: 10),
-                        AppDecore.button(context, "Valider", onSubmit)
-                      ],
-                    ),
-                  ),
-                ),
+                child: Container(),
               ),
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorConst {
-  static Color primary = Colors.green;
-  static Color error = Colors.red;
+  static const MaterialColor primary = Colors.green;
+  static const Color error = Colors.red;
+  static const Color white = Colors.white;
 }

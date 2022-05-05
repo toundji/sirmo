@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
+import 'package:sirmo/models/onboarding.dart';
+import 'package:sirmo/screens/welcome/onboarding-first.dart';
 import 'package:sirmo/utils/color-const.dart';
 
 import 'screens/auth/login.screen.dart';
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
           primaryColor: ColorConst.primary,
         ),
         routes: routes,
-        initialRoute: HomeScreen.routeName,
+        initialRoute: OnboardingFirst.routeName,
         // onGenerateInitialRoutes: (settings) {
         //   return [MaterialPageRoute(builder: (_) => authGuard)];
         // },
