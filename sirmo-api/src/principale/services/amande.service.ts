@@ -48,14 +48,12 @@ export class AmandeService {
     amande.montant = montant;
     amande.restant = montant;
 
-    try {
-      return this.amandeRepository.save(amande);
-
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-
-    }
+    
+      return this.amandeRepository.save(amande).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+  
+      });
 
   }
   async payAmande(id:number, montant:number, user:User){
@@ -74,46 +72,44 @@ export class AmandeService {
   }
 
   findOne(id: number):Promise<Amande> {
-    try {
-      return this.amandeRepository.findOne(id, {relations:["commune"]});
+   
+      return this.amandeRepository.findOne(id, {relations:["commune"]}).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("L'amande spécifiée n'existe pas");
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("L'amande spécifiée n'existe pas");
-
-    }
+ 
   }
 
   async update(id: number, amande: Amande) {
-    try {
-      return this.amandeRepository.update(id,amande);
-
-    } catch (error) {
-      console.log(error);
+   
+      return this.amandeRepository.update(id,amande).catch((error)=>{
+        console.log(error);
       throw new NotFoundException("L'amande spécifiée n'existe pas");
+      });
 
-    }
+   
   }
 
   patch(id: number, amande: Amande) {
-    try {
-      return this.amandeRepository.update(id, amande);
-
-    } catch (error) {
-      console.log(error);
+  
+      return this.amandeRepository.update(id, amande).catch((error)=>{
+        console.log(error);
       throw new NotFoundException("L'amande spécifiée n'existe pas");
 
-    }
+      });
+
+  
   }
 
   remove(id: number) {
-    try {
-    return this.amandeRepository.delete(id);
-      
-    } catch (error) {
+    
+    return this.amandeRepository.delete(id).catch((error)=>{
       console.log(error);
       throw new NotFoundException("L'amande spécifiée n'existe pas ou dépend dautre données");
 
-    }
+    });
+      
+    
   }
 }

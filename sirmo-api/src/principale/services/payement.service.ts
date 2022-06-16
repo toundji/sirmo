@@ -85,45 +85,42 @@ export class PayementService {
   }
 
   findOne(id: number): Promise<Payement> {
-    try {
-      return this.payementRepository.findOne(id);
+  
+      return this.payementRepository.findOne(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le payement spécifié n'existe pas");
+      
+      })
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
-    
-    }
   }
 
   update(id: number, updatePayementDto: Payement) {
-    try {
-      return this.payementRepository.update(id, updatePayementDto);
+   
+      return this.payementRepository.update(id, updatePayementDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le payement spécifié n'existe pas");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
-    
-    }
   }
 
   patch(id: number, updatePayementDto: Payement) {
-    try {
-      return this.payementRepository.update(id, updatePayementDto);
+ 
+      return this.payementRepository.update(id, updatePayementDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le payement spécifié n'existe pas");
+      
+      })    
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
-    
-    }
   }
 
   remove(id: number) {
-    try {
-      return this.payementRepository.delete(id);
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
-    }
+      return this.payementRepository.delete(id).catch((error)=> {
+        console.log(error);
+        throw new NotFoundException("Le payement spécifié n'existe pas");
+      });
+
+ 
   }
 }

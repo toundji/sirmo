@@ -27,20 +27,38 @@ export class Moto extends Audit {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, unique: true })
-  matricule: string;
+  @Column({ nullable: false })
+  immatriculation: string;
 
-  @Column({ nullable: false, unique: true })
-  carteGrise: string;
+  @Column({ nullable: false })
+  numero_carte_grise: string;
 
-  @Column({ nullable: false, unique: true })
-  chassis: string;
+  @Column({ nullable: false})
+  numero_chassis: string;
 
-  @Column({ nullable: false, unique: true })
-  serie: string;
+  @Column({ nullable: false })
+  numero_serie_moteur: string;
+
+  @Column({ nullable: false })
+  provenance:string;
+
+  @Column({ nullable: false })
+  puissance:string;
+
+  @Column({ nullable: false })
+  energie:string;
+
+  @Column({ nullable: false })
+  annee_mise_circulation:Date;
+
+  @Column({ nullable: false })
+  derniere_revision:Date;
 
   @Column({ default: EtatMoto.OCASION, nullable: false })
   etat: EtatMoto;
+
+  @Column({ default: EtatMoto.OCASION, nullable: false })
+  type:string;
 
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'proprietaire_id' })

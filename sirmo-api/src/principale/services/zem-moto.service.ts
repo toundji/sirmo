@@ -61,15 +61,15 @@ export class ZemMotoService {
   createValidZemMoto(
     zemMoto: ZemMoto,
   ): Promise<ZemMoto> {
-    try {
-      return this.zemMotoRepository.save(zemMoto);
+    
+      return this.zemMotoRepository.save(zemMoto).catch((error)=>{
+        console.log(error);
 
-    } catch (error) {
-      console.log(error);
+        throw new BadRequestException("Erreur de lors de la liason du zem au moto." + error.message)
+     
+      });
 
-      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
-   
-    }
+  
   }
 
   findAll(): Promise<ZemMoto[]> {
@@ -79,85 +79,73 @@ export class ZemMotoService {
   }
 
   findOne(id: number): Promise<ZemMoto> {
-    try {
+   
       return this.zemMotoRepository.findOne(id, {
         relations:['moto', 'propprietaire'],
-      });
-    } catch (error) {
-      console.log(error);
+      }).catch((error)=>{
+        console.log(error);
   
         throw new NotFoundException(
               "La réssource démander est introuvable est introuvable",
             );
-      
-    }
+      });
     
   }
 
   findOneByZemAndMoto(zem_id: number, moto_id: number): Promise<ZemMoto> {
-    try {
+ 
       const moto:Moto =new Moto(); moto.id = moto_id;
       const zem:Zem = new Zem(); zem.id = zem_id;
       return this.zemMotoRepository.findOne( {
         where:{
           moto:moto,
           zem:zem
-        },
-        order:{
-          create_at: "DESC"
-        },
-      });
-    } catch (error) {
-      console.log(error);
+        }
+      }).catch((error)=>{
+        console.log(error);
   
         throw new NotFoundException(
-              "La réssource démander est introuvable est introuvable",
+              "La réssource démander est introuvable est introuvable"
             );
-    }
+      });
    
   }
 
   update(id: number, updateZemMotoDto: ZemMoto) {
-    try {
+    
       return this.zemMotoRepository.update(
         id,
         updateZemMotoDto,
-      );
-    } catch (error) {
-      console.log(error);
+      ).catch((error)=>{
+        console.log(error);
   
         throw new NotFoundException(
               "La réssource démander est introuvable est introuvable",
             );
-    }
+      });
+    
     
   }
 
   patch(id: number, updateZemMotoDto: ZemMoto) {
-    try {
+   
       return this.zemMotoRepository.update(
         id,
         updateZemMotoDto,
-      );
-    } catch (error) {
-      console.log(error);
+      ).catch((error)=>{
+        console.log(error);
         throw new NotFoundException(
               "La réssource démander est introuvable est introuvable",
             );
-    }
-    
+      });
+   
   }
 
   remove(id: number) {
-    try {
-      return this.zemMotoRepository.delete(id);
-
-    } catch (error) {
-      console.log(error);
-  
-        throw new NotFoundException(
-              "La réssource démander est introuvable est introuvable",
-            );
-    }
+    
+      return this.zemMotoRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("La réssource démander est introuvable est introuvable");
+      });
   }
 }

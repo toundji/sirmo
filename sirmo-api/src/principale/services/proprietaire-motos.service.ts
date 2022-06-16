@@ -39,118 +39,98 @@ export class ProprietaireMotosService {
     moto.proprietaire = user;
     await this.motoService.edit(moto.id, moto);
 
-    try {
-      return this.proprietaireMotoRepository.save(proprietaireMoto);
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-    
-    }
+   
+      return this.proprietaireMotoRepository.save(proprietaireMoto).catch((error)=>{ console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      });
+  
 
   }
-
   createValidProprietaireMoto(
     moto: ProprietaireMoto,
   ): Promise<ProprietaireMoto> {
-    try {
-      return this.proprietaireMotoRepository.save(moto);
-
-    } catch (error) {
-      console.log(error);
+      return this.proprietaireMotoRepository.save(moto).catch((error)=>{
+        console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
-    }
+      });
   }
 
   findOneByProprietaireAndMoto(proprietaire_id: number, moto_id: number): Promise<ProprietaireMoto> {
     const moto:Moto =new Moto(); moto.id = moto_id;
     const proprietaire:User = new User(); proprietaire.id = proprietaire_id;
-    try {
       return this.proprietaireMotoRepository.findOne( {
         where:{
           moto: moto,
           proprietaire: proprietaire
-        },
-        order:{
-          create_at: "DESC"
-        },
-      });
-    } catch (error) {
-      console.log(error);
+        }
+      }).catch((error)=>{
+        console.log(error);
       throw new NotFoundException(
             "La réssource démander est introuvable est introuvable",
           );
-    }
+      });
+   
     
   }
 
   findAll(): Promise<ProprietaireMoto[]> {
-    try {
       return this.proprietaireMotoRepository.find({
         relations: ['moto', 'propprietaire'],
-      });
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException(
-            "La réssource démander est introuvable est introuvable",
-          );
-    }
+      }).catch((error)=>{console.log(error);
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );});
+ 
    
   }
 
   findOne(id: number): Promise<ProprietaireMoto> {
-    try {
       return this.proprietaireMotoRepository.findOne(id, {
         relations:['moto', 'propprietaire'],
+      }).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );
       });
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException(
-            "La réssource démander est introuvable est introuvable",
-          );
-    }
+  
     
   }
 
   update(id: number, updateProprietaireMotoDto: UpdateProprietaireMotoDto) {
-    try {
       return this.proprietaireMotoRepository.update(
         id,
         updateProprietaireMotoDto,
-      );
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException(
-            "La réssource démander est introuvable est introuvable",
-          );
-    }
+      ).catch((error)=>{ console.log(error);
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );});
+  
    
   }
 
   patch(id: number, updateProprietaireMotoDto: UpdateProprietaireMotoDto) {
-    try {
       return this.proprietaireMotoRepository.update(
         id,
         updateProprietaireMotoDto,
-      );
-    } catch (error) {
-      console.log(error);
+      ).catch((error)=>{
+        console.log(error);
       throw new NotFoundException(
             "La réssource démander est introuvable est introuvable",
           );
-    }
-    
+      });
+  
   }
 
   remove(id: number) {
-    try {
-      return this.proprietaireMotoRepository.delete(id);
+      return this.proprietaireMotoRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException(
+              "La réssource démander est introuvable est introuvable",
+            );
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException(
-            "La réssource démander est introuvable est introuvable",
-          );
-    }
+  
   }
 }

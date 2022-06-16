@@ -18,6 +18,7 @@ import { HttpException } from "@nestjs/common";
 import { HttpStatus } from "@nestjs/common";
 import { FichierService } from "./fichier.service";
 import { Fichier } from "../entities/fichier.entity";
+import { RoleName } from 'src/enums/role-name';
 
 @Injectable()
 export class UserService {
@@ -33,21 +34,19 @@ export class UserService {
     Object.keys(createUserDto).forEach((cle) => {
       user[cle] = createUserDto[cle];
     });
-    try {
-      const roles: Role[] = await this.roleService.findAllByIds(
-        createUserDto.roles,
-      );
-      user.roles = roles;
+   
+    const role: Role = await this.roleService.findOneByName(RoleName.USER);
+    user.roles = [role];
 
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(createUserDto.arrondissement);
       user.arrondissement = arrondisement;
-      return this.userRepository.save(user);
-    } catch (e) {
-      console.log(e);
+      return this.userRepository.save(user).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons récu ne sont pas celle que nous espérons");
       
-      throw new BadRequestException("Les données que nous avons récu ne sont pas celle que nous espérons");
-    }
+      });
+  
   }
 
   async createWithProfile(
@@ -58,11 +57,9 @@ export class UserService {
     Object.keys(createUserDto).forEach((cle) => {
       user[cle] = createUserDto[cle];
     });
-    try {
-      const roleList: number[] = createUserDto.roles.map((e) => +e);
-      const roles: Role[] = await this.roleService.findAllByIds(roleList);
-      user.roles = roles;
-      console.log(roleList, roles);
+    
+      const role: Role = await this.roleService.findOneByName(RoleName.USER);
+      user.roles = [role];
 
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(+createUserDto.arrondissement);
@@ -79,16 +76,16 @@ export class UserService {
       const profil: Fichier = await this.fichierService.create(file);
       user.profile = profil;
 
-      const userSaved = await this.userRepository.save(user);
+      const userSaved = await this.userRepository.save(user).catch((error)=>{
+        console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celle que nous espérons");
+    
+      });
       profil.entityId = userSaved.id;
       await this.fichierService.create(file);
 
       return userSaved;
-    } catch (e) {
-      console.log(e);
-
-      throw new BadRequestException("Les données que nous avons réçues ne sont celle que nous espérons");
-    }
+    
   }
 
   async updateProfile(id: number, @UploadedFile() profile, createur: User) {
@@ -102,14 +99,14 @@ export class UserService {
     user.profile = profil;
     user.profiles ??= [];
     user.profiles.push(profil);
-    try {
-      return this.userRepository.save(user);
+    
+      return this.userRepository.save(user).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
+  
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
 
-    }
   }
 
   async createWithRole(
@@ -122,15 +119,16 @@ export class UserService {
     });
     user.roles = roles;
 
-    try {
+    
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(createUserDto.arrondissement);
       user.arrondissement = arrondisement;
-      return this.userRepository.save(user);
-    } catch (e) {
-      console.log(e);
-      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
-    }
+      return this.userRepository.save(user).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
+      
+      });
+   
   }
 
   findAll(): Promise<User[]> {
@@ -138,17 +136,17 @@ export class UserService {
   }
 
   findOne(id: number): Promise<User> {
-    try {
+    
       return this.userRepository.findOneOrFail(id, {
         relations: ["roles", "arrondissement"],
-      });
-    } catch (e) {
-      console.log(e);
+      }).catch((error)=>{
+        console.log(error);
 
       throw new NotFoundException(
         "L'utilisateur avec l'id " + id + " est introuvable",
       );
-    }
+      });
+   
   }
 
   findOneByPseudo(pseudo: string): Promise<any> {
@@ -173,46 +171,40 @@ export class UserService {
     return this.userRepository.save(updateUserDto);
   }
   changeWithoutControle(updateUserDto: User) {
-    try {
-      return this.userRepository.save(updateUserDto);
+ 
+      return this.userRepository.save(updateUserDto).catch((error)=>{
+        console.log(error);
 
-    } catch (error) {
-      console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
+     
+      });
 
-      throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
-    }
   }
 
   update(id: number, updateUserDto: User) {
-    try {
-          return this.userRepository.update(id, updateUserDto);
-  
-    } catch (error) {
-      console.log(error);
-
-      throw new NotFoundException("L'utilisateur spécifier n'existe pas");
-    }
     
+      return this.userRepository.update(id, updateUserDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("L'utilisateur spécifier n'existe pas");      
+      });
   }
 
   async updateAll() {
-   try{ const users: User[] = await this.findAll();
-    return this.userRepository.save(users);}catch(e){
-      console.log(e);
+   const users: User[] = await this.findAll();
+    return this.userRepository.save(users).catch((error)=>{
+      console.log(error);
 
       throw new BadRequestException("L'utilisateur spécifier n'existe pas");
-    }
+    })
   }
 
   remove(id: number) {
-    try {
-      return this.userRepository.delete(id);
+   
+      return this.userRepository.delete(id).catch((error)=>{
+        console.log(error);
 
-    } catch (error) {
-      console.log(error);
-
-      throw new NotFoundException("L'utilisateur spécifier n'existe pas")
-    }
+        throw new NotFoundException("L'utilisateur spécifier n'existe pas")
+      });
   }
 
   async initOneAdmin() {

@@ -13,14 +13,14 @@ export class CommuneService {
   ) {}
 
   create(createCommuneDto: CreateCommuneDto) {
-    try {
-      return this.communeRepository.save(createCommuneDto);
-
-    } catch (error) {
-      console.log(error);
+    
+      return this.communeRepository.save(createCommuneDto).catch((error)=>{
+        console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
 
-    }
+      });
+
+  
   }
 
   findAll() {
@@ -30,49 +30,48 @@ export class CommuneService {
   }
 
   findOne(id: number) {
-    try {
+ 
       return this.communeRepository.findOne(id, {
         relations: ['departement', 'arrondissements'],
         loadEagerRelations:false
-      });
-    } catch (error) {
-      console.log(error);
+      }).catch((error)=>{
+        console.log(error);
       throw new NotFoundException("Le commune spécifiée n'existe pas");
 
-    }
+      });;
+    
    
   }
 
   update(id: number, updateCommuneDto: UpdateCommuneDto) {
-    try {
-      return this.communeRepository.update(id, updateCommuneDto);
+   
+      return this.communeRepository.update(id, updateCommuneDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le commune spécifiée n'existe pas");
+  
+      });;
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le commune spécifiée n'existe pas");
-
-    }
+    
   }
 
   patch(id: number, updateCommuneDto: UpdateCommuneDto) {
-    try {
-      return this.communeRepository.update(id, updateCommuneDto);
+    
+      return this.communeRepository.update(id, updateCommuneDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le commune spécifiée n'existe pas");
+  
+      });;
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le commune spécifiée n'existe pas");
-
-    }
+  
   }
 
   remove(id: number) {
-    try {
-      return this.communeRepository.delete(id);
-
-    } catch (error) {
-      console.log(error);
+  
+      return this.communeRepository.delete(id).catch((error)=>{
+        console.log(error);
       throw new NotFoundException("Le commune spécifiée n'existe pas ou comportes des arrondissements");
 
-    }
+      });;
+
   }
 }

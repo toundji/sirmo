@@ -25,18 +25,17 @@ export class PoliceService {
       police[cle] = createPoliceWithUserDto[cle];
     });
 
-    const role:Role = await this.roleService.findOneByName("zem");
+    const role:Role = await this.roleService.findOneByName(RoleName.POLICE);
     const user: User = await this.userService.createWithRole(createPoliceWithUserDto.user, [role]);
     police.user = user;
 
-    try {
-      return this.policeRepository.save(police);
+  
+      return this.policeRepository.save(police).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-    
-    }
   }
 
   async createForUser(createPoliceDto: CreatePoliceDto): Promise<Police> {
@@ -45,7 +44,7 @@ export class PoliceService {
       police[cle] = createPoliceDto[cle];
     });
 
-    try{
+  
       const user: User = await this.userService.findOne(createPoliceDto.userId);
       const role:Role = await this.roleService.findOneByName(RoleName.POLICE);
       const index:number = user.roles.indexOf(role);
@@ -54,13 +53,12 @@ export class PoliceService {
         this.userService.changeWithoutControle(user);
       }
       police.user = user;
-      return this.policeRepository.save(police);
-    }catch(e){
-      console.log(e);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-    
-      }
-
+      return this.policeRepository.save(police).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      
+      });
+   
   }
 
   
@@ -76,39 +74,38 @@ export class PoliceService {
     
     });
   }
+//.catch((error)=>{})
 
   change(id: number, police: Police) {
-    try {
+   
       this.findOne(id);
     police.id = id;
-    return this.policeRepository.save(police);
-    } catch (error) {
+    return this.policeRepository.save(police).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le policier spécifié n'existe pas");
     
-    }
+    });
+   
     
   }
 
   update(id: number, updatePoliceDto: Police) {
-    try {
-      return this.policeRepository.update(id, updatePoliceDto);
-
-    } catch (error) {
-      console.log(error);
+  
+      return this.policeRepository.update(id, updatePoliceDto).catch((error)=>{
+        console.log(error);
       throw new NotFoundException("Le policier spécifié n'existe pas");
     
-    }
+      });
+
   }
 
   remove(id: number) {
-    try {
-      return this.policeRepository.delete(id);
+  
+      return this.policeRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le policier spécifié n'existe pas");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le policier spécifié n'existe pas");
-    
-    }
   }
 }

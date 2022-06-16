@@ -22,14 +22,14 @@ export class DepartementService {
   ) {}
 
   create(createDepartementDto: CreateDepartementDto) {
-    try {
-      return this.departementRepository.save(createDepartementDto);
+   
+      return this.departementRepository.save(createDepartementDto).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+  
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-
-    }
+ 
   }
 
   findAll() {
@@ -39,49 +39,45 @@ export class DepartementService {
   }
 
   findOne(id: number) {
-    try {
+   
       return this.departementRepository.findOne(id, {
         relations: ['communes'],
+      }).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le département spécifié n'existe pas");
+  
       });
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le département spécifié n'existe pas");
-
-    }
+  
     
   }
 
   update(id: number, updateDepartementDto: UpdateDepartementDto) {
-    try {
-      return this.departementRepository.update(id,updateDepartementDto);
+    
+      return this.departementRepository.update(id,updateDepartementDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le département spécifié n'existe pas");
+  
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le département spécifié n'existe pas");
-
-    }
   }
 
   patch(id: number, updateDepartementDto: UpdateDepartementDto) {
-    try {
-      return this.departementRepository.update(id,updateDepartementDto);
-
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le département spécifié n'existe pas");
-
-    }
+   
+      return this.departementRepository.update(id,updateDepartementDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le département spécifié n'existe pas");
+  
+      });
   }
 
   remove(id: number) {
-    try {
-      return this.departementRepository.delete(id);
+   
+      return this.departementRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le département spécifié n'existe pas");
+  
+      });;
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le département spécifié n'existe pas");
-
-    }
   }
 
   async initDepComAr(){

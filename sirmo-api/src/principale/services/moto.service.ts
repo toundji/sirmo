@@ -42,14 +42,14 @@ export class MotoService {
     const zem: Zem = await this.zemService.findOne(createMotoDto.zem.zem_id)
     moto.zem = zem;
 
-    try {
-      moto =await  this.motoRepository.save(moto);
-
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
-    }
+      moto =await  this.motoRepository.save(moto).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      
+      });
+
+    
      
 
      //update ZemMoto if zem.moto is not null
@@ -79,11 +79,11 @@ export class MotoService {
   }
 
   findOne(id: number): Promise<Moto> {
-    try{return this.motoRepository.findOne(id);}catch(e){
-      console.log(e);
+    return this.motoRepository.findOne(id).catch((error)=>{
+      console.log(error);
       throw new NotFoundException("Le payement spécifié n'existe pas");
-        }
-  }
+        });
+      }
 
   edit(id: number, moto: Moto) {
     this.findOne(id);
@@ -102,35 +102,30 @@ export class MotoService {
     moto.image = image;
     moto.images ??= [];
     moto.images.push(image)
-    try {
-      return await this.motoRepository.save(moto);
-
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
     
-    }
+      return await this.motoRepository.save(moto).catch((error)=>{
+        console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+      });
   }
 
   update(id: number, moto: Moto) {
-    try {
-      return this.motoRepository.update(id, moto );
-
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
     
-    }
+      return this.motoRepository.update(id, moto ).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le payement spécifié n'existe pas");
+      });
+
+    
   }
 
   remove(id: number) {
-    try {
-      return this.motoRepository.delete(id);
+   
+      return this.motoRepository.delete(id).catch((error) =>{
+        console.log(error);
+        throw new NotFoundException("Le payement spécifié n'existe pas");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
-    
     }
-  }
 }

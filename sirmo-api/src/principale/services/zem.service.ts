@@ -12,6 +12,7 @@ import { Role } from '../entities/role.entity';
 import { Compte } from './../entities/compte.entity';
 import { CompteService } from './compte.service';
 import { catchError } from 'rxjs';
+import { RoleName } from 'src/enums/role-name';
 
 @Injectable()
 export class ZemService {
@@ -25,29 +26,26 @@ export class ZemService {
     const zem:Zem = new Zem();
 
     Object.keys(createZemDto).forEach(cle=>{zem[cle] = createZemDto[cle]});
-    const role:Role = await this.roleService.findOneByName("zem");
+    const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
     const user: User = await this.userService.createWithRole(createZemDto.user, [role]);
     zem.user = user;
     const zemSaved : Zem= await this.zemRepository.save(zem);
     // const compte: Compte = 
-    try {
-      await this.compteService.create(new Compte({zem:zemSaved}));
+   
+      await this.compteService.create(new Compte({zem:zemSaved})).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");  
+      }); 
       return zemSaved;
-
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-    
-    }
   }
 
   async createForUser(createZemDto: CreateZemDto) {
     const zem:Zem = new Zem();
     Object.keys(createZemDto).forEach(cle=>{zem[cle] = createZemDto[cle]});
 
-    try{
+    
       const user: User =  await this.userService.findOne(createZemDto.userId);
-      const role:Role = await this.roleService.findOneByName("zem");
+      const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
       const index:number = user.roles.indexOf(role);
       if( index == -1){
         user.roles.push(role);
@@ -56,24 +54,24 @@ export class ZemService {
       zem.user = user;
       const zemSaved: Zem= await this.zemRepository.save(zem);
       // const compte: Compte = 
-      await this.compteService.create(new Compte({zem:zemSaved}));
-      return zemSaved;
-    }catch(e){
-      console.log(e);
+      await this.compteService.create(new Compte({zem:zemSaved})).catch((error)=>{
+
+      console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
-    }
+      });
+      return zemSaved;
   }
 
   createAll(createZemDto: CreateZemDto[]) {
-    try{
-      return this.zemRepository.save(createZemDto);
-
-    }catch(error){
+   
+      return this.zemRepository.save(createZemDto).catch((error)=>{
       console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-      
-    }
+      }); 
+
+ 
+    
   }
 
   findAll() : Promise<Zem[]>{
@@ -89,37 +87,34 @@ export class ZemService {
   }
 
   update(id: number, updateZemDto: Zem): Promise<Zem> {
-    try {
-      return this.zemRepository.update(id, updateZemDto). then((zem: UpdateResult) => zem.raw);
-
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le zem spécifié n'existe pas");
-    
-    }
+   
+      return this.zemRepository.update(id, updateZemDto). then((zem: UpdateResult) => zem.raw).catch((error)=>{
+        console.log(error);
+       throw new NotFoundException("Le zem spécifié n'existe pas");
+      });
   }
 
   changed(id:number, updateZemDto: Zem){
-    try {
+    
       this.findOne(id);
       updateZemDto.id = id;
-     return this.zemRepository.save(updateZemDto);
-    } catch (error) {
+     return this.zemRepository.save(updateZemDto).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le zem spécifié n'existe pas");
-    }
     
+     });
+
   }
 
   remove(id: number) {
-    try {
-      return this.zemRepository.delete(id);
+   
+      return this.zemRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le zem spécifié n'existe pas ou dépend d'autre données");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le zem spécifié n'existe pas ou dépend d'autre données");
-    
-    }
+   
   }
 
   async initZemCompt(){

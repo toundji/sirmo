@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { BaseEntity, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from "typeorm";
 
 export abstract class  Audit extends BaseEntity {
   @Column({nullable: true})
@@ -9,8 +9,12 @@ export abstract class  Audit extends BaseEntity {
   editeur_id: number;
 
   @CreateDateColumn()
-  create_at: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  update_at: Date;
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
+  
 }

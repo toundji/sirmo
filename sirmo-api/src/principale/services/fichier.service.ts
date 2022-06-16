@@ -12,15 +12,15 @@ export class FichierService {
   ) {}
 
   create(createFichierDto: Fichier) {
-    try {
-      return this.fichierRepository.save(createFichierDto);
-
-    } catch (error) {
-      console.log(error);
+ 
+      return this.fichierRepository.save(createFichierDto).catch((error)=>{
+        console.log(error);
       
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
 
-    }
+      });
+
+   
   }
 
   findAll() {
@@ -43,47 +43,46 @@ export class FichierService {
   }
 
   findOne(id: number) {
-    try {
-      return this.fichierRepository.findOne(id);
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le fichier spécifié n'existe pas");
-    
-    }
+      return this.fichierRepository.findOne(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le fichier spécifié n'existe pas");
+      
+      });
+
+  
   }
 
   edit(id: number, fichier: Fichier) {
     this.findOne(id);
     fichier.id = id;
 
-    try {
-      return this.fichierRepository.save(fichier);
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le fichier spécifié n'existe pas");
-
-    }
+    
+      return this.fichierRepository.save(fichier).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le fichier spécifié n'existe pas");
+  
+      });
+  
   }
 
   update(id: number, fichier: Fichier) {
-    try {
-      return this.fichierRepository.update(id, fichier);
+ 
+      return this.fichierRepository.update(id, fichier).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le fichier spécifié n'existe pas");
+  
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le fichier spécifié n'existe pas");
-
-    }
   }
 
   remove(id: number) {
-    try {
-      return this.fichierRepository.delete(id);
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le fichier spécifié n'existe pas");
-
-    }
+   
+      return this.fichierRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le fichier spécifié n'existe pas");
+  
+      });
+    
   }
 }

@@ -15,23 +15,7 @@ export class CreateZemDto {
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  cni: string;
-
-  @ApiProperty({required:true})
-  @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  compteEcobank: string;
-
-  @ApiProperty({required:true})
-  @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  compteFedapay: string;
-
-  @ApiProperty({required:true})
-  @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  certificatRoute: string;
-
-  @ApiProperty({required:true})
-  @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  ancienIdentifiant: string;
+  nip: string;
 
   @ApiProperty({required:true})
   @IsNumber({},{message : "Utilisateur invalide"})

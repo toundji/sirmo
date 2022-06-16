@@ -29,5 +29,4 @@ export class Localisation {
     @Column()
     entityId:number;
 
-   
 }

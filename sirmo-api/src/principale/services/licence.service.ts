@@ -75,13 +75,13 @@ export class LicenceService {
       return licence;
 
     });
-    try {
-      return this.licenceRepository.save(licences);
+    
+      return this.licenceRepository.save(licences).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+     
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-    }
   }
 
   findAll() {
@@ -89,34 +89,33 @@ export class LicenceService {
   }
 
   findOne(id: number) {
-    try {
-      return this.licenceRepository.findOne(id);
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le licence spécifiée n'existe pas");
-    
-    }
+      return this.licenceRepository.findOne(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le licence spécifiée n'existe pas");
+      
+      });
   }
 
   update(id: number, updateLicenceDto: UpdateLicenceDto) {
-    try {
-      return this.licenceRepository.update(id, updateLicenceDto);
-
+      return this.licenceRepository.update(id, updateLicenceDto).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le licence spécifiée n'existe pas");
      
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le licence spécifiée n'existe pas");
-    }
+      });
+
+
   }
 
   remove(id: number) {
-    try {
-      return this.licenceRepository.delete(id);
+  
+      return this.licenceRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le licence spécifiée n'existe pas");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le licence spécifiée n'existe pas");
-    }
+
+ 
   }
 }

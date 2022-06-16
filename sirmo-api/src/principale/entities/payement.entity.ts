@@ -10,8 +10,7 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
+ 
 } from 'typeorm';
 import { Audit } from './audit';
 import { Compte } from './compte.entity';
@@ -40,8 +39,4 @@ export class Payement extends Audit{
   @ManyToOne((type) => Compte)
   @JoinColumn({ name : 'compte_id' })
   compte: Compte;
-
-
-
-
 }

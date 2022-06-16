@@ -14,27 +14,29 @@ export class TypeAmandeService {
   ) {}
 
   create(createTypeAmandeDto: CreateTypeAmandeDto) {
-    try {
-      return this.typeAmandeRepository.save(createTypeAmandeDto);
-
-    } catch (error) {
-      console.log(error);
+   
+      return this.typeAmandeRepository.save(createTypeAmandeDto).catch((error)=>{
+        console.log(error);
   
         throw new BadRequestException(
               "Les données que nous avons réçues ne sont celles que  nous espérons",
             );
-    }
+      });
+
+   
+     
+    
   }
 
   createAll(createTypeAmandeDto: CreateTypeAmandeDto[]) {
-    try {
-      return this.typeAmandeRepository.save(createTypeAmandeDto);
+   
+      return this.typeAmandeRepository.save(createTypeAmandeDto).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
-    }
   }
 
   findAll() {
@@ -42,64 +44,59 @@ export class TypeAmandeService {
   }
 
   findOne(id: number) {
-    try {
-      return this.typeAmandeRepository.findOne(id);
+   
+      return this.typeAmandeRepository.findOne(id).catch((error)=>{console.log(error);
+        throw new NotFoundException("Le type d'amande spécifié n'existe pas");
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le type d'amande spécifié n'existe pas");
-    
-    }
+  
   }
 
   findBysIds(ids: number[]) {
     return this.typeAmandeRepository.findByIds(ids);
   }
   findOneOrFail(option: any) {
-    try {
-      return this.typeAmandeRepository.findOneOrFail(option);
+   
+      return this.typeAmandeRepository.findOneOrFail(option).catch((error)=>{  console.log(error);
 
-    } catch (error) {
-      console.log(error);
+        throw new NotFoundException("Le type d'amande spécifié n'existe pas");
+     });
 
-      throw new NotFoundException("Le type d'amande spécifié n'existe pas");
-    }
+  
   }
 
   edit(id: number, typeAmande: TypeAmande) {
-    try {
-      return this.typeAmandeRepository.save(typeAmande);
+   
+      return this.typeAmandeRepository.save(typeAmande).catch((error)=>{ console.log(error);
 
-    } catch (error) {
-      console.log(error);
+        throw new NotFoundException("Le type d'amande spécifié n'existe pas");
+      });
 
-      throw new NotFoundException("Le type d'amande spécifié n'existe pas");
-    
-    }
+   
   }
 
   update(id: number, updateTypeAmandeDto: UpdateTypeAmandeDto) {
-    try {
-      return this.typeAmandeRepository.update(id,updateTypeAmandeDto);
-
-    } catch (error) {
-      console.log(error);
+  
+      return this.typeAmandeRepository.update(id,updateTypeAmandeDto).catch((error)=>{
+        console.log(error);
 
       throw new NotFoundException("Le type d'amande spécifié n'existe pas");
     
-    }
+      });
+
+   
   }
 
   remove(id: number) {
-    try {
-      return this.typeAmandeRepository.delete(id);
+   
+      return this.typeAmandeRepository.delete(id).catch((error)=>{
+        console.log(error);
 
-    } catch (error) {
-      console.log(error);
+        throw new NotFoundException("Le type d'amande spécifié n'existe pas");
+      
+      });
 
-      throw new NotFoundException("Le type d'amande spécifié n'existe pas");
-    
-    }
+  
   }
 
   async init(){

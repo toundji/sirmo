@@ -36,15 +36,9 @@ export class Zem extends Audit {
   niz: string;
 
   @Column({ unique: true })
-  compteEcobank: string;
-
-  @Column({ unique: true })
-  compteFedapay: string;
-
-  @Column({ unique: true })
   certificatRoute: string;
 
-  @Column()
+  @Column({ default: StatutZem.ACTIF, nullable: false })
   statut: StatutZem;
 
   @Column({ nullable: false })

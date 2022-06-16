@@ -12,14 +12,13 @@ export class LocalisationService {
   ) {}
 
   create(createLocalisationDto: CreateLocalisationDto) {
-    try {
-      return this.localisationRepository.save(createLocalisationDto);
-
-    } catch (error) {
-      console.log(error);
+   
+      return this.localisationRepository.save(createLocalisationDto).catch((error)=>{
+        console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
-    }
+      });
+
   }
 
   findAll() {
@@ -29,46 +28,45 @@ export class LocalisationService {
   }
 
   findOne(id: number) {
-    try {
+  
       return this.localisationRepository.findOne(id, {
         relations: ['departement', 'arrondissements'],
+      }).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le localisation spécifié n'existe pas");
+      
       });
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le localisation spécifié n'existe pas");
-    
-    }
+
     
   }
 
   update(id: number, localisation: Localisation) {
-    try {
-      return this.localisationRepository.update(id, localisation);
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le localisation spécifié n'existe pas");
-    
-    }
+   
+      return this.localisationRepository.update(id, localisation).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le localisation spécifié n'existe pas");
+      
+      });
+ 
   }
 
   patch(id: number, localisation: Localisation) {
-    try {
-      return this.localisationRepository.update(id, localisation);
+     return this.localisationRepository.update(id, localisation).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le localisation spécifié n'existe pas");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le localisation spécifié n'existe pas");
-    
-    }
   }
 
   remove(id: number) {
-    try {
-      return this.localisationRepository.delete(id);
+  
+      return this.localisationRepository.delete(id).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le localisation spécifié n'existe pas");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le localisation spécifié n'existe pas");
-    }
+  
   }
 }

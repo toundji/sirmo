@@ -36,11 +36,8 @@ export class User extends Audit{
   @Column({unique:true, nullable:false})
   phone: string;
 
-
   @Column({ nullable: false, unique: true })
   code?: string = uuidv4();
-
-  
 
   @ManyToMany(type=>Role, {eager:true})
   @JoinTable({
@@ -66,9 +63,9 @@ export class User extends Audit{
   })
   profiles?: Fichier[];
 
-
-  
   @BeforeInsert()  async hashPassword() {
+    this.email = this.email?.toLowerCase()?.trim();
+    this.phone = this.phone.trim();
     this.password = await hash(this.password, 10);  
   }
 }

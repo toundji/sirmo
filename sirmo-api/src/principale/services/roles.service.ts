@@ -16,14 +16,12 @@ export class RoleService {
   }
 
   createAll(createRoleDto: CreateRoleDto[]) {
-    try {
-      return this.roleRepository.save(createRoleDto);
-
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
-    }
+      return this.roleRepository.save(createRoleDto).catch((error)=>{  console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      });
+
+  
   }
 
   findAll() {
@@ -42,20 +40,33 @@ export class RoleService {
 
  
 
-  findOneByName(name: string):Promise<Role> {
-    try{return this.roleRepository.findOne({where:{
-      nom: name.toUpperCase()
-    }});}catch(e){
-      throw new NotFoundException("Recupération d'un rôle", e.message);
-    }
+  findOneByName(name: RoleName):Promise<Role> {
+ 
+      return this.roleRepository.findOne({where:{
+      nom: name
+    }}).catch((error)=>{ 
+      console.log(error);
+      
+      throw new NotFoundException("Recupération d'un rôle", error.message);});
+ 
   }
 
   update(id: number, updateRoleDto: UpdateRoleDto) {
-    return this.roleRepository.update(id, updateRoleDto);
+    return this.roleRepository.update(id, updateRoleDto).catch((error)=>{
+      console.log(error);
+
+      throw new BadRequestException(
+        "Les données que nous avons réçues ne sont celles que  nous espérons",
+      );
+    });
   }
 
   remove(id: number) {
-    return this.roleRepository.delete(id);
+    return this.roleRepository.delete(id).catch((error)=>{
+      throw new BadRequestException(
+        "Les role indiqué n'existe pas",
+      );
+    });
   }
 
   async init(){

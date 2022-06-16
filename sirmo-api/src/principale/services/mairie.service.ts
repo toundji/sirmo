@@ -22,19 +22,22 @@ export class MairieService {
     private arrondissementService:ArrondissementService,
     private readonly fichierService: FichierService,
 
-  ) {}
+  ) {
+  }
   async create(createMairieDto: CreateMairieDto, user:User) {
     let mairie: Mairie = new Mairie();
     Object.keys(createMairieDto).forEach(cle=>{mairie[cle] = createMairieDto[cle]});
 
     mairie.createur_id = user?.id;
 
-   try{ const arrondissement: Arrondissement = await this.arrondissementService.findOne(createMairieDto.arrondissementId)
+  
+     const arrondissement: Arrondissement = await this.arrondissementService.findOne(createMairieDto.arrondissementId).catch((error)=>{
+      throw new NotFoundException("Impossible de trouver l'arrondisement précicser ");
+
+     })
     mairie.arrondissement = arrondissement;
     mairie.commune = arrondissement.commune;
-  }catch(e){
-      return new NotFoundException("Impossible de trouver l'arrondisement précicser ");
-    }
+ 
 
     if(createMairieDto.localisation){
       const localisation: Localisation = await this.localisationService.create(mairie.localisation);
@@ -45,7 +48,9 @@ export class MairieService {
       return mairie;
     }
     else{
-        return await  this.mairieRepository.save(mairie);
+        return await  this.mairieRepository.save(mairie).catch((error)=>{
+          throw new NotFoundException("Problème lor de la création de la mairie. Donnée invalide")
+        });
     }
 
   }
@@ -59,40 +64,39 @@ export class MairieService {
   }
 
   findOne(id: number) {
-    try {
-      return this.mairieRepository.findOne(id, {relations: ["image"]});
-    } catch (error) {
-      throw new NotFoundException("Mairie non trouvé")
-    }
+   
+      return this.mairieRepository.findOne(id, {relations: ["image"]}).catch((error)=>{
+        throw new NotFoundException("Mairie non trouvé")
+    
+      });
+  
   }
 
   findOneWithImage(id: number) {
-    try {
-      
-    } catch (error) {
-      
-    }
-    return this.mairieRepository.findOne(id, {relations:["image"]});
+   
+    return this.mairieRepository.findOne(id, {relations:["image"]}).catch((error)=>{
+      throw new NotFoundException("Mairie non trouvé")
+    });
   }
 
   findFirst(option:any) {
-    try {
-      return this.mairieRepository.findOne(option);
-    } catch (error) {
-      throw new NotFoundException("Mairie non trouvé")
-    }
+    
+      return this.mairieRepository.findOne(option).catch((error)=>{
+        throw new NotFoundException("Mairie non trouvé")
+      });
+  
   }
 
   update(id: number, mairie: Mairie) {
     this.findOne(id);
     mairie.id = id;
-    try {
-      return this.mairieRepository.save( mairie);
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-    
-    }
+  
+      return this.mairieRepository.save( mairie).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      
+      });
+   
     
   }
 
@@ -131,13 +135,13 @@ export class MairieService {
   }
 
   remove(id: number) {
-    try {
-      return this.mairieRepository.delete(id);
+   
+      return this.mairieRepository.softRemove({id:id}).catch((error)=>{
+        console.log(error);
+        throw new NotFoundException("Le mairie spécifiée n'existe pas");
+      
+      });
 
-    } catch (error) {
-      console.log(error);
-      throw new NotFoundException("Le mairie spécifiée n'existe pas");
-    
-    }
+  
   }
 }

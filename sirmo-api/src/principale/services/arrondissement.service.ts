@@ -14,18 +14,18 @@ export class ArrondissementService {
   ) {}
 
   create(createArrondissementDto: CreateArrondissementDto) {
-    return this.arrondissementRepository.save(createArrondissementDto);
+    return this.arrondissementRepository.save(createArrondissementDto).catch((error)=>{
+      console.log(error);
+      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+    });
   }
 
   createAll(createArrondissementDtos: CreateArrondissementDto[]) {
-    try {
-      return this.arrondissementRepository.save(createArrondissementDtos);
-
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-
-    }
+    
+      return this.arrondissementRepository.save(createArrondissementDtos).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      });
   }
 
   findAll() {
@@ -33,45 +33,47 @@ export class ArrondissementService {
   }
 
   findOne(id: number) {
-try{    return this.arrondissementRepository.findOne(id, {relations:["commune"], loadEagerRelations:false});
-}catch(e)  {
-   throw new HttpException(
+   return this.arrondissementRepository.findOne(id, {relations:["commune"], loadEagerRelations:false}).catch((error)=>{
+  throw new HttpException(
     "Impossible de trouver l'arrondissement démandé",
     HttpStatus.UNAUTHORIZED,
   );
-}
+});
+
 }
 
   update(id: number, updateArrondissementDto: UpdateArrondissementDto) {
-    try{    return this.arrondissementRepository.update(id,updateArrondissementDto);
-    } catch(e)  {
+    return this.arrondissementRepository.update(id,updateArrondissementDto).catch((error)=>{
+        
       throw new HttpException(
-      "Impossible de trouver l'arrondissement concerné",
-      HttpStatus.NOT_FOUND,
-    );
-    }
+        "Impossible de trouver l'arrondissement concerné",
+        HttpStatus.NOT_FOUND,
+      );
+      
+    });
+   
  }
 
   patch(id: number, updateArrondissementDto: UpdateArrondissementDto) {
-    try {
-      return this.arrondissementRepository.update(id,updateArrondissementDto);
-
-    } catch (error) {
-      console.log(error);
+    
+      return this.arrondissementRepository.update(id,updateArrondissementDto).catch((error)=>{
+        console.log(error);
       throw new NotFoundException("L'arrondissement spécifiée n'existe pas");
 
-    }
+      });
+
+  
   }
 
   remove(id: number) {
-    try {
-      return this.arrondissementRepository.delete(id);
-
-    } catch (error) {
-      console.log(error);
+    
+      return this.arrondissementRepository.delete(id).catch((error)=>{
+        console.log(error);
 
       throw new NotFoundException("L'arrondissement spécifié n'existe pas ou depend d'autres données");
 
-    }
+      });
+
+  
   }
 }
