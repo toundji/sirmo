@@ -15,7 +15,6 @@ async function bootstrap() {
     })
   );
   app.enableCors({ origin: true });
-  // eslint-disable-next-line prettier/prettier
   const config = new DocumentBuilder()
                 .setTitle("SIRMO API")
                 .setDescription("Système d'Identification RFID Mobile des conducteurs motos(Zems) au Bénin")
@@ -25,6 +24,6 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup("/api/doc",app, document);
     writeFileSync('./swagger.json', JSON.stringify(document));
-  await app.listen(process.env.PORT || 3000, '0.0.0.0');
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
