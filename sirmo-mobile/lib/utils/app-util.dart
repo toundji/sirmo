@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppUtil {
-  static String appName = "ZemPlus";
+  static String appName = "Zem🏍";
   static void goToScreen(BuildContext context, Widget screen) {
     Navigator.push(
       context,

@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/user.dart';
@@ -34,6 +36,25 @@ class UserService extends ChangeNotifier {
     }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw "Les données que nous avons récues ne sont pas celle que nous espérons";
+    });
+  }
+
+  Future<void> updateProfile(File profile) async {
+    FormData body = FormData.fromMap(
+      {
+        'logo': await MultipartFile.fromFile(profile.path),
+      },
+    );
+
+    await DioClient(headers: {'Accept': 'application/json'})
+        .post("users/proi", body: body)
+        .then((value) {
+      log("$value");
+      return value;
+    }).onError((error, stackTrace) {
+      log("Erreure lors de la mise à jour du logo",
+          error: error, stackTrace: stackTrace);
+      throw error ?? "";
     });
   }
 }

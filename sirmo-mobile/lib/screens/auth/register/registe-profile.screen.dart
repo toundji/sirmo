@@ -6,6 +6,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:sirmo/models/arrondissement.dart';
 import 'package:sirmo/models/commune.dart';
 import 'package:sirmo/models/departement.dart';
+import 'package:sirmo/services/user.service.dart';
 import 'package:sirmo/utils/app-date.dart';
 import '../../../components/curve_path_clipper.dart';
 import '../../../services/departement.service.dart';
@@ -88,7 +89,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
           controller: _scrollController,
           child: Card(
             elevation: 10.0,
-            margin: EdgeInsets.all(16),
+            margin: EdgeInsets.all(8),
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
             child: Padding(
@@ -102,21 +103,21 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                     SizedBox(height: 25),
                     TextFormField(
                       initialValue: user?.nom,
-                      onChanged: onFirstNameChanged,
+                      onChanged: onLastNameChanged,
                       validator: firstNameValidator,
                       decoration: AppDecore.input("Nom"),
                     ),
                     SizedBox(height: 16),
                     TextFormField(
                       initialValue: user?.prenom,
-                      onChanged: onLastNameChanged,
+                      onChanged: onFirstNameChanged,
                       validator: lastNameValidator,
                       decoration: AppDecore.input("Prénom"),
                     ),
                     SizedBox(height: 16),
                     DateTimeField(
                         format: AppDate.dateFormat,
-                        initialValue: new DateTime.now(),
+                        initialValue: user?.date_naiss,
                         onChanged: (DateTime? date) {
                           user?.date_naiss = date;
                         },
@@ -199,7 +200,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                           if (value == null)
                             return "le commune est obligatoire";
                         },
-                        decoration: AppDecore.input("Pays * "),
+                        decoration: AppDecore.input("Commune * "),
                         items: dep?.communes == null
                             ? []
                             : dep!.communes!
@@ -227,9 +228,9 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                             return "l'arrondissement est obligatoire";
                         },
                         decoration: AppDecore.input("Arrondissement * "),
-                        items: commune?.arrondissement == null
+                        items: commune?.arrondissements == null
                             ? []
-                            : commune!.arrondissement!
+                            : commune!.arrondissements!
                                 .map((e) => DropdownMenuItem(
                                       child: Text(
                                         "${e.nom}",
@@ -315,7 +316,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
   }
 
   onLastNameChanged(String? value) {
-    user?.prenom = value?.trim();
+    user?.nom = value?.trim();
   }
 
   String? cityValidator(String? value) {
@@ -329,19 +330,29 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
   }
 
   String? adresseValidator(String? value) {
-    if (value == null)
+    if (value == null) {
       return "L'adresse est obligartoire";
-    else if (value.length < 3)
+    } else if (value.length < 3) {
       return "Vous devez entrez 3 cararères au minimum";
-    else if (value.length > 50)
+    } else if (value.length > 50) {
       return "Vous devez entrez 50 cararères au maximum";
+    }
     return null;
   }
 
   onSubmit() async {
-    if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
-      context.read<AuthService>().create();
-      AppUtil.goToScreen(context, UpdateProfileImageScreen());
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      PersonalAlert.showLoading(context);
+      context.read<AuthService>().create(user!).then((value) {
+        PersonalAlert.showSuccess(context,
+                message: "Vous êtes inscrit avec succès.")
+            .then((value) {
+          AppUtil.goToScreen(context, UpdateProfileImageScreen());
+        });
+        context.read<UserService>().user = value;
+      }).onError((error, stackTrace) {
+        PersonalAlert.showError(context, message: "$error");
+      });
     }
   }
 

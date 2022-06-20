@@ -55,7 +55,7 @@ class Departement implements Audit {
     return {
       'id': id,
       'nom': nom,
-      'communes': communes?.map((x) => x?.toMap())?.toList(),
+      'communes': communes?.map((x) => x.toMap()).toList(),
       'created_at': created_at?.millisecondsSinceEpoch,
       'createur_id': createur_id,
       'editeur_id': editeur_id,
@@ -71,12 +71,12 @@ class Departement implements Audit {
           ? List<Commune>.from(map['communes']?.map((x) => Commune.fromMap(x)))
           : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }

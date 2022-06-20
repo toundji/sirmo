@@ -17,6 +17,11 @@ class AuthService extends ChangeNotifier {
   PhoneNumber? phone;
   File? profile;
 
+  setImageProfile(File? profil) {
+    profile = profil;
+    notifyListeners();
+  }
+
   setEmailPhoneAndPass(PhoneNumber phone, String password, String? email) {
     user.phone = phone.toString();
     user.password = password;
@@ -42,10 +47,20 @@ class AuthService extends ChangeNotifier {
     });
   }
 
-  Future create() async {
+  Future<User> create(User data) async {
+    user = data;
     var body = user.toCreateMap();
-    log("$body", name: "Body of the request");
-    throw "Debog mode";
+    return await DioClient(auth: false)
+        .post("users/register", body: body)
+        .then((value) {
+      NetworkInfo.token = value["token"];
+      user = User.fromMap(value["user"]);
+      return user;
+    }).onError((error, stackTrace) {
+      log("", error: error, stackTrace: stackTrace);
+      throw error ??
+          "Une erreur s'est produit pendant l'enrégisterement des données";
+    });
   }
 
   loadUserInfo() async {

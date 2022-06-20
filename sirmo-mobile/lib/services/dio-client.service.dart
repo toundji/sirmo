@@ -8,12 +8,16 @@ import '../utils/request.exception.dart';
 
 class DioClient {
   Dio? _dio;
-  DioClient({bool auth = true, String? contentType}) {
+  DioClient(
+      {bool auth = true, String? contentType, Map<String, dynamic>? headers}) {
     _dio = Dio();
     _dio!.options.baseUrl = "${NetworkInfo.baseUrl}";
     _dio!.options.sendTimeout = 100000;
 
     _dio!.options.contentType = contentType ?? "application/json";
+    if (headers != null) {
+      _dio!.options.headers = headers;
+    }
     if (auth)
       _dio!.options.headers["Authorization"] = "Bearer ${NetworkInfo.token}";
   }

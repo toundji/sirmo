@@ -115,17 +115,17 @@ class User implements Audit {
       'genre': genre,
       'password': password,
       'email': email,
-      'date_naiss': date_naiss?.millisecondsSinceEpoch,
+      'date_naiss': date_naiss?.toIso8601String(),
       'phone': phone,
       'code': code,
-      'roles': roles?.map((x) => x?.toMap())?.toList(),
+      'roles': roles?.map((x) => x.toMap()).toList(),
       'arrondissement': arrondissement?.toMap(),
       'profile': profile?.toMap(),
-      'profiles': profiles?.map((x) => x?.toMap())?.toList(),
-      'created_at': created_at?.millisecondsSinceEpoch,
+      'profiles': profiles?.map((x) => x.toMap()).toList(),
+      'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
-      'updated_at': updated_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at?.toIso8601String(),
     };
   }
 
@@ -151,7 +151,7 @@ class User implements Audit {
       password: map['password'],
       email: map['email'],
       date_naiss: map['date_naiss'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['date_naiss'])
+          ? DateTime.tryParse(map['date_naiss'])
           : null,
       phone: map['tel'],
       code: map['code'],
@@ -166,12 +166,12 @@ class User implements Audit {
           ? List<Fichier>.from(map['profiles']?.map((x) => Fichier.fromMap(x)))
           : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }

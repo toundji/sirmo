@@ -10,7 +10,7 @@ class Commune implements Audit {
   int? id;
   String? nom;
   Departement? departement;
-  List<Arrondissement>? arrondissement;
+  List<Arrondissement>? arrondissements;
 
   @override
   DateTime? created_at;
@@ -27,7 +27,7 @@ class Commune implements Audit {
     this.id,
     this.nom,
     this.departement,
-    this.arrondissement,
+    this.arrondissements,
     this.created_at,
     this.createur_id,
     this.editeur_id,
@@ -48,7 +48,7 @@ class Commune implements Audit {
       id: id ?? this.id,
       nom: nom ?? this.nom,
       departement: departement ?? this.departement,
-      arrondissement: arrondissement ?? this.arrondissement,
+      arrondissements: arrondissement ?? this.arrondissements,
       created_at: created_at ?? this.created_at,
       createur_id: createur_id ?? this.createur_id,
       editeur_id: editeur_id ?? this.editeur_id,
@@ -61,7 +61,7 @@ class Commune implements Audit {
       'id': id,
       'nom': nom,
       'departement': departement?.toMap(),
-      'arrondissement': arrondissement?.map((x) => x.toMap()).toList(),
+      'arrondissement': arrondissements?.map((x) => x.toMap()).toList(),
       'created_at': created_at?.millisecondsSinceEpoch,
       'createur_id': createur_id,
       'editeur_id': editeur_id,
@@ -76,17 +76,17 @@ class Commune implements Audit {
       departement: map['departement'] != null
           ? Departement.fromMap(map['departement'])
           : null,
-      arrondissement: map['arrondissement'] != null
+      arrondissements: map['arrondissements'] != null
           ? List<Arrondissement>.from(
-              map['arrondissement']?.map((x) => Arrondissement.fromMap(x)))
+              map['arrondissements']?.map((x) => Arrondissement.fromMap(x)))
           : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }
@@ -98,7 +98,7 @@ class Commune implements Audit {
 
   @override
   String toString() {
-    return 'Commune(id: $id, nom: $nom, departement: $departement, arrondissement: $arrondissement, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
+    return 'Commune(id: $id, nom: $nom, departement: $departement, arrondissement: $arrondissements, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 
   @override
@@ -109,7 +109,7 @@ class Commune implements Audit {
         other.id == id &&
         other.nom == nom &&
         other.departement == departement &&
-        listEquals(other.arrondissement, arrondissement) &&
+        listEquals(other.arrondissements, arrondissements) &&
         other.created_at == created_at &&
         other.createur_id == createur_id &&
         other.editeur_id == editeur_id &&
@@ -121,7 +121,7 @@ class Commune implements Audit {
     return id.hashCode ^
         nom.hashCode ^
         departement.hashCode ^
-        arrondissement.hashCode ^
+        arrondissements.hashCode ^
         created_at.hashCode ^
         createur_id.hashCode ^
         editeur_id.hashCode ^

@@ -209,6 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       authService.checkAvailableEmail().then((value) {
         authService.checkAvailablePhone().then((value) {
+          PersonalAlert.hideLoading();
           AppUtil.goToScreen(context, RegistreProfileScreen());
         }).onError((error, stackTrace) {
           PersonalAlert.showError(context, message: "$error");

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sirmo/services/user.service.dart';
 import '../../../components/curve_path_clipper.dart';
 import '../../home/home.screen.dart';
 import '/utils/app-util.dart';
@@ -24,12 +25,12 @@ class UpdateProfileImageScreen extends StatefulWidget {
 class _UpdateProfileImageScreenState extends State<UpdateProfileImageScreen> {
   String? errorMessage;
 
-  File? logo;
+  File? profile;
 
   @override
   void initState() {
     super.initState();
-    logo = context.read<AuthService>().profile;
+    profile = context.read<AuthService>().profile;
   }
 
   @override
@@ -60,7 +61,7 @@ class _UpdateProfileImageScreenState extends State<UpdateProfileImageScreen> {
           children: [
             AppDecore.getTitle("Profile", color: ColorConst.text, scal: 1.2),
             const SizedBox(height: 16),
-            _getImage(logo, getImage: _getLogo),
+            _getImage(profile, getImage: _getLogo),
             if (_hasError)
               Padding(
                   padding: EdgeInsets.only(top: 16),
@@ -79,18 +80,10 @@ class _UpdateProfileImageScreenState extends State<UpdateProfileImageScreen> {
   }
 
   onSubmit() {
-    if (logo != null) {
-      // context.read<AuthService>().setMedia(logo: logo!);
-      AppUtil.goToScreen(
-        context,
-        HomeScreen(),
-      );
-    } else {
-      AppUtil.goToScreen(
-        context,
-        HomeScreen(),
-      );
-    }
+    if (profile != null) {
+      context.read<AuthService>().setImageProfile(profile);
+      context.read<UserService>().setImageProfile(profile)
+    } else {}
   }
 
   bool get _hasError => errorMessage != null && errorMessage!.isNotEmpty;
