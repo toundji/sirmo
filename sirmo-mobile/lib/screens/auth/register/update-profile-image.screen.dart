@@ -82,7 +82,7 @@ class _UpdateProfileImageScreenState extends State<UpdateProfileImageScreen> {
   onSubmit() {
     if (profile != null) {
       context.read<AuthService>().setImageProfile(profile);
-      context.read<UserService>().setImageProfile(profile)
+      // context.read<UserService>().setImageProfile(profile)
     } else {}
   }
 

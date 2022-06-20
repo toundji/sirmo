@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, SetMetadata, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, SetMetadata, Req, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../createDto/create-user.dto';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '../entities/user.entity';
 import { RoleName } from 'src/enums/role-name';
 import { Roles } from '../role.decorator';
@@ -15,6 +15,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Public } from 'src/auth/public-decore';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { LoginRespo } from './../../auth/dto/login-respo.dto';
+import { Fichier } from '../entities/fichier.entity';
 
 
 
@@ -110,7 +111,19 @@ export class UserController {
   }
 
   @ApiBearerAuth("token")
-  @Post(":id")
+  @Post("profile/image")
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema:{
+      type: 'object',
+      properties: {
+        profile:{
+          type: 'string',
+          format: 'binary'
+        }
+      }
+    }
+  })
   @UseInterceptors(
     FileInterceptor('profile', {
       storage: diskStorage({
@@ -120,9 +133,24 @@ export class UserController {
       fileFilter: imageFileFilter,
     }),
   )
-  updateProfile(@UploadedFile() profile, @Param('id') id: number, @Req() request,):Promise<User> {
+  updateProfile(@UploadedFile() profile, @Req() request,):Promise<User> {
     const user: User = request.user;
-    return this.userService.updateProfile(+id, profile, user);
+    return this.userService.updateProfile(user.id, profile, user);
+  }
+
+
+  @ApiBearerAuth("token")
+  @ApiOkResponse({ schema:{
+        type: 'string',
+        format: 'binary'
+      }
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get("profile/image")
+  myProfile(@Req() request, @Res() res){
+    const user: User=request.user;
+    const file:Fichier = user.profile;
+    return res.sendFile(file.path, { root: './' })
   }
 }
 
