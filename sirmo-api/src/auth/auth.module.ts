@@ -21,7 +21,7 @@ import "dotenv/config";
     }),
   ],
   providers: [AuthService, JwtStrategy],
-  exports: [PassportModule, JwtModule],
+  exports: [PassportModule, JwtModule, AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}

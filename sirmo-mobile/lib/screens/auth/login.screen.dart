@@ -1,156 +1,206 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import '../../components/curve_path_clipper.dart';
+import '/components/app-decore.dart';
+import '/components/shake-transition.dart';
+import '/screens/auth/register/register.screen.dart';
+import '/services/user.service.dart';
+import '/utils/app-util.dart';
+import '/utils/color-const.dart';
 import 'package:provider/provider.dart';
-import 'package:sirmo/components/app-decore.dart';
-import 'package:sirmo/components/icon-animation.dart';
-import 'package:sirmo/components/responsive.dart';
-import 'package:sirmo/components/shake-transition.dart';
-import 'package:sirmo/main.dart';
-import 'package:sirmo/models/login.dart';
-import 'package:sirmo/services/auth.service.dart';
-import 'package:sirmo/utils/color-const.dart';
 
 import '../../components/personal_alert.dart';
 import '../../utils/size-const.dart';
-import '../home/home.screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  static String routeName = "login";
   LoginScreen({Key? key}) : super(key: key);
-  static const String routeName = "login";
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String? errorText = "";
-  bool _phoneIsValide = false;
+  String? errorMessage;
   String? password;
-  PhoneNumber? phone = PhoneNumber(isoCode: "BJ");
+  String? email;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool saveInfo = false;
+  PhoneNumber? phone = PhoneNumber(isoCode: "BJ");
+  bool phoneisValide = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-              height: 200,
-              child: Image.asset(
-                "assets/images/logo_large.png",
-                fit: BoxFit.cover,
-              )),
-          Card(
-            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: Responsive.responsiveValue(context,
-                      mobile: MainAxisSize.min),
-                  children: [
-                    AppDecore.getTitle("Connexion"),
-                    const SizedBox(height: 10),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: Responsive.responsiveValue(context,
-                                mobile: 16.0, desktop: 24.0)),
-                        child: InternationalPhoneNumberInput(
-                          onInputValidated: (value) {
-                            log("$value");
-                            _phoneIsValide = value;
-                          },
-                          initialValue: phone,
-                          countries: ["BJ"],
-                          errorMessage: "Numméron de téléphone est invalide",
-                          spaceBetweenSelectorAndTextField: 0.0,
-                          validator: phoneValidator,
-                          onInputChanged: onPhoneChanged,
-                          inputDecoration: AppDecore.input("Téléphone * "),
-                          selectorConfig: SelectorConfig(
-                              leadingPadding: SizeConst.padding,
-                              setSelectorButtonAsPrefixIcon: true),
-                        )),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: Responsive.responsiveValue(context,
-                              mobile: 16.0, desktop: 24.0)),
-                      child: TextFormField(
-                        onChanged: onPasswordChanged,
-                        validator: passwordValidator,
-                        decoration: AppDecore.input("Password"),
-                      ),
-                    ),
-                    Row(
+      appBar: PreferredSize(
+        preferredSize: Size(MediaQuery.of(context).size.width, 120),
+        child: ClipPath(
+          clipper: CurvePathClipper(),
+          child: AppBar(
+            iconTheme:
+                Theme.of(context).iconTheme.copyWith(color: ColorConst.white),
+            title: Text(
+              AppUtil.appName,
+              textScaleFactor: 1.2,
+              style: TextStyle(color: ColorConst.white),
+            ),
+            centerTitle: true,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ShakeTransition(
+              child: Card(
+                elevation: 10.0,
+                margin: EdgeInsets.all(16),
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16))),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Checkbox(value: false, onChanged: (value) {}),
-                        Text("Se souvenir de moi")
+                        AppDecore.getTitle("Conexion"),
+                        SizedBox(height: 25),
+                        Padding(
+                            padding:
+                                EdgeInsets.only(top: SizeConst.padding + 10),
+                            child: InternationalPhoneNumberInput(
+                              onInputValidated: (value) {
+                                log("$value");
+                                phoneisValide = value;
+                              },
+                              initialValue: phone,
+                              countries: ["BJ", "CI"],
+                              errorMessage: "Numméro de téléphone est invalide",
+                              spaceBetweenSelectorAndTextField: 0.0,
+                              validator: phoneValidator,
+                              onInputChanged: onPhoneChanged,
+                              inputDecoration: AppDecore.input("Téléphone * "),
+                              selectorConfig: SelectorConfig(
+                                  leadingPadding: SizeConst.padding,
+                                  trailingSpace: false,
+                                  setSelectorButtonAsPrefixIcon: true),
+                            )),
+                        SizedBox(height: 25),
+                        TextFormField(
+                          onChanged: onPasswordChanged,
+                          initialValue: password,
+                          validator: passwordValidator,
+                          obscureText: true,
+                          decoration: AppDecore.input("Password"),
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            const Flexible(
+                                child: SizedBox(
+                              width: 20,
+                            )),
+                            Checkbox(
+                                value: saveInfo,
+                                onChanged: (value) {
+                                  setState(() {
+                                    saveInfo = value ?? false;
+                                  });
+                                }),
+                            Text("Se souvenir de moi"),
+                          ],
+                        ),
+                        if (_hasError)
+                          Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: Text(
+                                errorMessage!,
+                                style: TextStyle(color: ColorConst.error),
+                              )),
+                        SizedBox(height: 20),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: AppDecore.submitButton(
+                                context, "Valider", onSubmit))
                       ],
                     ),
-                    Text(
-                      errorText ?? "",
-                      style: TextStyle(color: ColorConst.error),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(SizeConst.padding),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Je n'ai pas de compte ! ",
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      AppUtil.goToScreen(context, RegisterScreen());
+                    },
+                    child: const Text(
+                      "S'inscrire",
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                    const SizedBox(height: 10),
-                    AppDecore.button(context, "Valider", onSubmit)
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-    ));
-  }
-
-  get form {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(
-        vertical: Responsive.responsiveValue(context,
-            mobile: 16.0, tablet: 50.0, desktop: 20.0),
-        horizontal: Responsive.responsiveValue(context,
-            mobile: 16.0, tablet: 150.0, desktop: 100.0),
-      ),
-      child: Column(
-        children: [
-          SizedBox(height: 35),
-          Flexible(
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 400),
-                  child: Image.asset("assets/images/logo_large.png"))),
-          SizedBox(height: 10),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 400),
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Responsive.responsiveValue(context,
-                      mobile: 16.0, tablet: 60.0, desktop: 50.0),
-                  vertical: Responsive.responsiveValue(context,
-                      mobile: 50.0, tablet: 50.0, desktop: 50.0),
-                ),
-                child: Container(),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
+  onSubmit() async {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      var formValue = {
+        "email": email,
+        "password": password,
+      };
+      PersonalAlert.showLoading(context);
+
+      context
+          .read<UserService>()
+          .login("${phone?.dialCode}${phone?.parseNumber()}", password!)
+          .then((value) {
+        PersonalAlert.showSuccess(context,
+                message: "Vous êtes connecter avec succès")
+            .then(
+          (value) => AppUtil.goToScreen(context, Scaffold()),
+        );
+      }).onError((error, stackTrace) {
+        PersonalAlert.showError(context, message: "$error").then((value) {});
+      });
+    }
+  }
+
+  onMailChanged(value) {
+    email = value;
+  }
+
   String? phoneValidator(String? value) {
     if (value == null) return "Le numéro de téléphone est obligatoire";
-    if (!_phoneIsValide) return "Le numéro de téléphone est invalide";
+    if (!phoneisValide) return "Le numéro de téléphone est invalide";
     return null;
   }
 
   onPhoneChanged(PhoneNumber? value) {
     phone = value;
+  }
+
+  MultiValidator emailValidator() {
+    return MultiValidator([
+      EmailValidator(errorText: "Format email invalid"),
+    ]);
   }
 
   String? passwordValidator(String? value) {
@@ -167,23 +217,5 @@ class _LoginScreenState extends State<LoginScreen> {
     password = value;
   }
 
-  onSubmit() async {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      PersonalAlert.showLoading(context);
-      context
-          .read<AuthService>()
-          .login(Login(username: phone.toString(), password: password!))
-          .then((value) {
-        PersonalAlert.showSuccess(context,
-                message: "Vous êtes connecter avec succès")
-            .then((value) =>
-                Navigator.pushReplacementNamed(context, HomeScreen.routeName));
-      }).onError((error, stackTrace) {
-        PersonalAlert.showError(context, message: "$error").then((value) {});
-        setState(() {
-          errorText = "$error";
-        });
-      });
-    }
-  }
+  bool get _hasError => errorMessage != null && errorMessage!.isNotEmpty;
 }

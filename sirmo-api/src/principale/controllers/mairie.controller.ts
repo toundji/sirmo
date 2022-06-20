@@ -14,7 +14,7 @@ import {
 } from "@nestjs/common";
 import { CreateMairieDto } from "../createDto/create-mairie.dto";
 import { MairieService } from "../services/mairie.service";
-import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { UpdateMairieDto } from "../updateDto/update-mairie.dto";
 import { Mairie } from "../entities/mairie.entity";
 import { Roles } from "../role.decorator";
@@ -30,6 +30,7 @@ import { Fichier } from "../entities/fichier.entity";
 import { CreateLocalisationDto } from "./../createDto/create-localisation.dto";
 
 @ApiTags("Mairie")
+@ApiBearerAuth("token")
 @Controller("mairies")
 export class MairieController {
   constructor(private readonly mairieService: MairieService) {}

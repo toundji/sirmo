@@ -9,10 +9,11 @@ import {
 } from "@nestjs/common";
 import { ProprietaireMotosService } from "../services/proprietaire-motos.service";
 import { CreateProprietaireMotoDto } from "../createDto/create-proprietaire-moto.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UpdateProprietaireMotoDto } from "../updateDto/update-proprietaire-moto.dto";
 
 @ApiTags("Proprietaires de Motos")
+@ApiBearerAuth("token")
 @Controller("proprietaire-motos")
 export class ProprietaireMotosController {
   constructor(

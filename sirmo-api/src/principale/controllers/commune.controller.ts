@@ -9,10 +9,11 @@ import {
 } from "@nestjs/common";
 import { CommuneService } from "../services/commune.service";
 import { CreateCommuneDto } from "../createDto/create-commune.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UpdateCommuneDto } from "../updateDto/update-commune.dto";
 
 @ApiTags("Communes")
+@ApiBearerAuth("token")
 @Controller("communes")
 export class CommuneController {
   constructor(private readonly communeService: CommuneService) {}

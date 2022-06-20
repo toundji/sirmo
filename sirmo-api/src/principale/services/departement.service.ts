@@ -34,14 +34,14 @@ export class DepartementService {
 
   findAll() {
     return this.departementRepository.find({
-      relations: ['communes'],
+      relations: ['communes', "communes.arrondissements"],
     });
   }
 
   findOne(id: number) {
    
       return this.departementRepository.findOne(id, {
-        relations: ['communes'],
+        relations: ['communes', "communes.arrondissements"],
       }).catch((error)=>{
         console.log(error);
         throw new NotFoundException("Le département spécifié n'existe pas");

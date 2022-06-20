@@ -24,6 +24,74 @@ class AppDecore {
     );
   }
 
+  static Widget buildSearch({
+    void Function(String)? onChanged,
+    String hintText = "Ecriver pour rechercher ...",
+  }) {
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(left: 20, right: 20),
+      padding: EdgeInsets.only(left: 16, right: 10),
+      height: 40,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(36),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(0, 10),
+              blurRadius: 10,
+              color: Colors.black12,
+            )
+          ]),
+      child: TextField(
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            color: Colors.black38,
+          ),
+          suffixIcon: Icon(Icons.search),
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+        ),
+      ),
+    );
+  }
+
+  static Widget submitButton(
+      BuildContext context, String label, VoidCallback onPressed,
+      {VoidCallback? onLongPress,
+      Color? color,
+      Color? textColor,
+      double scal = 1.2,
+      double vp = 16}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: vp),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        onLongPress: onLongPress,
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            label,
+            textAlign: TextAlign.left,
+            textScaleFactor: scal,
+            style: TextStyle(
+              color: textColor ?? ColorConst.white,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   static nameValidator(String name, String? value,
       {int min = 3, int max = 50}) {
     if (value == null || value.isEmpty)
@@ -79,9 +147,12 @@ class AppDecore {
     );
   }
 
-  static InputDecoration input(String label, {String? helper}) {
+  static InputDecoration input(String label,
+      {String? helper, IconData? prefix, IconData? suffix}) {
     return InputDecoration(
       helperText: helper,
+      suffix: suffix == null ? null : Icon(suffix),
+      prefix: prefix == null ? null : Icon(prefix),
       label: Text(label,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.left,
@@ -132,7 +203,7 @@ class AppDecore {
     );
   }
 
-  static Widget buildSearch({
+  static Widget buildSearch2({
     void Function(String)? onChanged,
     String hintText = "Ecriver pour rechercher ...",
   }) {

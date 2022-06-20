@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { CreateMotoDto } from '../createDto/create-moto.dto';
 import { MotoService } from '../services/moto.service';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateMotoDto } from '../updateDto/update-moto.dto';
 import { Moto } from '../entities/moto.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -24,6 +24,7 @@ import { User } from '../entities/user.entity';
 
 
 @ApiTags('Moto')
+@ApiBearerAuth("token")
 @Controller('motos')
 export class MotoController {
   constructor(private readonly motosService: MotoService) {}

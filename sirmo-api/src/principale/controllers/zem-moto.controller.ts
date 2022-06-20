@@ -8,13 +8,14 @@ import {
   Param,
   Delete,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateZemMotoDto } from "../createDto/create-zem-moto.dto";
 import { ZemMoto } from "../entities/zem-moto.entity";
 import { ZemMotoService } from "../services/zem-moto.service";
 import { UpdateZemMotoDto } from "../updateDto/update-zem-moto.dto";
 
 @ApiTags("ZemMotos")
+@ApiBearerAuth("token")
 @Controller("zemMotos")
 export class ZemMotoController {
   constructor(private readonly zemMotoService: ZemMotoService) {}

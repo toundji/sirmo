@@ -39,7 +39,7 @@ dependencies:
   provider:
   cached_network_image:
   email_validator:
-  form_field_validator:
+  form_field_validator: ^1.1.0
   badges: 
   carousel_slider:
   # kkiapay_flutter_sdk: 
@@ -50,7 +50,7 @@ dependencies:
   intl:
   jwt_decode: ^0.3.1
   flutter_secure_storage: ^5.0.2
-  
+  datetime_picker_formfield:
 
 
 dev_dependencies:

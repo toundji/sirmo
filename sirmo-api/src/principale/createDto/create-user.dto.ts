@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
-import { Transform, Type } from "class-transformer";
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsPhoneNumber, IsPositive, IsString, Length } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsPositive, IsString, Length } from "class-validator";
 
 export class CreateUserDto {
     @ApiProperty({required:true})
@@ -24,7 +23,8 @@ export class CreateUserDto {
     password: string;
 
     @ApiProperty()
-    @IsString()
+    @IsEmail()
+    @IsOptional()
     email: string;
 
     @ApiProperty()

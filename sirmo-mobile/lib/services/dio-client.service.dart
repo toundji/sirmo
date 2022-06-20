@@ -8,14 +8,14 @@ import '../utils/request.exception.dart';
 
 class DioClient {
   Dio? _dio;
-  DioClient({Dio? dio}) {
-    _dio = dio ?? Dio();
+  DioClient({bool auth = true, String? contentType}) {
+    _dio = Dio();
     _dio!.options.baseUrl = "${NetworkInfo.baseUrl}";
     _dio!.options.sendTimeout = 100000;
-    if (dio == null) {
-      _dio!.options.contentType = "application/json";
+
+    _dio!.options.contentType = contentType ?? "application/json";
+    if (auth)
       _dio!.options.headers["Authorization"] = "Bearer ${NetworkInfo.token}";
-    }
   }
 
   Future<dynamic> post(
@@ -24,13 +24,12 @@ class DioClient {
     dynamic param,
   }) async {
     try {
-      // await isConnected();
+      await isConnected();
       final response =
           await _dio!.post(url, data: body, queryParameters: param);
 
       return response.data;
     } on DioError catch (e) {
-      log("error");
       manageDioError(e);
     }
   }
@@ -104,31 +103,25 @@ class DioClient {
   }
 
   manageDioError(DioError error) {
-    log("$error");
+    log("Uri", error: error.requestOptions.uri);
+    log("Response", error: error.response);
+    log("mesage", error: error.message);
+    log("mesage", error: error.type);
 
     if (error.response != null) {
       if (error.response!.statusCode != null &&
           error.response!.statusCode! >= 500) {
         throw RequestException(
-          error.response!.data["message"] ??
-              "Erreur de traitement. Les données que nous avon réçues ne sont pas celles que nous espérons. Vous pouvez contacter un administrateur si cella persiste",
+          "Erreur de traitement. Les données que nous avon réçues ne sont pas celles que nous espérons. Vous pouvez contacter un administrateur si cella persiste",
         );
       }
       if (error.response!.statusCode != null &&
           error.response!.statusCode! >= 400) {
-        String message = error.response!.data is String
-            ? error.response!.data
-            : error.response!.data["message"] ??
-                "Mauvaise requète. Les données que nous avon réçues ne sont pas celles que nous espérons";
-        throw RequestException(message);
-      }
-      if (error.response!.statusCode != null &&
-          error.response!.statusCode! >= 300) {
-        String message = error.response!.data is String
-            ? error.response!.data
-            : error.response!.data["message"] ??
-                "Mauvaise requète. Les données que nous avon réçues ne sont pas celles que nous espérons";
-        throw RequestException(message);
+        throw RequestException(
+          "Mauvaise requète. Les données que nous avon réçues ne sont pas celles que nous espérons",
+        );
+      } else {
+        throw RequestException("${error.response}");
       }
     } else {
       if (error.type == DioErrorType.connectTimeout) {
@@ -152,11 +145,6 @@ class DioClient {
         throw RequestException("Erreur incconu est annulée");
       }
     }
-    String message = error.response!.data is String
-        ? error.response!.data
-        : error.response!.data["message"] ??
-            "Mauvaise requète. Les données que nous avon réçues ne sont pas celles que nous espérons";
-    throw RequestException(message);
   }
 
   techniqueError() {

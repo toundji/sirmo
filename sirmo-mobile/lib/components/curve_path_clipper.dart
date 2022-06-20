@@ -17,8 +17,8 @@ class CurvePathClipper extends CustomClipper<Path> {
 
     //démarrage du déssin
 
-    path.lineTo(0, height - offset);
-    path.quadraticBezierTo(width / 2, height, width, height - offset);
+    path.lineTo(0, height - offset / 2);
+    path.quadraticBezierTo(width / 2, height, width, height - offset / 2);
     path.lineTo(width, 0);
 
     path.close();

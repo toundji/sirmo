@@ -2,6 +2,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UploadedFile,
 } from "@nestjs/common";
@@ -161,10 +162,26 @@ export class UserService {
               "L'utilisateur avec l'pseudo " + pseudo + " est introuvable",
             );
       }
-    );
-  
+    )
   }
-
+  countByMailOrPHone(mailOrPhone:string): Promise<number>{
+    return this.userRepository.count({where: [{email: mailOrPhone}, {phone: mailOrPhone}]}).catch(
+      (error)=>{
+        throw new InternalServerErrorException("Erreur de traitement: "+error.message);
+      });
+  }
+  countByEmail(mailOrPhone:string): Promise<number>{
+   return this.userRepository.count({where: {email: mailOrPhone}}).catch(
+      (error)=>{
+        throw new InternalServerErrorException("Erreur de traitement: "+error.message);
+      });
+  }
+  countByPhone(mailOrPhone:string): Promise<number>{
+    return this.userRepository.count({where:  {phone: mailOrPhone}}).catch(
+      (error)=>{
+        throw new InternalServerErrorException("Erreur de traitement: "+error.message);
+      });
+  }
   change(id: number, updateUserDto: User) {
     this.findOne(id);
     updateUserDto.id = id;

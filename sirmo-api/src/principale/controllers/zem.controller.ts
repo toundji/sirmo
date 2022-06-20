@@ -12,18 +12,17 @@ import {
 } from "@nestjs/common";
 import { ZemService } from "../services/zem.service";
 import { CreateZemDto } from "../createDto/create-zem.dto";
-import { ApiTags } from "@nestjs/swagger";
-import { UpdateZemDto } from "../updateDto/update-zem.dto";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateUserZemDto } from "./../createDto/create-user-zem.dto";
 import { Zem } from "../entities/zem.entity";
 import { User } from "../entities/user.entity";
-import { UpdateResult } from "typeorm";
 import { Roles } from "../role.decorator";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { RoleGuard } from "../role.guard";
 import { RoleName } from "src/enums/role-name";
 
 @ApiTags("Zems")
+@ApiBearerAuth("token")
 @Controller("zems")
 export class ZemController {
   constructor(private readonly zemService: ZemService) {}

@@ -11,7 +11,7 @@ import {
 } from "@nestjs/common";
 import { LicenceService } from "../services/licence.service";
 import { CreateLicenceDto } from "../createDto/create-licence.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UpdateLicenceDto } from "../updateDto/update-licence.dto";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { RoleGuard } from "../role.guard";
@@ -19,6 +19,7 @@ import { User } from "../entities/user.entity";
 
 @UseGuards(JwtAuthGuard, RoleGuard)
 @ApiTags("Licences des Zems")
+@ApiBearerAuth("token")
 @Controller("licences")
 export class LicenceController {
   constructor(private readonly licenceService: LicenceService) {}

@@ -3,10 +3,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ArrondissementService } from '../services/arrondissement.service';
 import { CreateArrondissementDto } from '../createDto/create-arrondissement.dto';
 import { UpdateArrondissementDto } from '../updateDto/update-arrondissement.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 
 @ApiTags("Arrondissements")
+@ApiBearerAuth("token")
 @Controller('arrondissements')
 export class ArrondissementController {
   constructor(private readonly arrondissementService: ArrondissementService) {}

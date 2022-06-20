@@ -10,11 +10,12 @@ import {
 } from "@nestjs/common";
 import { TypeAmandeService } from "../services/type-amande.service";
 import { CreateTypeAmandeDto } from "../createDto/create-type-amande.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UpdateTypeAmandeDto } from "../updateDto/update-type-amande.dto";
 import { TypeAmande } from "src/principale/entities/type-amande.entity";
 
 @ApiTags("Les Types d'amandes")
+@ApiBearerAuth("token")
 @Controller("type-amandes")
 export class TypeAmandeController {
   constructor(private readonly typeAmandeService: TypeAmandeService) {}

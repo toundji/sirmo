@@ -13,7 +13,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     console.log(secretOrKey);
     super({
       ignoreExpiration: false,
-      // secretOrKey: ""+secretOrKey,
       secretOrKey : process.env.JWT_SECRET,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     });

@@ -15,7 +15,7 @@ export class Departement {
     @Column({ nullable: false })
     nom: string;
 
-    @OneToMany(type => Commune, commune => commune.departement, {eager:true})
+    @OneToMany(type => Commune, commune => commune.departement)
     communes?: Commune[];
 
    }

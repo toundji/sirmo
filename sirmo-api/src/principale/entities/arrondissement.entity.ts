@@ -14,6 +14,6 @@ export class Arrondissement {
   nom: string;
 
   @JoinColumn({ name: 'commune_id' })
-  @ManyToOne(type => Commune, (commune) => commune.arrondissements, {nullable:false})
+  @ManyToOne(type => Commune, (commune) => commune.arrondissements, {nullable:false, eager:true})
   commune?: Commune;
 }

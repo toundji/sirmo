@@ -10,10 +10,11 @@ import {
   } from "@nestjs/common";
   import { AppreciationService } from "../services/appreciation.service";
   import { CreateAppreciationDto } from "../createDto/create-appreciation.dto";
-  import { ApiTags } from "@nestjs/swagger";
+  import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
   import { Appreciation } from "../entities/appreciation.entity";
   
   @ApiTags("Appreciations des Zems")
+  @ApiBearerAuth("token")
   @Controller("appreciations")
   export class AppreciationController {
     constructor(private readonly appreciationService: AppreciationService) {}

@@ -2,7 +2,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { CreatePoliceDto } from '../createDto/create-police.dto';
 import { PoliceService } from '../services/police.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Police } from '../entities/police.entity';
 import { CreatePoliceWithUserDto } from './../createDto/create-user-police.dto';
 import { Roles } from '../role.decorator';
@@ -12,6 +12,7 @@ import { RoleName } from 'src/enums/role-name';
 import { User } from '../entities/user.entity';
 
 @ApiTags("Police")
+@ApiBearerAuth("token")
 @Controller('polices')
 export class PoliceController {
   constructor(private readonly policeService: PoliceService) {}

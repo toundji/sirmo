@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Arrondissement } from "src/principale/entities/arrondissement.entity";
-import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 import { Role } from './role.entity';
 import { hash } from 'bcrypt';
@@ -28,6 +28,7 @@ export class User extends Audit{
   password: string;
 
   @Column({nullable:true})
+  // @Index({ unique: true, where: "email IS NOT NULL" })
   email: string;
 
   @Column({nullable:true})

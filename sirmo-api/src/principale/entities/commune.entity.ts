@@ -22,9 +22,9 @@ export class Commune {
   nom: string;
 
   @JoinColumn({ name: 'departement_id' })
-  @ManyToOne(type => Departement, (departement) => departement.communes, {nullable:false})
+  @ManyToOne(type => Departement, (departement) => departement.communes, {nullable:false, eager:true})
   departement?: Departement;
 
-  @OneToMany(type => Arrondissement, (arrondissement) => arrondissement.commune,{eager:true})
+  @OneToMany(type => Arrondissement, (arrondissement) => arrondissement.commune,)
   arrondissements?: Arrondissement[];
 }
