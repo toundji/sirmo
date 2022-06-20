@@ -41,8 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     super.initState();
     User? user = context.read<AuthService>().user;
-    password = user?.password;
-    email = user?.email;
+    password = user.password;
+    email = user.email;
     phone = context.read<AuthService>().phone ?? phone;
   }
 
@@ -181,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   onMailChanged(value) {
-    email = value;
+    email = value?.trim();
   }
 
   MultiValidator emailValidator() {
@@ -223,7 +223,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
       });
     }
-    AppUtil.goToScreen(context, RegistreProfileScreen());
   }
 
   String? passwordValidator(String? value) {

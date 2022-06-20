@@ -42,6 +42,12 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  Future create() async {
+    var body = user.toCreateMap();
+    log("$body", name: "Body of the request");
+    throw "Debog mode";
+  }
+
   loadUserInfo() async {
     await DioClient().get("auth/me").then((value) {
       User? user = User.fromMap(value);

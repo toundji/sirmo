@@ -51,7 +51,7 @@ class User implements Audit {
     this.id,
     this.nom,
     this.prenom,
-     this.genre = true,
+    this.genre = true,
     this.password,
     this.email,
     this.date_naiss,
@@ -126,6 +126,19 @@ class User implements Audit {
       'createur_id': createur_id,
       'editeur_id': editeur_id,
       'updated_at': updated_at?.millisecondsSinceEpoch,
+    };
+  }
+
+  Map<String, dynamic> toCreateMap() {
+    return {
+      'nom': nom,
+      'prenom': prenom,
+      'genre': genre,
+      'password': password,
+      'email': email,
+      'date_naiss': date_naiss?.toIso8601String(),
+      'phone': phone,
+      'arrondissement': arrondissement?.id,
     };
   }
 

@@ -172,7 +172,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                       isDense: true,
                       isExpanded: true,
                       validator: departmentValidator,
-                      decoration: AppDecore.input("Pays * "),
+                      decoration: AppDecore.input("Departement * "),
                       items: departments == null
                           ? []
                           : departments!
@@ -226,7 +226,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                           if (value == null)
                             return "l'arrondissement est obligatoire";
                         },
-                        decoration: AppDecore.input("Pays * "),
+                        decoration: AppDecore.input("Arrondissement * "),
                         items: commune?.arrondissement == null
                             ? []
                             : commune!.arrondissement!
@@ -240,19 +240,19 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                                 .toList(),
                       ),
                     SizedBox(height: 16),
-                    Text(
+                    const Text(
                       "* est obligatoire",
                       style: TextStyle(fontStyle: FontStyle.italic),
                     ),
                     if (_hasError)
                       Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 16.0),
                           child: Text(
                             errorMessage!,
-                            style: TextStyle(color: ColorConst.error),
+                            style: const TextStyle(color: ColorConst.error),
                           )),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: AppDecore.submitButton(
@@ -301,7 +301,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
   }
 
   onFirstNameChanged(String? value) {
-    user?.prenom = value;
+    user?.prenom = value?.trim();
   }
 
   String? lastNameValidator(String? value) {
@@ -315,7 +315,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
   }
 
   onLastNameChanged(String? value) {
-    user?.prenom = value;
+    user?.prenom = value?.trim();
   }
 
   String? cityValidator(String? value) {
@@ -340,7 +340,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
 
   onSubmit() async {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
-      // context.read<AuthService>().setPersonalInfo(user!);
+      context.read<AuthService>().create();
       AppUtil.goToScreen(context, UpdateProfileImageScreen());
     }
   }

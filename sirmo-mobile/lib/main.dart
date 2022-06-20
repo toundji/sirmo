@@ -7,6 +7,9 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/models/onboarding.dart';
 import 'package:sirmo/screens/welcome/onboarding-first.dart';
+import 'package:sirmo/services/arrondissement.service.dart';
+import 'package:sirmo/services/commune.service.dart';
+import 'package:sirmo/services/departement.service.dart';
 import 'package:sirmo/utils/color-const.dart';
 
 import 'screens/auth/login.screen.dart';
@@ -30,6 +33,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthService()),
+        ChangeNotifierProvider(create: (context) => DepartmentService()),
+        ChangeNotifierProvider(create: (context) => CommuneService()),
+        ChangeNotifierProvider(create: (context) => ArrondissementService()),
+        // ChangeNotifierProvider(create: (context) => DepartmentService()),
       ],
       child: MaterialApp(
         title: 'Sirmo',

@@ -10,7 +10,7 @@ class DepartmentService extends ChangeNotifier {
 
   Future<List<Departement>?> loadAll({bool refresh = false}) async {
     if (all == null || all!.isEmpty || refresh) {
-      return await DioClient().get("departements").then((value) {
+      return await DioClient(auth: false).get("departements").then((value) {
         List<dynamic> list = value;
         all = list.map((e) => Departement.fromMap(e)).toList();
         notifyListeners();
