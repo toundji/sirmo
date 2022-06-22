@@ -20,10 +20,11 @@ async function bootstrap() {
         erreur.statusCode = 400;
         erreur.message="Les données ne sont pas celle espérer";
         erreur.validations = {};
+        console.log("ok here");
        errors.forEach((error)=>{
         erreur.validations[error.property] = Object.values(error.constraints);
        });
-        new BadRequestException(erreur);
+       return new BadRequestException(erreur);
       }
     })
   );
