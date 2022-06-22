@@ -44,13 +44,13 @@ export class UserService {
       user.roles = await this.roleService.findAllByIds(createUserDto.role_ids)
     }
     user.roles.push(role);
-    
+
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(createUserDto.arrondissement);
       user.arrondissement = arrondisement;
       return this.userRepository.save(user).catch((error)=>{
         console.log(error);
-        throw new BadRequestException("Les données que nous avons récu ne sont pas celle que nous espérons");
+        throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
       
       });
   

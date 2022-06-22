@@ -16,7 +16,7 @@ class User implements Audit {
 
   String? prenom;
 
-  bool genre = true;
+  String genre;
 
   String? password;
 
@@ -45,13 +45,16 @@ class User implements Audit {
   @override
   int? editeur_id;
 
+  static String MASCULIN = "MASCULIN";
+  static String FEMININ = "FEMININ";
+
   @override
   DateTime? updated_at;
   User({
     this.id,
     this.nom,
     this.prenom,
-    this.genre = true,
+    this.genre ,
     this.password,
     this.email,
     this.date_naiss,
