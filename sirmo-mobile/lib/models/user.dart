@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:sirmo/models/audit.dart';
 
+import '../utils/network-info.dart';
 import 'arrondissement.dart';
 import 'fichier.dart';
 import 'fichier.dart';
@@ -69,6 +70,9 @@ class User implements Audit {
     this.editeur_id,
     this.updated_at,
   });
+
+  static String get imageProfile =>
+      "${NetworkInfo.baseUrl}/users/profile/image";
 
   User copyWith({
     int? id,

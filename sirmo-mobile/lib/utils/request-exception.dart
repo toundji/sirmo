@@ -33,7 +33,9 @@ class RequestExcept implements Exception {
       statusCode: map['statusCode']?.toInt(),
       error: map['error'],
       message: map['message'],
-      validations: Map<String, dynamic>.from(map['validations']),
+      validations: map['validations'] == null
+          ? null
+          : Map<String, dynamic>.from(map['validations']),
       path: map['path'],
     );
   }
