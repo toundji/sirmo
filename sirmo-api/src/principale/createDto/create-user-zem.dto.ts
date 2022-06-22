@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { IsNumberString, IsObject, MinLength } from "class-validator";
+import { IsNumberString, IsObject, MinLength, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { CreateUserDto } from './create-user.dto';
 import { IsNumber } from 'class-validator';
+import { Type } from "class-transformer";
 
 export class CreateUserZemDto {
 
@@ -30,7 +31,8 @@ export class CreateUserZemDto {
   ancienIdentifiant: string;
 
   @ApiProperty({required:true})
-  @IsObject()
+  @ValidateNested({ each: true })
+  @Type(() => CreateUserDto)
   user:CreateUserDto;
 
 }
