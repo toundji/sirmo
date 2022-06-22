@@ -42,12 +42,12 @@ class UserService extends ChangeNotifier {
   Future<void> updateProfile(File profile) async {
     FormData body = FormData.fromMap(
       {
-        'logo': await MultipartFile.fromFile(profile.path),
+        'profile': await MultipartFile.fromFile(profile.path),
       },
     );
 
     await DioClient(headers: {'Accept': 'application/json'})
-        .post("users/proi", body: body)
+        .post("users/profile/image", body: body)
         .then((value) {
       log("$value");
       return value;

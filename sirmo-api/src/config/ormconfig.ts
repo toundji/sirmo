@@ -4,7 +4,6 @@ import 'dotenv/config'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 
-
 const ormConfig: TypeOrmOptionsFactory|any = {
     type: process.env.DATABASE_SG,
     url: process.env.DB_URL,
@@ -19,7 +18,7 @@ const ormConfig: TypeOrmOptionsFactory|any = {
     entities: ["dist/**/*.entity{.ts,.js}"],
 
     synchronize: true,
-    
+
     migrations: ["dist/migrations/*.js"],
     cli: {
         migrationsDir: "src/migrations",

@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsPositive, IsString, Length } from "class-validator";
 import { Genre } from 'src/enums/genre';
 
-export class CreateUserDto {
+export class CreateUserWithRoleDto {
     @ApiProperty({required:true})
     @IsString()
     @IsNotEmpty()
@@ -30,6 +30,7 @@ export class CreateUserDto {
 
     @ApiProperty()
     @IsString()
+    @IsOptional()
     date_naiss: Date;
 
     @ApiProperty({required:true})
@@ -40,5 +41,10 @@ export class CreateUserDto {
     @IsNumber()
     @IsPositive()
     arrondissement: number;
+
+    @ApiProperty({required:true})
+    @IsNumber({},{each:true})
+    @IsPositive({each:true})
+    role_ids?: number[];
 }
 

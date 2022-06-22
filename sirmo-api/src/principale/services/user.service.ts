@@ -20,6 +20,8 @@ import { HttpStatus } from "@nestjs/common";
 import { FichierService } from "./fichier.service";
 import { Fichier } from "../entities/fichier.entity";
 import { RoleName } from 'src/enums/role-name';
+import { Genre } from "src/enums/genre";
+import { CreateUserWithRoleDto } from "../createDto/create-user-with-role.dto";
 
 @Injectable()
 export class UserService {
@@ -30,15 +32,19 @@ export class UserService {
     private readonly fichierService: FichierService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserWithRoleDto): Promise<User> {
     const user: User = new User();
     Object.keys(createUserDto).forEach((cle) => {
       user[cle] = createUserDto[cle];
     });
-   
     const role: Role = await this.roleService.findOneByName(RoleName.USER);
-    user.roles = [role];
+    user.roles = [];
 
+    if(createUserDto.role_ids){
+      user.roles = await this.roleService.findAllByIds(createUserDto.role_ids)
+    }
+    user.roles.push(role);
+    
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(createUserDto.arrondissement);
       user.arrondissement = arrondisement;
@@ -251,7 +257,7 @@ export class UserService {
     user.arrondissement = arrondis;
     user.prenom = "Ola";
     user.nom = "BABA";
-    user.genre = true;
+    user.genre = Genre.MASCULIN;
     user.email = "Baba@gmail.com";
     user.password = "Baba@1234";
     user.phone = "+22994851785";

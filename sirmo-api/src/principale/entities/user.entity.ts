@@ -6,6 +6,7 @@ import { Role } from './role.entity';
 import { hash } from 'bcrypt';
 import { Fichier } from 'src/principale/entities/fichier.entity';
 import { Audit } from "./audit";
+import { Genre } from 'src/enums/genre';
 
 
 @Entity("users")
@@ -22,7 +23,7 @@ export class User extends Audit{
   prenom: string;
 
   @Column()
-  genre: boolean;
+  genre: Genre;
 
   @Column({ nullable: false })
   password: string;

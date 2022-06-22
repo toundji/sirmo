@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sirmo/components/personal_alert.dart';
 import 'package:sirmo/services/user.service.dart';
 import '../../../components/curve_path_clipper.dart';
 import '../../home/home.screen.dart';
@@ -81,31 +83,39 @@ class _UpdateProfileImageScreenState extends State<UpdateProfileImageScreen> {
 
   onSubmit() {
     if (profile != null) {
+      PersonalAlert.showLoading(context);
       context.read<AuthService>().setImageProfile(profile);
-      // context.read<UserService>().setImageProfile(profile)
+      context.read<UserService>().updateProfile(profile!).then((value) {
+        PersonalAlert.showSuccess(context,
+                message: "Photo de profile mise à jour avec succès")
+            .then((value) {
+          AppUtil.goToScreen(context, HomeScreen());
+        });
+      }).onError((error, stackTrace) {
+        PersonalAlert.showError(context, message: "$error");
+      });
     } else {}
   }
 
   bool get _hasError => errorMessage != null && errorMessage!.isNotEmpty;
 
   _getLogo() async {
-    // final pickerFile =
-    //     await ImagePicker().pickImage(source: ImageSource.gallery);
-    // // await FilePicker.platform.pickFiles(type: FileType.image);
-    // if (pickerFile != null) {
-    //   logo = File(pickerFile.path);
-    //   setState(() {});
-    // }
+    final pickerFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickerFile != null) {
+      profile = File(pickerFile.path);
+      setState(() {});
+    }
   }
 
   _getImage(image, {required VoidCallback getImage}) {
-    return InkWell(
-      onTap: getImage,
-      child: Card(
-        shape: CircleBorder(),
-        child: Stack(
-          children: [
-            Container(
+    return Card(
+      shape: CircleBorder(),
+      child: Stack(
+        children: [
+          MaterialButton(
+            onPressed: getImage,
+            child: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.all(5.0),
               width: MediaQuery.of(context).size.width * 0.45,
@@ -138,13 +148,13 @@ class _UpdateProfileImageScreenState extends State<UpdateProfileImageScreen> {
                 ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              right: 10,
-              child: buildEditButton(onPressed: null),
-            )
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 10,
+            child: buildEditButton(onPressed: getImage),
+          )
+        ],
       ),
     );
   }

@@ -51,6 +51,8 @@ dependencies:
   jwt_decode: ^0.3.1
   flutter_secure_storage: ^5.0.2
   datetime_picker_formfield:
+  image_picker:
+  
 
 
 dev_dependencies:

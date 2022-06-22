@@ -16,6 +16,8 @@ import { Public } from 'src/auth/public-decore';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { LoginRespo } from './../../auth/dto/login-respo.dto';
 import { Fichier } from '../entities/fichier.entity';
+import { CreateUserWithRoleDto } from '../createDto/create-user-with-role.dto';
+import { Role } from '../entities/role.entity';
 
 
 
@@ -29,7 +31,8 @@ export class UserController {
   @ApiOkResponse({type:User})
   @ApiBearerAuth("token")
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  @Roles(RoleName.ADMIN)
+  async create(@Body() createUserDto: CreateUserWithRoleDto): Promise<User> {
     return await this.userService.create(createUserDto);
   }
 

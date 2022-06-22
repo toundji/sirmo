@@ -13,25 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 100,
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(child: AppDrawer()),
-                Expanded(
-                  flex: 4,
-                  child: Container(),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBar(),
     );
   }
 }
