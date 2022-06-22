@@ -45,8 +45,8 @@ class User implements Audit {
   @override
   int? editeur_id;
 
-  static String MASCULIN = "MASCULIN";
-  static String FEMININ = "FEMININ";
+  static const String MASCULIN = "MASCULIN";
+  static const String FEMININ = "FEMININ";
 
   @override
   DateTime? updated_at;
@@ -54,7 +54,7 @@ class User implements Audit {
     this.id,
     this.nom,
     this.prenom,
-    this.genre ,
+    this.genre = User.MASCULIN,
     this.password,
     this.email,
     this.date_naiss,
@@ -74,7 +74,7 @@ class User implements Audit {
     int? id,
     String? nom,
     String? prenom,
-    bool? genre,
+    String? genre,
     String? password,
     String? email,
     DateTime? date_naiss,
@@ -150,7 +150,7 @@ class User implements Audit {
       id: map['id']?.toInt(),
       nom: map['nom'],
       prenom: map['prenom'],
-      genre: map['genre'] ?? false,
+      genre: map['genre'],
       password: map['password'],
       email: map['email'],
       date_naiss: map['date_naiss'] != null

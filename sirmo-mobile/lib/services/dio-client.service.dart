@@ -116,13 +116,17 @@ class DioClient {
       if (error.response!.statusCode != null &&
           error.response!.statusCode! >= 500) {
         throw RequestException(
-          "Erreur de traitement. Les données que nous avon réçues ne sont pas celles que nous espérons. Vous pouvez contacter un administrateur si cella persiste",
+          error.response?.data['message'] ??
+              "Erreur de traitement. Les données que nous avon réçues ne sont pas celles que nous espérons. Vous pouvez contacter un administrateur si cella persiste",
         );
       }
       if (error.response!.statusCode != null &&
           error.response!.statusCode! >= 400) {
+        Map<String, dynamic>? reponse = error.response?.extra;
+
         throw RequestException(
-          "Mauvaise requète. Les données que nous avon réçues ne sont pas celles que nous espérons",
+          error.response?.data['message'] ??
+              "Mauvaise requète. Les données que nous avon réçues ne sont pas celles que nous espérons",
         );
       } else {
         throw RequestException("${error.response}");

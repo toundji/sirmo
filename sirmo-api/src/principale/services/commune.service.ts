@@ -48,7 +48,6 @@ export class CommuneService {
       return this.communeRepository.update(id, updateCommuneDto).catch((error)=>{
         console.log(error);
         throw new NotFoundException("Le commune spécifiée n'existe pas");
-  
       });;
 
     

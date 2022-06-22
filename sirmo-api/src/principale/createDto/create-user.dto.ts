@@ -15,7 +15,7 @@ export class CreateUserDto {
     prenom: string;
 
     @ApiProperty({required:true, default:Genre.MASCULIN})
-    @IsEnum({entity:Genre})
+    @IsEnum(Genre)
     genre: Genre;
 
     @ApiProperty({required:true})

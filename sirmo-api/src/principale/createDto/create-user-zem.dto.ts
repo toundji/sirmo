@@ -23,14 +23,6 @@ export class CreateUserZemDto {
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  compteEcobank: string;
-
-  @ApiProperty({required:true})
-  @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  compteFedapay: string;
-
-  @ApiProperty({required:true})
-  @IsNumberString({},{message:"Seules les chiffres sont valides"})
   certificatRoute: string;
 
   @ApiProperty({required:true})
@@ -40,6 +32,5 @@ export class CreateUserZemDto {
   @ApiProperty({required:true})
   @IsObject()
   user:CreateUserDto;
-
 
 }

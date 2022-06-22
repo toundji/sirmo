@@ -41,14 +41,14 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
 
   User? user;
 
-  bool genre = true;
+  String genre = User.MASCULIN;
 
   @override
   void initState() {
     super.initState();
     user = context.read<AuthService>().user;
 
-    genre = user?.genre ?? true;
+    genre = user?.genre ?? User.MASCULIN;
 
     context
         .read<DepartmentService>()
@@ -134,12 +134,11 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Radio<bool?>(
-                                value: true,
-                                groupValue: genre,
-                                onChanged: (bool? value) {
-                                  user?.genre = value ?? true;
-                                  genre = value ?? true;
+                            Radio<String>(
+                                value: User.MASCULIN,
+                                groupValue: user?.genre,
+                                onChanged: (String? value) {
+                                  user?.genre = value ?? User.MASCULIN;
                                   setState(() {});
                                 }),
                             Text("MASCULIN")
@@ -148,12 +147,11 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Radio<bool?>(
-                                value: false,
-                                groupValue: genre,
-                                onChanged: (bool? value) {
-                                  user?.genre = value ?? true;
-                                  genre = value ?? false;
+                            Radio<String>(
+                                value: User.FEMININ,
+                                groupValue: user?.genre,
+                                onChanged: (String? value) {
+                                  user?.genre = value ?? User.MASCULIN;
 
                                   setState(() {});
                                 }),
