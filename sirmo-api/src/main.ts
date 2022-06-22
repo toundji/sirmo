@@ -6,13 +6,25 @@ import { AppModule } from './app.module';
 import { BadRequestException } from '@nestjs/common';
 import { writeFileSync } from 'fs';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AppValidationError } from './principale/utilis/api-validation-error';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix("/api")
   app.useGlobalPipes(
     new ValidationPipe({
-      exceptionFactory: (errors: ValidationError[]) => new BadRequestException(errors),
+      exceptionFactory: (errors: ValidationError[]) => {
+        const erreur:AppValidationError = new AppValidationError();
+        erreur.type = "VALIDATION";
+        erreur.statusCode = 400;
+        erreur.message="Les données ne sont pas celle espérer";
+        erreur.validations = {};
+       errors.forEach((error)=>{
+        erreur.validations[error.property] = Object.values(error.constraints);
+       });
+        new BadRequestException(erreur);
+      }
     })
   );
   app.enableCors({ origin: true });
@@ -31,9 +43,7 @@ async function bootstrap() {
                     in: 'header',
                   },
                   'token', // This name here is important for matching up with @ApiBearerAuth() in your controller!
-                )
-
-                .build();
+                ).build();
     const document = SwaggerModule.createDocument(app, config);
     const reflector = app.get(Reflector);
     app.useGlobalGuards(new JwtAuthGuard(reflector));
