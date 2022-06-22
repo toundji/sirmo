@@ -18,11 +18,22 @@ async function bootstrap() {
         const erreur:AppValidationError = new AppValidationError();
         erreur.type = "VALIDATION";
         erreur.statusCode = 400;
-        erreur.message="Les données ne sont pas celle espérer";
+        erreur.message="Les données ne sont pas celles espérées";
         erreur.validations = {};
         console.log("ok here");
+
        errors.forEach((error)=>{
-        erreur.validations[error.property] = Object.values(error.constraints);
+         if(error.children && error.children.length>0){
+            erreur.validations[error.property] = {};
+            error.children.forEach((ele)=>{
+                if(ele.constraints){
+                  erreur.validations[error.property][ele.property] =  Object.values(ele.constraints)
+                }
+            })
+          }
+          if(error.constraints)
+          erreur.validations[error.property] = Object.values(error.constraints);
+          
        });
        return new BadRequestException(erreur);
       }
@@ -45,6 +56,7 @@ async function bootstrap() {
                   },
                   'token', // This name here is important for matching up with @ApiBearerAuth() in your controller!
                 ).build();
+
     const document = SwaggerModule.createDocument(app, config);
     const reflector = app.get(Reflector);
     app.useGlobalGuards(new JwtAuthGuard(reflector));

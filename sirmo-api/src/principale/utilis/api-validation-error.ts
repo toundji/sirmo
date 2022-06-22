@@ -4,6 +4,6 @@ export class AppValidationError {
   statusCode: number;
   path:string;
   message:string;
-  validations: {[property: string]: string[];} | any;
+  validations: {[property: string]: string[] | any;} | any;
 
 }

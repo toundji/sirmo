@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import '../utils/network-info.dart';
+import '../utils/request-exception.dart';
 import '../utils/request.exception.dart';
 
 class DioClient {
@@ -122,12 +123,26 @@ class DioClient {
       }
       if (error.response!.statusCode != null &&
           error.response!.statusCode! >= 400) {
-        Map<String, dynamic>? reponse = error.response?.extra;
-
-        throw RequestException(
-          error.response?.data['message'] ??
-              "Mauvaise requète. Les données que nous avon réçues ne sont pas celles que nous espérons",
-        );
+        if (error.response!.data is String) {
+          String data = error.response!.data;
+          if (data.length < 500) {
+            throw RequestException(error.response?.data['message']);
+          } else {
+            throw RequestException("Les donnée réces son invalide");
+          }
+        } else if (error.response!.data is Map<String, dynamic>) {
+          Map<String, dynamic> reponse = error.response?.data;
+          RequestExcept except = RequestExcept.fromMap(reponse);
+          if (except.validations != null) {
+            throw except;
+          } else if (except.message != null) {
+            throw RequestException(except.message!);
+          } else {
+            throw RequestException(
+              "Erreur de traitement. Les données que nous avon réçues ne sont pas celles que nous espérons. Vous pouvez contacter un administrateur si cella persiste",
+            );
+          }
+        }
       } else {
         throw RequestException("${error.response}");
       }
