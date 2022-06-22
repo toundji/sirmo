@@ -29,11 +29,11 @@ export class ArrondissementService {
   }
 
   findAll() {
-    return this.arrondissementRepository.find({loadEagerRelations:false});
+    return this.arrondissementRepository.find();
   }
 
   findOne(id: number) {
-   return this.arrondissementRepository.findOne(id, {relations:["commune"], loadEagerRelations:false}).catch((error)=>{
+   return this.arrondissementRepository.findOne(id).catch((error)=>{
   throw new HttpException(
     "Impossible de trouver l'arrondissement démandé",
     HttpStatus.UNAUTHORIZED,
