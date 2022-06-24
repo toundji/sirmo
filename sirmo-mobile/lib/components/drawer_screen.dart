@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
 
+import '../models/user.dart';
 import '../screens/home/home.screen.dart';
+import '../services/user.service.dart';
 import '../utils/app-routes.dart';
+import '../utils/app-util.dart';
 import '../utils/color-const.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -13,6 +16,27 @@ class AppDrawer extends StatefulWidget {
 
   @override
   _AppDrawerState createState() => _AppDrawerState();
+}
+
+_buildHeader(BuildContext context) {
+  return UserAccountsDrawerHeader(
+    accountName: Text("ZEM+"),
+    accountEmail: Text(""),
+    currentAccountPicture: InkWell(
+      onTap: () {},
+      child: CircleAvatar(
+        backgroundColor: Colors.white,
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset(
+              "assets/images/femme.jpg",
+              fit: BoxFit.contain,
+            )),
+      ),
+    ),
+    otherAccountsPictures: [],
+    otherAccountsPicturesSize: Size(100, 50),
+  );
 }
 
 class _AppDrawerState extends State<AppDrawer> {
@@ -26,16 +50,20 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-        child: Column(
-      children: [
-        Expanded(
-          child: ListView(
-            children: menus!.map((e) => e.build(context)).toList(),
-          ),
-        )
-      ],
-    ));
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: Drawer(
+          child: Column(
+        children: [
+          _buildHeader(context),
+          Expanded(
+            child: ListView(
+              children: menus!.map((e) => e.build(context)).toList(),
+            ),
+          )
+        ],
+      )),
+    );
   }
 
   adminMenu() {
@@ -43,23 +71,38 @@ class _AppDrawerState extends State<AppDrawer> {
       _Menu(title: "ACCUEIL", page: HomeScreen.routeName),
       _Menu(
           title: "Zem",
-          leading: const Icon(Icons.motorcycle),
+          leading: const Icon(
+            Icons.motorcycle,
+            color: ColorConst.primary,
+          ),
           page: UnbuildScreen.routeName),
       _Menu(
           title: "Mairie",
-          leading: const Icon(Icons.policy),
+          leading: const Icon(
+            Icons.policy,
+            color: ColorConst.primary,
+          ),
           page: UnbuildScreen.routeName),
       _Menu(
           title: "Licences",
-          leading: const Icon(Icons.badge),
+          leading: const Icon(
+            Icons.badge,
+            color: ColorConst.primary,
+          ),
           page: UnbuildScreen.routeName),
       _Menu(
           title: "Police",
-          leading: const Icon(Icons.policy),
+          leading: const Icon(
+            Icons.policy,
+            color: ColorConst.primary,
+          ),
           page: UnbuildScreen.routeName),
       _Menu(
           title: "Amande",
-          leading: const Icon(Icons.low_priority),
+          leading: const Icon(
+            Icons.low_priority,
+            color: ColorConst.primary,
+          ),
           page: UnbuildScreen.routeName),
       _Menu(
           title: "AUTRES",
@@ -67,51 +110,87 @@ class _AppDrawerState extends State<AppDrawer> {
           childreen: [
             _Menu(
                 title: "Notifications",
-                leading: const Icon(Icons.notification_important),
+                leading: const Icon(
+                  Icons.notification_important,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Aide",
-                leading: const Icon(Icons.help),
+                leading: const Icon(
+                  Icons.help,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Paramertre",
-                leading: const Icon(Icons.settings),
+                leading: const Icon(
+                  Icons.settings,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Nous Contacter",
-                leading: const Icon(Icons.mail),
+                leading: const Icon(
+                  Icons.mail,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Partager",
-                leading: const Icon(Icons.share),
+                leading: const Icon(
+                  Icons.share,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "UACTransport",
-                leading: const Icon(Icons.app_blocking),
+                leading: const Icon(
+                  Icons.app_blocking,
+                  color: ColorConst.primary,
+                ),
                 page: null),
             _Menu(
                 title: "Login",
-                leading: const Icon(Icons.login),
+                leading: const Icon(
+                  Icons.login,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "sign up",
-                leading: const Icon(Icons.logout),
+                leading: const Icon(
+                  Icons.logout,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Confirm mail",
-                leading: const Icon(Icons.email),
+                leading: const Icon(
+                  Icons.email,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Confirm phone",
-                leading: const Icon(Icons.phone),
+                leading: const Icon(
+                  Icons.phone,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Onboarding",
-                leading: const Icon(Icons.phone),
+                leading: const Icon(
+                  Icons.phone,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
             _Menu(
                 title: "Débugage",
-                leading: const Icon(Icons.car_repair),
+                leading: const Icon(
+                  Icons.car_repair,
+                  color: ColorConst.primary,
+                ),
                 page: UnbuildScreen.routeName),
           ]),
     ];
@@ -160,7 +239,7 @@ class _Menu {
     }
   }
 }
-// 
+//
 // _buildHeader(BuildContext context) {
 //   User user = context.read<UserService>().user ?? User();
 //   Account account = context.read<UserService>().account ?? Account(amount: 0);

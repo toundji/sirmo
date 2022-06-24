@@ -141,6 +141,34 @@ export class UserController {
     return this.userService.updateProfile(user.id, profile, user);
   }
 
+  @ApiBearerAuth("token")
+  @Post("profile/image/path")
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema:{
+      type: 'object',
+      properties: {
+        profile:{
+          type: 'string',
+          format: 'binary'
+        }
+      }
+    }
+  })
+  @UseInterceptors(
+    FileInterceptor('profile', {
+      storage: diskStorage({
+        destination: './files/profiles',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  updateProfilePath(@UploadedFile() profile, @Req() request,):Promise<string> {
+    const user: User = request.user;
+    return this.userService.editUserProfilePath(user.id, profile);
+  }
+
 
   @ApiBearerAuth("token")
   @ApiOkResponse({ schema:{
@@ -150,9 +178,9 @@ export class UserController {
   })
   @UseGuards(JwtAuthGuard)
   @Get("profile/image")
-  myProfile(@Req() request, @Res() res){
-    const user: User=request.user;
-    const file:Fichier = user.profile;
+  async myProfile(@Req() request, @Res() res){
+    const user: User = request.user;
+    const file:Fichier = await  this.userService.getUserProfile(user.id);
     return res.sendFile(file.path, { root: './' })
   }
 }

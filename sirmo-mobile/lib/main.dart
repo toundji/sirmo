@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           primaryColor: ColorConst.primary,
         ),
         routes: routes,
-        initialRoute: OnboardingFirst.routeName,
+        initialRoute: HomeScreen.debugRouteName,
         // onGenerateInitialRoutes: (settings) {
         //   return [MaterialPageRoute(builder: (_) => authGuard)];
         // },

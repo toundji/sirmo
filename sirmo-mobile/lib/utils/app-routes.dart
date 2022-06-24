@@ -10,6 +10,8 @@ import '../screens/home/home.screen.dart';
 final Map<String, WidgetBuilder> routes = {
   // Splashscreen.routeName: (BuildContext context) => Splashscreen(),
   HomeScreen.routeName: (context) => HomeScreen(),
+  HomeScreen.debugRouteName: (context) => HomeScreen(debug: false),
+
   LoginScreen.routeName: (context) => LoginScreen(),
   OnboardingFirst.routeName: (context) => OnboardingFirst(),
   OnboardingSecond.routeName: (context) => OnboardingSecond(),

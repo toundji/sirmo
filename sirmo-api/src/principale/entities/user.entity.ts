@@ -54,7 +54,7 @@ export class User extends Audit{
   arrondissement: Arrondissement;
 
   @JoinColumn({ name: 'fichier_id' , })
-  @ManyToOne(type => Fichier, {eager:true})
+  @ManyToOne(type => Fichier)
   profile: Fichier;
 
   @ManyToMany(type=>Fichier)

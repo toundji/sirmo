@@ -17,6 +17,7 @@ import '../../utils/size-const.dart';
 
 class LoginScreen extends StatefulWidget {
   static String routeName = "login";
+
   LoginScreen({Key? key}) : super(key: key);
 
   @override

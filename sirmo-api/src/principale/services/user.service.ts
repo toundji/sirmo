@@ -22,6 +22,7 @@ import { Fichier } from "../entities/fichier.entity";
 import { RoleName } from 'src/enums/role-name';
 import { Genre } from "src/enums/genre";
 import { CreateUserWithRoleDto } from "../createDto/create-user-with-role.dto";
+import { error, profile } from 'console';
 
 @Injectable()
 export class UserService {
@@ -115,6 +116,41 @@ export class UserService {
 
 
   }
+
+  async getUserProfile(id:number){
+   const user:User= await  this.userRepository.findOneOrFail(id,{relations: ["profile"]}).catch((error)=>{
+      console.log(error);
+      throw new NotFoundException(
+        "L'utilisateur avec spécifié n'existe est introuvable",
+      );
+    });
+    console.log(user);
+    if(user && user.profile){
+      return user.profile;
+    }
+    throw new NotFoundException("Vous n'avez pas ajoutez une photo de profile")
+  }
+
+  async editUserProfilePath(id:number, @UploadedFile() profile,):Promise<string>{
+    
+    const user:User= await  this.userRepository.findOneOrFail(id,{relations: ["profile"]}).catch((error)=>{
+       console.log(error);
+       throw new NotFoundException(
+         "L'utilisateur avec spécifié n'existe est introuvable",
+       );
+     });
+     if(user && user.profile){
+       const fichier:Fichier = user.profile;
+       const name = profile.originalname.split(".")[0];
+       fichier.nom = name;
+       fichier.path = profile.path;
+       fichier.mimetype = profile.mimetype;
+       fichier.size = profile.size;
+       await Fichier.save(fichier);
+       return "Image de profile modifiée avec succès";
+     }
+     throw new NotFoundException("Vous n'avez pas ajoutez une photo de profile")
+   }
 
   async createWithRole(
     createUserDto: CreateUserDto,
