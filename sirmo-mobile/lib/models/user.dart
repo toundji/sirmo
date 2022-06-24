@@ -160,7 +160,7 @@ class User implements Audit {
       date_naiss: map['date_naiss'] != null
           ? DateTime.tryParse(map['date_naiss'])
           : null,
-      phone: map['tel'],
+      phone: map['phone'],
       code: map['code'],
       roles: map['roles'] != null
           ? List<Role>.from(map['roles']?.map((x) => Role.fromMap(x)))

@@ -23,11 +23,11 @@ class UserService extends ChangeNotifier {
       "password": password,
     };
     return await DioClient(auth: false)
-        .post("users/auth/signin", body: body)
+        .post("auth/login", body: body)
         .then((value) {
-      NetworkInfo.token = value["access_token"];
+      NetworkInfo.token = value["token"];
 
-      user = User.fromMap(value["user_data"]);
+      user = User.fromMap(value["user"]);
 
       return user;
     }).onError((error, stackTrace) {
@@ -71,4 +71,5 @@ class UserService extends ChangeNotifier {
       throw error ?? "";
     });
   }
+
 }

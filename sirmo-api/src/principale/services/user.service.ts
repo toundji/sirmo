@@ -23,6 +23,7 @@ import { RoleName } from 'src/enums/role-name';
 import { Genre } from "src/enums/genre";
 import { CreateUserWithRoleDto } from "../createDto/create-user-with-role.dto";
 import { error, profile } from 'console';
+import { Compte } from "../entities/compte.entity";
 
 @Injectable()
 export class UserService {
@@ -49,11 +50,15 @@ export class UserService {
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(createUserDto.arrondissement);
       user.arrondissement = arrondisement;
-      return this.userRepository.save(user).catch((error)=>{
+     
+      const u: User = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
-      
       });
+      const compte:Compte = Compte.create({user:u, montant:0});
+      Compte.save(compte);
+
+      return u;
   
   }
 
@@ -87,7 +92,7 @@ export class UserService {
       const userSaved = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celle que nous espérons");
-    
+  
       });
       profil.entityId = userSaved.id;
       await this.fichierService.create(file);
@@ -113,8 +118,6 @@ export class UserService {
         throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
   
       });
-
-
   }
 
   async getUserProfile(id:number){
@@ -166,11 +169,15 @@ export class UserService {
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(createUserDto.arrondissement);
       user.arrondissement = arrondisement;
-      return this.userRepository.save(user).catch((error)=>{
+
+      const u: User = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
-        throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
-      
+        throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
       });
+      const compte:Compte = Compte.create({user:u, montant:0});
+      Compte.save(compte);
+
+      return u;
    
   }
 
@@ -298,7 +305,11 @@ export class UserService {
     user.password = "Baba@1234";
     user.phone = "+22994851785";
     user.date_naiss = new Date();
-    this.userRepository.save(user);
+    const u: User =  await this.userRepository.save(user);
+    const compte:Compte = Compte.create({user:u, montant:0});
+    Compte.save(compte);
+    return u;
+
   }
 
   async grandAllRole() {

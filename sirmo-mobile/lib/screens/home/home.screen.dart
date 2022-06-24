@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/drawer_screen.dart';
 import 'package:sirmo/components/top_curve_path.dart';
+import 'package:sirmo/screens/potefeuille/credite-porte.screen.dart';
 import 'package:sirmo/screens/profile/profile.screen.dart';
 import 'package:sirmo/utils/network-info.dart';
 
@@ -25,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  dynamic header;
   @override
   void initState() {
     super.initState();
@@ -37,8 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
     context
         .read<UserService>()
         .login("+22994851785", "Baba@1234")
-        .then((value) {})
-        .onError((error, stackTrace) {
+        .then((value) {
+      header = NetworkInfo.headers;
+      setState(() {});
+    }).onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "$error").then((value) {});
     });
   }
@@ -47,30 +51,29 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: preferredSize,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            portefeuile,
-            SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  actionCard("Payer Zem", Icons.payment),
-                  actionCard("Evaluer Zem", Icons.edit),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                actionCard("Statistique du Zem", CupertinoIcons.eye),
+                actionCard("Payer Zem", Icons.payment),
+                actionCard("Evaluer Zem", Icons.edit),
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              actionCard("Statistique du Zem", CupertinoIcons.eye),
+            ],
+          ),
+          portefeuile,
+        ],
       ),
       drawer: AppDrawer(),
     );
@@ -82,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Card(
         elevation: 10.0,
         child: Container(
-          color: ColorConst.primary.shade400,
+          color: Theme.of(context).primaryColor,
           child: Stack(children: [
             Align(
                 alignment: Alignment.center,
@@ -113,7 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          AppUtil.goToScreen(
+                              context, CreditPortefeuilleScreen());
+                        },
                         icon: const Icon(
                           Icons.add,
                           color: ColorConst.white,
@@ -173,8 +179,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        foregroundImage: NetworkImage(NetworkInfo.imageProfile,
-                            headers: NetworkInfo.headers),
+                        foregroundImage: header == null
+                            ? null
+                            : NetworkImage(NetworkInfo.imageProfile,
+                                headers: header),
                         backgroundImage: AssetImage("assets/logos/logo.png"),
                       ),
                       Icon(Icons.arrow_drop_down_outlined,

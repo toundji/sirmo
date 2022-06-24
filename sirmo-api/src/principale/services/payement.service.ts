@@ -12,6 +12,7 @@ import { UserService } from './user.service';
 import { TypeOperation } from 'src/enums/type-operation';
 import { TypePayement } from 'src/enums/type-payement';
 import { Zem } from './../entities/zem.entity';
+import { error } from 'console';
 
 @Injectable()
 export class PayementService {
@@ -19,8 +20,6 @@ export class PayementService {
     @InjectRepository(Payement) private payementRepository: Repository<Payement>,
     private readonly compteService:CompteService,
     private readonly userService:UserService,
-
-
   ) {}
 
   async create(createPayementDto: CreatePayementDto): Promise<Payement> {
@@ -42,6 +41,14 @@ export class PayementService {
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
     }
+  }
+
+  payementOf(user:User):Promise<Payement[]>{
+    const compte:Compte = Compte.create({user:user, id:user.id})
+     return  this.payementRepository.find({where:{compte:compte}}).catch((error)=>{
+       console.log(error);
+       throw new BadRequestException("Une erreur s'est produit. Veillez contacter l'administrateur si cella persiste");
+     })
   }
 
   async payLicence(montant:number,  zem: Zem, user?: User,){

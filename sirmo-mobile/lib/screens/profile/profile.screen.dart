@@ -146,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: ColorConst.primary,
                       ),
                       title: Text(
-                        user?.phone ?? "",
+                        user?.phone ?? "...",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),

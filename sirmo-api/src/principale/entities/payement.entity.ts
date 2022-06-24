@@ -26,12 +26,15 @@ export class Payement extends Audit{
   montant:number;
 
 
+  //SOLDE APRES L'OPERATION
   @Column()
   solde:number;
 
   @Column()
   type:TypePayement
 
+  @Column()
+  info: string
 
   @Column()
   operation:TypeOperation

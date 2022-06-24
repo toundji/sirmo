@@ -9,6 +9,7 @@ import 'package:sirmo/models/onboarding.dart';
 import 'package:sirmo/screens/welcome/onboarding-first.dart';
 import 'package:sirmo/services/arrondissement.service.dart';
 import 'package:sirmo/services/commune.service.dart';
+import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/services/departement.service.dart';
 import 'package:sirmo/services/user.service.dart';
 import 'package:sirmo/utils/color-const.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DepartmentService()),
         ChangeNotifierProvider(create: (context) => CommuneService()),
         ChangeNotifierProvider(create: (context) => ArrondissementService()),
-        // ChangeNotifierProvider(create: (context) => DepartmentService()),
+        ChangeNotifierProvider(create: (context) => CompteService()),
       ],
       child: MaterialApp(
         title: 'Sirmo',

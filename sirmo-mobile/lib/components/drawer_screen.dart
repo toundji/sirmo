@@ -26,12 +26,9 @@ _buildHeader(BuildContext context) {
       onTap: () {},
       child: CircleAvatar(
         backgroundColor: Colors.white,
-        child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Image.asset(
-              "assets/images/femme.jpg",
-              fit: BoxFit.contain,
-            )),
+        foregroundImage: AssetImage(
+          "assets/logos/logo.png",
+        ),
       ),
     ),
     otherAccountsPictures: [],

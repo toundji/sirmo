@@ -64,6 +64,7 @@ import { AuthModule } from './../auth/auth.module';
 import { SeederService } from './services/seeder.service';
 import { SeedController } from './controllers/seeder.controller';
 import { MulterModule } from '@nestjs/platform-express';
+import { CompteController } from './controllers/compte.controller';
 
 
 
@@ -136,6 +137,7 @@ import { MulterModule } from '@nestjs/platform-express';
       PoliceController,
       ZemMotoController,
       SeedController,
+      CompteController,
   ],
   providers: [
     SeederService,

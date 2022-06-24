@@ -11,7 +11,6 @@ import { RoleService } from './roles.service';
 import { Role } from '../entities/role.entity';
 import { Compte } from './../entities/compte.entity';
 import { CompteService } from './compte.service';
-import { catchError } from 'rxjs';
 import { RoleName } from 'src/enums/role-name';
 
 @Injectable()
@@ -32,7 +31,7 @@ export class ZemService {
     const zemSaved : Zem= await this.zemRepository.save(zem);
     // const compte: Compte = 
    
-      await this.compteService.create(new Compte({zem:zemSaved})).catch((error)=>{
+      await this.compteService.create( Compte.create({user:user, montant:0})).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");  
       }); 
@@ -54,7 +53,7 @@ export class ZemService {
       zem.user = user;
       const zemSaved: Zem= await this.zemRepository.save(zem);
       // const compte: Compte = 
-      await this.compteService.create(new Compte({zem:zemSaved})).catch((error)=>{
+      await this.compteService.create(Compte.create({user:user, montant:0, id:user?.id})).catch((error)=>{
 
       console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
@@ -64,14 +63,10 @@ export class ZemService {
   }
 
   createAll(createZemDto: CreateZemDto[]) {
-   
       return this.zemRepository.save(createZemDto).catch((error)=>{
       console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
       }); 
-
- 
-    
   }
 
   findAll() : Promise<Zem[]>{
@@ -117,13 +112,4 @@ export class ZemService {
    
   }
 
-  async initZemCompt(){
-    const zems: Zem[] = await this.findAll();
-    const comptes: Compte[] = [] ;
-
-    zems.forEach(zem=>{
-      comptes.push(new Compte({zem:zem}));
-    });
-   return this.compteService.createAll(comptes);
-  }
 }

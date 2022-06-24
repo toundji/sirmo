@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/app-util.dart';
 import '../utils/color-const.dart';
 import '../utils/size-const.dart';
+import 'curve_path_clipper.dart';
 
 class AppDecore {
   static Widget getTitle(
@@ -164,40 +166,28 @@ class AppDecore {
     );
   }
 
-  static AppBar appBar(
+  static PreferredSize appBar(
     BuildContext context,
     String title, {
     double scal = 1,
     double? height,
     bool leading = false,
+    List<Widget>? actions,
   }) {
-    return AppBar(
-      elevation: 0.0,
-      automaticallyImplyLeading: leading,
-      bottom: PreferredSize(
-        preferredSize: Size(
-          MediaQuery.of(context).size.width,
-          height != null ? height : MediaQuery.of(context).size.height * 0.1,
-        ),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: ColorConst.primary,
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(16),
-            ),
-          ),
-          margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).size.height * 0.1 * 0.4),
-          child: Text(
+    return PreferredSize(
+      preferredSize: Size(MediaQuery.of(context).size.width, 120),
+      child: ClipPath(
+        clipper: CurvePathClipper(),
+        child: AppBar(
+          iconTheme:
+              Theme.of(context).iconTheme.copyWith(color: ColorConst.white),
+          title: Text(
             title,
-            textAlign: TextAlign.center,
-            textScaleFactor: scal,
-            style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                fontSize: 18),
+            textScaleFactor: 1.2,
+            style: TextStyle(color: ColorConst.white),
           ),
+          centerTitle: true,
+          actions: actions ?? [],
         ),
       ),
     );

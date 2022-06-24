@@ -77,11 +77,4 @@ export class ZemController {
   remove(@Param("id") id: number) {
     return this.zemService.remove(+id);
   }
-
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleName.ADMIN, RoleName.MAIRIE)
-  @Get("init/compte")
-  initAllcompte() {
-    return this.zemService.initZemCompt();
-  }
 }
