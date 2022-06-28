@@ -78,7 +78,7 @@ export class ZemService {
       zem.user = user;
       zem.statut = StatutZem.DEMANDE;
       const zemSaved: Zem= await this.zemRepository.save(zem);
-       
+
       await this.compteService.create(Compte.create({user:user, montant:0, id:user?.id})).catch((error)=>{
 
       console.log(error);
@@ -108,6 +108,7 @@ export class ZemService {
   findForUser(user_id: number):Promise<Zem[]> {
     return this.zemRepository.find({where:{ user: User.create({id: user_id}) }}).catch((error)=>{
       console.log(error);
+      
       throw new NotFoundException("Le zem spécifié n'existe pas");
     });
   }
