@@ -41,12 +41,42 @@ class UserService extends ChangeNotifier {
       "old": old,
       "nevel": nevel,
     };
-    return await DioClient(auth: false)
-        .post("users/resset-password", body: body)
+    return await DioClient()
+        .put("users/change/password", body: body)
         .then((value) {
-      NetworkInfo.token = value["access_token"];
-      user = User.fromMap(value["user_data"]);
-      return user;
+      return value;
+    }).onError((error, stackTrace) {
+      log("Error de conexion ", error: error, stackTrace: stackTrace);
+      throw "Les données que nous avons récues ne sont pas celle que nous espérons";
+    });
+  }
+
+  Future<dynamic> changePhone(String nevel) async {
+    var body = {
+      "nevel": nevel,
+    };
+    return await DioClient()
+        .put("users/change/phone", body: body)
+        .then((value) {
+      user?.phone = nevel;
+      notifyListeners();
+      return value;
+    }).onError((error, stackTrace) {
+      log("Error de conexion ", error: error, stackTrace: stackTrace);
+      throw "Les données que nous avons récues ne sont pas celle que nous espérons";
+    });
+  }
+
+  Future<dynamic> changeEmail(String nevel) async {
+    var body = {
+      "nevel": nevel,
+    };
+    return await DioClient()
+        .put("users/change/email", body: body)
+        .then((value) {
+      user?.email = nevel;
+      notifyListeners();
+      return value;
     }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw "Les données que nous avons récues ne sont pas celle que nous espérons";
@@ -71,5 +101,4 @@ class UserService extends ChangeNotifier {
       throw error ?? "";
     });
   }
-
 }

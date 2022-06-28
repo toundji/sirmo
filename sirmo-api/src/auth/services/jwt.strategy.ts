@@ -10,7 +10,6 @@ const secretOrKey = process.env.JWT_KEY;
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
-    console.log(secretOrKey);
     super({
       ignoreExpiration: false,
       secretOrKey : process.env.JWT_SECRET,

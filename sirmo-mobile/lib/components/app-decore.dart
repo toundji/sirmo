@@ -73,6 +73,7 @@ class AppDecore {
         onPressed: onPressed,
         onLongPress: onLongPress,
         style: ElevatedButton.styleFrom(
+          primary: color ?? ColorConst.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),

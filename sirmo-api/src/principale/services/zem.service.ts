@@ -12,6 +12,7 @@ import { Role } from '../entities/role.entity';
 import { Compte } from './../entities/compte.entity';
 import { CompteService } from './compte.service';
 import { RoleName } from 'src/enums/role-name';
+import { StatutZem } from 'src/enums/statut-zem';
 
 @Injectable()
 export class ZemService {
@@ -34,7 +35,7 @@ export class ZemService {
       await this.compteService.create( Compte.create({user:user, montant:0})).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");  
-      }); 
+      });
       return zemSaved;
   }
 
@@ -42,7 +43,6 @@ export class ZemService {
     const zem:Zem = new Zem();
     Object.keys(createZemDto).forEach(cle=>{zem[cle] = createZemDto[cle]});
 
-    
       const user: User =  await this.userService.findOne(createZemDto.userId);
       const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
       const index:number = user.roles.indexOf(role);
@@ -57,7 +57,32 @@ export class ZemService {
 
       console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-    
+      });
+      return zemSaved;
+  }
+
+  async requestByUser(createZemDto: CreateZemDto, user?:User) {
+     await this.findForUser(user.id).then((zems:Zem[])=>{
+      if(zems.length>0) throw new BadRequestException("Vous êtes déjà un zem");
+      return [];
+    })
+    const zem:Zem = new Zem();
+    Object.keys(createZemDto).forEach(cle=>{zem[cle] = createZemDto[cle]});
+
+      const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
+      const index:number = user.roles.indexOf(role);
+      if( index == -1){
+        user.roles.push(role);
+        this.userService.changeWithoutControle(user);
+      }
+      zem.user = user;
+      zem.statut = StatutZem.DEMANDE;
+      const zemSaved: Zem= await this.zemRepository.save(zem);
+       
+      await this.compteService.create(Compte.create({user:user, montant:0, id:user?.id})).catch((error)=>{
+
+      console.log(error);
+      throw new BadRequestException("Création de zem: Données invalides");
       });
       return zemSaved;
   }
@@ -66,7 +91,7 @@ export class ZemService {
       return this.zemRepository.save(createZemDto).catch((error)=>{
       console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-      }); 
+      });
   }
 
   findAll() : Promise<Zem[]>{
@@ -77,7 +102,26 @@ export class ZemService {
     return this.zemRepository.findOneOrFail(id).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le zem spécifié n'existe pas");
-    
+    });
+  }
+
+  findForUser(user_id: number):Promise<Zem[]> {
+    return this.zemRepository.find({where:{ user: User.create({id: user_id}) }}).catch((error)=>{
+      console.log(error);
+      throw new NotFoundException("Le zem spécifié n'existe pas");
+    });
+  }
+
+  findActifForUser(user_id: number):Promise<Zem> {
+    const user:User = User.create({id: user_id});
+    return this.zemRepository.find({where:{ user: user, statut: StatutZem.ACTIF}})
+    .then((zems:Zem[])=>{
+      if(zems.length>0)return zems[0];
+      throw new NotFoundException();
+    })
+    .catch((error)=>{
+      console.log(error);
+      throw new NotFoundException("Le zem spécifié n'existe pas");
     });
   }
 

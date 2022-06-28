@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-decore.dart';
+import 'package:sirmo/screens/auth/login.screen.dart';
+import 'package:sirmo/utils/app-util.dart';
 
 import '../../components/personal_alert.dart';
 import '../../services/user.service.dart';
@@ -111,7 +113,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         digit = RegExp("\\d");
     //specialShare = RegExp("[@#%_-.*+/=)(']+");
     if (value!.isEmpty) return "Le mot de pass est obligatoire\n";
-    if (value.length < 8) {
+    if (value.length < 6) {
       return "Le mot de pass doit contenir au moins 8 caractère\n";
     }
     if (value.length > 10) {
@@ -142,8 +144,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           .resetPassword(_oldPassword!, _password!)
           .then((value) {
         PersonalAlert.showSuccess(context,
-            message: "Mot de passe changé avec succès");
-        Navigator.pop(context);
+                message: "Mot de passe changé avec succès")
+            .then((value) {
+          AppUtil.popAllAndGoTo(context, LoginScreen());
+        });
       }).onError((error, stackTrace) {
         PersonalAlert.showError(context, message: "$error");
       });

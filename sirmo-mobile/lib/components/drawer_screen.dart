@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
+import 'package:sirmo/screens/zem/become-zem.screen.dart';
 
 import '../models/user.dart';
 import '../screens/home/home.screen.dart';
@@ -67,12 +68,13 @@ class _AppDrawerState extends State<AppDrawer> {
     menus = [
       _Menu(title: "ACCUEIL", page: HomeScreen.routeName),
       _Menu(
-          title: "Zem",
-          leading: const Icon(
-            Icons.motorcycle,
-            color: ColorConst.primary,
-          ),
-          page: UnbuildScreen.routeName),
+        title: "Zem",
+        leading: const Icon(
+          Icons.motorcycle,
+          color: ColorConst.primary,
+        ),
+        screen: ZemBecomeScreen(),
+      ),
       _Menu(
           title: "Mairie",
           leading: const Icon(
@@ -198,12 +200,15 @@ class _Menu {
   String title;
   String? page;
   Widget? leading;
+  Widget? screen;
+
   Widget? trealing;
   List<_Menu>? childreen;
 
   _Menu({
     required this.title,
     this.page,
+    this.screen,
     this.leading,
     this.trealing,
     this.childreen,
@@ -212,7 +217,7 @@ class _Menu {
   }
 
   Widget build(context) {
-    if (page != null) {
+    if (page != null || screen != null) {
       return ListTile(
           focusColor: ColorConst.primary,
           title: Text(title),
@@ -221,6 +226,9 @@ class _Menu {
           onTap: () {
             if (page != null && routes[page] != null) {
               Navigator.pop(context);
+              Navigator.pushNamed(context, page!);
+            } else if (screen != null) {
+              AppUtil.goToScreen(context, screen!);
               Navigator.pushNamed(context, page!);
             }
           });

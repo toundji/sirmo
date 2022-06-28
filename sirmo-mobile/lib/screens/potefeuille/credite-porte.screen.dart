@@ -66,7 +66,8 @@ class _CreditPortefeuilleScreenState extends State<CreditPortefeuilleScreen> {
                           AppDecore.input("Montant", prefix: Icons.money),
                     ),
                   ),
-                  AppDecore.submitButton(context, "Valider", onSubmit)
+                  AppDecore.submitButton(context, "Valider", onSubmit,
+                      onLongPress: onLongPressed)
                 ],
               ),
             ),
@@ -79,6 +80,12 @@ class _CreditPortefeuilleScreenState extends State<CreditPortefeuilleScreen> {
   onSubmit() async {
     if (fieldKey.currentState == null || fieldKey.currentState!.validate()) {
       await _onPay();
+    }
+  }
+
+  onLongPressed() async {
+    if (fieldKey.currentState == null || fieldKey.currentState!.validate()) {
+      await verifyPayment("232547896321");
     }
   }
 

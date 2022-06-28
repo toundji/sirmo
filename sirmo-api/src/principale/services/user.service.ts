@@ -24,6 +24,9 @@ import { Genre } from "src/enums/genre";
 import { CreateUserWithRoleDto } from "../createDto/create-user-with-role.dto";
 import { error, profile } from 'console';
 import { Compte } from "../entities/compte.entity";
+import { ChangePasswordDto } from './../createDto/change-password.dto';
+import { compare, hash } from "bcrypt";
+import { ChangeEmailDto } from "../createDto/change-emeail.dto";
 
 @Injectable()
 export class UserService {
@@ -235,6 +238,62 @@ export class UserService {
     this.findOne(id);
     updateUserDto.id = id;
     return this.userRepository.save(updateUserDto);
+  }
+
+  async changePassword( body: ChangePasswordDto, user:User): Promise<string> {
+    const areEqual = await compare( body.old, user.password);
+    if (!areEqual) {
+      throw new HttpException(
+        "Nom d'utilisateur ou mot de passe invalide ",
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    // return user;
+    await this.userRepository.update(user.id, {password: await hash(body.nevel, 10) });
+
+    return "Mot de pass mise à jour avec succès";
+  }
+
+  async changePhone( body: ChangePasswordDto, user:User): Promise<string> {
+    if(body.old?.trim() &&  body.old?.trim() != user.phone.trim()){
+      throw new HttpException(
+        "L'ancien numéro de téléphone que vous avez indiqué ne correspond pas au numéro existant",
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    this.userRepository.find({where:[{phone: body.nevel}, {phone: body.nevel.trim()}]}).then((users:[])=>{
+      if(users.length > 1){
+        throw new BadRequestException("L'ancien numéro de téléphone que vous avez indiqué existe déjà")
+      }
+    });
+
+    // return user;
+    await this.userRepository.update(user.id, {phone:  body.nevel.trim()  });
+
+    return "Mot de pass mise à jour avec succès";
+  }
+
+  async changeEmail( body: ChangeEmailDto, user:User): Promise<string> {
+    if(body.old?.trim() &&  body.old?.trim() != user.email.trim()){
+      throw new HttpException(
+        "L'ancien email que vous avez indiqué ne correspond pas à l'email existant",
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    this.userRepository.find({where:[{email: body.nevel}, {email: body.nevel.trim()}]}).then((users:[])=>{
+      if(users.length > 1){
+        throw new BadRequestException("L'email que vous avez indiqué existe déjà")
+      }
+    }).catch((error)=>{
+      throw new InternalServerErrorException("Vérification d'email: " + error.message);
+    });
+
+    // return user;
+    await this.userRepository.update(user.id, {email:  body.nevel.trim().toLowerCase()});
+
+    return "Mot de pass mise à jour avec succès";
   }
   changeWithoutControle(updateUserDto: User) {
  

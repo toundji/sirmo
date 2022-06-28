@@ -31,8 +31,6 @@ export class Licence extends Audit{
   @ManyToOne((type) => Mairie, {nullable:false, eager:true})
   mairie: Mairie;
 
-
-
   @JoinColumn({ name: 'payement' })
   @ManyToOne((type) => Payement, {eager: true})
   payement: Payement;

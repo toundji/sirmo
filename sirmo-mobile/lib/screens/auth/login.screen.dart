@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:sirmo/screens/home/home.screen.dart';
 import '../../components/curve_path_clipper.dart';
 import '/components/app-decore.dart';
 import '/components/shake-transition.dart';
@@ -176,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
         PersonalAlert.showSuccess(context,
                 message: "Vous êtes connecter avec succès")
             .then(
-          (value) => AppUtil.goToScreen(context, Scaffold()),
+          (value) => AppUtil.goToScreen(context, HomeScreen()),
         );
       }).onError((error, stackTrace) {
         PersonalAlert.showError(context, message: "$error").then((value) {});

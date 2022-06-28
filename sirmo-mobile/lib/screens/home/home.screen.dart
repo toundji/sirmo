@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/drawer_screen.dart';
 import 'package:sirmo/components/top_curve_path.dart';
+import 'package:sirmo/components/user-drawer.dart';
+import 'package:sirmo/screens/potefeuille/compte.history.screen.dart';
 import 'package:sirmo/screens/potefeuille/credite-porte.screen.dart';
 import 'package:sirmo/screens/profile/profile.screen.dart';
+import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/utils/network-info.dart';
 
 import '../../components/curve_path_clipper.dart';
 import '../../components/personal_alert.dart';
+import '../../models/compte.dart';
 import '../../models/user.dart';
 import '../../services/user.service.dart';
 import '../../utils/app-util.dart';
@@ -27,9 +31,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   dynamic header;
+  Compte? compte;
   @override
   void initState() {
     super.initState();
+    context
+        .read<CompteService>()
+        .loadCompte()
+        .then((value) {})
+        .onError((error, stackTrace) {
+      PersonalAlert.showError(context, message: "êrror");
+    });
     if (widget.debug) {
       login();
     }
@@ -40,7 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
         .read<UserService>()
         .login("+22994851785", "Baba@1234")
         .then((value) {
-      header = NetworkInfo.headers;
+      setState(() {
+        header = NetworkInfo.headers;
+      });
+      context
+          .read<CompteService>()
+          .loadCompte()
+          .then((value) {})
+          .onError((error, stackTrace) {
+        PersonalAlert.showError(context, message: "êrror");
+      });
       setState(() {});
     }).onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "$error").then((value) {});
@@ -75,11 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
           portefeuile,
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: UserDrawer(),
     );
   }
 
   Widget get portefeuile {
+    compte = context.watch<CompteService>().compte;
     return ClipPath(
       clipper: TopCurvePathClipper(),
       child: Card(
@@ -91,8 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       "Solde: ",
                       style: TextStyle(
                           color: ColorConst.white,
@@ -100,8 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "0 F ",
-                      style: TextStyle(
+                      "${compte?.montant ?? "..."} F ",
+                      style: const TextStyle(
                           color: ColorConst.white,
                           fontSize: 24,
                           fontWeight: FontWeight.bold),
@@ -133,7 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          AppUtil.goToScreen(context, CompteHistoryScreen());
+                        },
                         icon: const Icon(
                           Icons.history,
                           color: ColorConst.white,
@@ -179,11 +203,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        foregroundImage: header == null
-                            ? null
-                            : NetworkImage(NetworkInfo.imageProfile,
-                                headers: header),
-                        backgroundImage: AssetImage("assets/logos/logo.png"),
+                        foregroundImage:
+                            header == null && NetworkInfo.token == null
+                                ? null
+                                : NetworkImage(NetworkInfo.imageProfile,
+                                    headers: NetworkInfo.headers),
+                        backgroundImage:
+                            AssetImage("assets/images/profile.jpg"),
                       ),
                       Icon(Icons.arrow_drop_down_outlined,
                           color: ColorConst.white)

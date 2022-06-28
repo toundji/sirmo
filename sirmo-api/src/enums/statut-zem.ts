@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 export enum StatutZem{
     ACTIF ="ACTIF",
-    DESATIVE = "DESACTIVE"
+    DESATIVE = "DESACTIVE",
+    DEMANDE = "DEMANDE"
 }

@@ -52,11 +52,11 @@ export class ZemController {
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleName.ADMIN, RoleName.MAIRIE)
+  @Roles(RoleName.ZEM)
   @Get("my/info")
   findOneMyInfo(@Req() request) {
     const user: User = request.user;
-    return this.zemService.findOne(user.id);
+    return this.zemService.findActifForUser(user.id);
   }
 
   @Patch(":id")

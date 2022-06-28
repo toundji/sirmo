@@ -58,10 +58,10 @@ class Compte implements Audit {
       'id': id,
       'montant': montant,
       'user': user?.toMap(),
-      'created_at': created_at?.millisecondsSinceEpoch,
+      'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
-      'updated_at': updated_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at?.toIso8601String(),
     };
   }
 
@@ -71,12 +71,12 @@ class Compte implements Audit {
       montant: map['montant']?.toInt(),
       user: map['user'] != null ? User.fromMap(map['user']) : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }

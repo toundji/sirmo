@@ -15,13 +15,12 @@ import { Audit } from './audit';
 export class Zem extends Audit {
   static entityName  = "zems";
 
-  @OneToOne((type) => User, { nullable:false, eager:true , primary:true})
-  @JoinColumn({ name: 'id'})
-  user:User;
-  
-  @PrimaryColumn()
-  @RelationId((zem: Zem) => zem.user)
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToOne((type) => User, { nullable:false, eager:true})
+  @JoinColumn({ name: 'zem_id'})
+  user:User;
 
   @Column({ nullable: false, unique: true })
   ifu: string;
@@ -50,7 +49,7 @@ export class Zem extends Audit {
   @JoinColumn({ name: 'licence_id'})
   licence?:Licence;
 
-  @ManyToOne((type) => Moto, { nullable:true})
+  @ManyToOne((type) => Moto, moto=>moto.zem, { nullable:true})
   @JoinColumn({ name: 'moto_id'})
   moto?:Moto;
 
@@ -60,9 +59,6 @@ export class Zem extends Audit {
   // List des anciens motos conduit
   @OneToMany(type => ZemMoto, zemMoto => zemMoto.zem)
   zemMotos?: ZemMoto[];
-
-  // @OneToOne(type => Compte, compte => compte.zem,{eager:false})
-  // compte: Compte;
 
 
   @OneToMany(type => Appreciation, appreciation  => appreciation.zem)

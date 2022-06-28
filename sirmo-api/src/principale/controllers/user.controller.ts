@@ -18,6 +18,9 @@ import { LoginRespo } from './../../auth/dto/login-respo.dto';
 import { Fichier } from '../entities/fichier.entity';
 import { CreateUserWithRoleDto } from '../createDto/create-user-with-role.dto';
 import { Role } from '../entities/role.entity';
+import { ChangePasswordDto } from './../createDto/change-password.dto';
+import { ChangePhoneDto } from '../createDto/change-phone.dto';
+import { ChangeEmailDto } from '../createDto/change-emeail.dto';
 
 
 
@@ -70,6 +73,27 @@ export class UserController {
   @Put(':id')
   change(@Param('id') id: number, @Body() updateUserDto: User):Promise<User> {
     return this.userService.change(+id, updateUserDto);
+  }
+
+  @ApiBearerAuth("token")
+  @Put('change/password')
+  changePassword(@Req() request,  @Body() body: ChangePasswordDto):Promise<string> {
+    const user: User = request.user;
+    return this.userService.changePassword(body, user);
+  }
+
+  @ApiBearerAuth("token")
+  @Put('change/phone')
+  changePhone(@Req() request,  @Body() body: ChangePhoneDto):Promise<string> {
+    const user: User = request.user;
+    return this.userService.changePhone(body, user);
+  }
+
+  @ApiBearerAuth("token")
+  @Put('change/email')
+  changeEmail(@Req() request,  @Body() body: ChangeEmailDto):Promise<string> {
+    const user: User = request.user;
+    return this.userService.changeEmail(body, user);
   }
 
   @ApiBearerAuth("token")

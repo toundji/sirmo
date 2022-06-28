@@ -20,7 +20,7 @@ export class ZemMoto extends Audit{
   @Column()
   date_fin: Date;
 
-  @ManyToOne((type) => Zem, {nullable:false})
+  @ManyToOne((type) => Zem,  {nullable:false})
   @JoinColumn({ name: 'zem_id'})
   zem:Zem;
 
