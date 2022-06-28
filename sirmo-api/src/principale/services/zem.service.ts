@@ -108,7 +108,7 @@ export class ZemService {
   findForUser(user_id: number):Promise<Zem[]> {
     return this.zemRepository.find({where:{ user: User.create({id: user_id}) }}).catch((error)=>{
       console.log(error);
-      
+
       throw new NotFoundException("Le zem spécifié n'existe pas");
     });
   }
@@ -120,6 +120,7 @@ export class ZemService {
       if(zems.length>0)return zems[0];
       throw new NotFoundException();
     })
+    
     .catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le zem spécifié n'existe pas");
