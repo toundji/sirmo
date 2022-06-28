@@ -41,6 +41,13 @@ export class ZemController {
     return this.zemService.createForUser(createZemDto);
   }
 
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Post("request/by/user")
+  requestByUser(@Body() createZemDto: CreateZemDto, @Req() request) {
+    const user: User = request.user;
+    return this.zemService.requestByUser(createZemDto, user);
+  }
+
   @Get()
   findAll() {
     return this.zemService.findAll();
