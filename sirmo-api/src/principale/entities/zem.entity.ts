@@ -34,7 +34,7 @@ export class Zem extends Audit {
   @Column({ nullable: false, unique: true })
   niz: string;
 
-  @Column()
+  @Column({nullable:true})
   idCarde: string;
 
   @Column({ unique: true })
