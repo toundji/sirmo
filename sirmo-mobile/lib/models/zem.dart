@@ -30,6 +30,8 @@ class Zem implements Audit {
 
   String? certificatRoute;
 
+  String? idCarde;
+
   String? statut;
 
   String? ancienIdentifiant;
@@ -71,6 +73,7 @@ class Zem implements Audit {
     this.compteEcobank,
     this.compteFedapay,
     this.certificatRoute,
+    this.idCarde,
     this.statut,
     this.ancienIdentifiant,
     this.licence,
@@ -95,6 +98,7 @@ class Zem implements Audit {
     String? compteEcobank,
     String? compteFedapay,
     String? certificatRoute,
+    String? idCarde,
     String? statut,
     String? ancienIdentifiant,
     Licence? licence,
@@ -118,6 +122,7 @@ class Zem implements Audit {
       compteEcobank: compteEcobank ?? this.compteEcobank,
       compteFedapay: compteFedapay ?? this.compteFedapay,
       certificatRoute: certificatRoute ?? this.certificatRoute,
+      idCarde: idCarde ?? this.idCarde,
       statut: statut ?? this.statut,
       ancienIdentifiant: ancienIdentifiant ?? this.ancienIdentifiant,
       licence: licence ?? this.licence,
@@ -144,6 +149,7 @@ class Zem implements Audit {
       'compteEcobank': compteEcobank,
       'compteFedapay': compteFedapay,
       'certificatRoute': certificatRoute,
+      'idCarde': idCarde,
       'statut': statut,
       'ancienIdentifiant': ancienIdentifiant,
       'licence': licence?.toMap(),
@@ -170,6 +176,7 @@ class Zem implements Audit {
       compteEcobank: map['compteEcobank'],
       compteFedapay: map['compteFedapay'],
       certificatRoute: map['certificatRoute'],
+      idCarde: map['idCarde'],
       statut: map['statut'],
       ancienIdentifiant: map['ancienIdentifiant'],
       licence: map['licence'] != null ? Licence.fromMap(map['licence']) : null,
@@ -188,12 +195,12 @@ class Zem implements Audit {
           ? List<Amande>.from(map['amandes']?.map((x) => Amande.fromMap(x)))
           : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }
@@ -204,7 +211,7 @@ class Zem implements Audit {
 
   @override
   String toString() {
-    return 'Zem(user: $user, id: $id, ifu: $ifu, cip: $cip, nip: $nip, niz: $niz, compteEcobank: $compteEcobank, compteFedapay: $compteFedapay, certificatRoute: $certificatRoute, statut: $statut, ancienIdentifiant: $ancienIdentifiant, licence: $licence, moto: $moto, licences: $licences, zemMotos: $zemMotos, appreciations: $appreciations, amandes: $amandes, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
+    return 'Zem(user: $user, id: $id, ifu: $ifu, cip: $cip, nip: $nip, niz: $niz, compteEcobank: $compteEcobank, compteFedapay: $compteFedapay, certificatRoute: $certificatRoute, idCarde: $idCarde, statut: $statut, ancienIdentifiant: $ancienIdentifiant, licence: $licence, moto: $moto, licences: $licences, zemMotos: $zemMotos, appreciations: $appreciations, amandes: $amandes, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 
   @override
@@ -221,6 +228,7 @@ class Zem implements Audit {
         other.compteEcobank == compteEcobank &&
         other.compteFedapay == compteFedapay &&
         other.certificatRoute == certificatRoute &&
+        other.idCarde == idCarde &&
         other.statut == statut &&
         other.ancienIdentifiant == ancienIdentifiant &&
         other.licence == licence &&
@@ -246,6 +254,7 @@ class Zem implements Audit {
         compteEcobank.hashCode ^
         compteFedapay.hashCode ^
         certificatRoute.hashCode ^
+        idCarde.hashCode ^
         statut.hashCode ^
         ancienIdentifiant.hashCode ^
         licence.hashCode ^

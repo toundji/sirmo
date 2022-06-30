@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sirmo/screens/zem/become-zem-file.screen.dart';
 import 'package:sirmo/services/zem.sevice.dart';
 import '../../models/zem.dart';
 import '../../utils/request-exception.dart';
@@ -97,6 +98,18 @@ class _ZemBecomeScreenState extends State<ZemBecomeScreen> {
                     ...displayError("certificatRoute"),
                     SizedBox(height: 16),
                     TextFormField(
+                      initialValue: zem.idCarde,
+                      validator: (value) => firstNameValidator(value, 8, 17),
+                      onChanged: (String? value) {
+                        zem.idCarde = value?.trim();
+                        resetError('idCarde');
+                      },
+                      decoration:
+                          AppDecore.input("Numéro de la carte d'identité"),
+                    ),
+                    ...displayError("idCarde"),
+                    SizedBox(height: 16),
+                    TextFormField(
                       initialValue: zem.ancienIdentifiant,
                       validator: (value) => firstNameValidator(value, 8, 17),
                       onChanged: (String? value) {
@@ -168,23 +181,24 @@ class _ZemBecomeScreenState extends State<ZemBecomeScreen> {
 
   onSubmit() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      PersonalAlert.showLoading(context);
-      context.read<ZemService>().becomeZem(zem).then((value) {
-        PersonalAlert.showSuccess(context,
-                message: "Vous demander est enregistrées evac succès")
-            .then((value) {
-          AppUtil.goToScreen(context, HomeScreen());
-        });
-        context.read<ZemService>().zem = value;
-      }).onError((error, stackTrace) {
-        if (error is RequestExcept) {
-          setState(() {
-            validation = error;
-          });
-        } else if (error is String) {
-          PersonalAlert.showError(context, message: "$error");
-        }
-      });
+      // PersonalAlert.showLoading(context);
+      // context.read<ZemService>().becomeZem(zem).then((value) {
+      //   PersonalAlert.showSuccess(context,
+      //           message: "Vous demander est enregistrées evac succès")
+      //       .then((value) {
+      //     AppUtil.goToScreen(context, HomeScreen());
+      //   });
+      //   context.read<ZemService>().zem = value;
+      // }).onError((error, stackTrace) {
+      //   if (error is RequestExcept) {
+      //     setState(() {
+      //       validation = error;
+      //     });
+      //   } else if (error is String) {
+      //     PersonalAlert.showError(context, message: "$error");
+      //   }
+      // });
+      AppUtil.goToScreen(context, BecomeZemFileScreen());
     }
   }
 

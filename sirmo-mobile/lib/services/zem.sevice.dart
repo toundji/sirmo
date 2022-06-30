@@ -27,6 +27,7 @@ class ZemService extends ChangeNotifier {
       "ifu": zem.ifu,
       "cip": zem.cip,
       "nip": zem.nip,
+      "idCarde": zem.idCarde,
       "certificatRoute": zem.certificatRoute,
       "ancienIdentifiant": zem.ancienIdentifiant,
       "userId": 1,
