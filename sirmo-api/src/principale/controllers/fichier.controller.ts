@@ -85,17 +85,13 @@ export class FichierController {
     format: 'binary'
   }
 })
-  async updateProfile(
+  updateProfile(
     @Param('id') id: number,
-     @UploadedFiles() files: Array<Express.Multer.File>,
-      @Req() request, @Res() res){
+      @UploadedFiles() files: Array<Express.Multer.File>,
+      @Req() request){
     const user: User = request.user;
     console.log(files);
-    const fchiers:Fichier[] = await  this.fichierService.createZemFiles(id, files, user);
-    fchiers.forEach((file)=>{
-      res.sendFile(file.path, { root: './' })
-    });
-    return res;
+    return  this.fichierService.createZemFiles(id, files, user);
   }
 
 

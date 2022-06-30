@@ -43,18 +43,16 @@ dependencies:
   badges: 
   carousel_slider:
   # kkiapay_flutter_sdk: 
-  file_picker:  ^4.3.0
+  file_picker: 
   pdf: ^3.7.1
-  syncfusion_flutter_pdfviewer:
+  syncfusion_flutter_pdfviewer: 
   flutter_svg:
   intl:
   jwt_decode: ^0.3.1
   flutter_secure_storage: ^5.0.2
   datetime_picker_formfield:
   image_picker:
-  kkiapay_flutter_sdk: 
-  # form_builder_file_picker: ^2.2.0
-  # flutter_form_builder: ^7.3.1
+  kkiapay_flutter_sdk:
 
 
 dev_dependencies:
