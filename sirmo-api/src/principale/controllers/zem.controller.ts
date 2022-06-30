@@ -20,6 +20,7 @@ import { Roles } from "../role.decorator";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { RoleGuard } from "../role.guard";
 import { RoleName } from "src/enums/role-name";
+import { StatutZem } from 'src/enums/statut-zem';
 
 @ApiTags("Zems")
 @ApiBearerAuth("token")
@@ -37,31 +38,36 @@ export class ZemController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleName.ADMIN, RoleName.MAIRIE)
   @Post("for/user")
-  createUserZem(@Body() createZemDto: CreateZemDto) {
+  createUserZem(@Body() createZemDto: CreateZemDto) : Promise<Zem>{
     return this.zemService.createForUser(createZemDto);
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post("request/by/user")
-  requestByUser(@Body() createZemDto: CreateZemDto, @Req() request) {
+  requestByUser(@Body() createZemDto: CreateZemDto, @Req() request): Promise<Zem> {
     const user: User = request.user;
     return this.zemService.requestByUser(createZemDto, user);
   }
 
   @Get()
-  findAll() {
+  findAll() : Promise<Zem[]>{
     return this.zemService.findAll();
   }
 
+  @Get("/status/:status")
+  findAllByStatus(@Param("status") status: StatutZem,): Promise<Zem[]> {
+    return this.zemService.findByStatus(status);
+  }
+
   @Get(":id")
-  findOne(@Param("id") id: number) {
+  findOne(@Param("id") id: number) : Promise<Zem>{
     return this.zemService.findOne(+id);
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleName.ZEM)
   @Get("my/info")
-  findOneMyInfo(@Req() request) {
+  findOneMyInfo(@Req() request): Promise<Zem> {
     const user: User = request.user;
     return this.zemService.findActifForUser(user.id);
   }

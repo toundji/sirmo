@@ -1,9 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, Injectable, NotFoundException, UploadedFile } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UploadedFile, UploadedFiles } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm/repository/Repository";
 import { Fichier } from "../entities/fichier.entity";
 import { User } from "../entities/user.entity";
+import { Express } from 'multer';
+import { Zem } from "../entities/zem.entity";
+import { In } from "typeorm";
+
 
 @Injectable()
 export class FichierService {
@@ -42,6 +46,47 @@ export class FichierService {
     
   }
 
+
+  async createZemFiles(id:number, @UploadedFiles() files: Array<Express.Multer.File>, user:User) {
+    const zem:Zem = await Zem.findOne(id).catch((error)=>{
+      console.log("error");
+      throw new BadRequestException("L'e zem indique n'existe pas");
+    });
+    const fichiers: Fichier[] = [];
+    Object.keys(files).forEach((cle)=>{
+      const fichier: Express.Multer.File = files[cle][0];
+    const file: Fichier = Fichier.create({
+      nom: cle,
+      path: fichier.path,
+      mimetype: fichier.mimetype,
+      size: fichier.size,
+      entity: "zems",
+      entityId: id,
+      createur_id:user?.id,
+    });
+    fichiers.push(file);
+    });
+    
+    return await this.fichierRepository.save(fichiers).catch((error)=>{
+      console.log(error);
+      throw new BadRequestException(" Erreur est pendant la sauvegarde des fichiers. Veillez contacter un administrateur si cella persiste")
+    });
+  
+}
+
+async getZemFiles(id:number):Promise<Fichier[]> {
+  return await this.fichierRepository.find({where: {
+    nom: In(["ifu", "cip", "nip", "idCarde", "ancienIdentifiant"]),
+    entityId: id,
+    entity: "zems"
+  }}).catch((error)=>{
+    console.log(error);
+    throw new BadRequestException(" Erreur pendant la récuperation des fichiers. Veillez contacter un administrateur si cela persiste")
+  });
+
+}
+
+
   findOne(id: number) {
 
       return this.fichierRepository.findOne(id).catch((error)=>{
@@ -73,8 +118,8 @@ export class FichierService {
         throw new NotFoundException("Le fichier spécifié n'existe pas");
   
       });
-
   }
+
 
   remove(id: number) {
    

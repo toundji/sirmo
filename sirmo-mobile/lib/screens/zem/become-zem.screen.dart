@@ -1,25 +1,15 @@
-import 'dart:developer';
-
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:sirmo/models/arrondissement.dart';
-import 'package:sirmo/models/commune.dart';
-import 'package:sirmo/models/departement.dart';
-import 'package:sirmo/services/user.service.dart';
-import 'package:sirmo/utils/app-date.dart';
-import '../../../components/curve_path_clipper.dart';
-import '../../../services/departement.service.dart';
+import 'package:sirmo/services/zem.sevice.dart';
+import '../../models/zem.dart';
+import '../../utils/request-exception.dart';
 import '/screens/home/home.screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/app-decore.dart';
 import '../../../components/personal_alert.dart';
-import '../../../models/user.dart';
-import '../../../services/auth.service.dart';
+import '../../../models/zem.dart';
 import '../../../utils/app-util.dart';
 import '../../../utils/color-const.dart';
-import '../../../utils/size-const.dart';
 
 class ZemBecomeScreen extends StatefulWidget {
   ZemBecomeScreen({Key? key}) : super(key: key);
@@ -34,11 +24,11 @@ class _ZemBecomeScreenState extends State<ZemBecomeScreen> {
 
   ScrollController _scrollController = ScrollController();
 
-  User? user;
+  Zem zem = Zem();
+  RequestExcept? validation;
   @override
   void initState() {
     super.initState();
-    user = context.read<UserService>().user;
   }
 
   @override
@@ -63,39 +53,59 @@ class _ZemBecomeScreenState extends State<ZemBecomeScreen> {
                     AppDecore.getTitle("Devenir Zem"),
                     SizedBox(height: 25),
                     TextFormField(
-                      initialValue: user?.nom,
-                      onChanged: onLastNameChanged,
-                      validator: firstNameValidator,
+                      initialValue: zem.ifu,
+                      onChanged: (String? value) {
+                        zem.ifu = value?.trim();
+                        resetError('ifu');
+                      },
+                      validator: (value) => firstNameValidator(value, 8, 17),
                       decoration: AppDecore.input("IFU"),
                     ),
+                    ...displayError("ifu"),
                     SizedBox(height: 16),
                     TextFormField(
-                      initialValue: user?.prenom,
-                      onChanged: onFirstNameChanged,
-                      validator: lastNameValidator,
+                      initialValue: zem.cip,
+                      validator: (value) => firstNameValidator(value, 8, 17),
+                      onChanged: (String? value) {
+                        zem.cip = value?.trim();
+                        resetError('cip');
+                      },
                       decoration: AppDecore.input("CIP"),
                     ),
+                    ...displayError("cip"),
                     SizedBox(height: 16),
                     TextFormField(
-                      initialValue: user?.nom,
-                      onChanged: onLastNameChanged,
-                      validator: firstNameValidator,
+                      initialValue: zem.nip,
+                      validator: (value) => firstNameValidator(value, 8, 17),
+                      onChanged: (String? value) {
+                        zem.nip = value?.trim();
+                        resetError('nip');
+                      },
                       decoration: AppDecore.input("NIP"),
                     ),
+                    ...displayError("nip"),
                     SizedBox(height: 16),
                     TextFormField(
-                      initialValue: user?.prenom,
-                      onChanged: onFirstNameChanged,
-                      validator: lastNameValidator,
+                      initialValue: zem.certificatRoute,
+                      validator: (value) => firstNameValidator(value, 8, 17),
+                      onChanged: (String? value) {
+                        zem.certificatRoute = value?.trim();
+                        resetError('certificatRoute');
+                      },
                       decoration: AppDecore.input("Certificat de Route"),
                     ),
+                    ...displayError("certificatRoute"),
                     SizedBox(height: 16),
                     TextFormField(
-                      initialValue: user?.prenom,
-                      onChanged: onFirstNameChanged,
-                      validator: lastNameValidator,
+                      initialValue: zem.ancienIdentifiant,
+                      validator: (value) => firstNameValidator(value, 8, 17),
+                      onChanged: (String? value) {
+                        zem.ancienIdentifiant = value?.trim();
+                        resetError('ancienIdentifiant');
+                      },
                       decoration: AppDecore.input("Ancien Identifiant"),
                     ),
+                    ...displayError("ancienIdentifiant"),
                     SizedBox(height: 16),
                     const Text(
                       "* est obligatoire",
@@ -124,46 +134,56 @@ class _ZemBecomeScreenState extends State<ZemBecomeScreen> {
     );
   }
 
-  String? firstNameValidator(String? value) {
-    if (value == null)
-      return "Le nom est obligartoire";
-    else if (value.length < 3)
-      return "Vous devez entrez 3 cararères au minimum";
-    else if (value.length > 50)
-      return "Vous devez entrez 50 cararères au maximum";
+  List<Widget> displayError(String cle) {
+    if (validation?.validations?[cle] != null) {
+      return (validation?.validations?[cle] as List)
+          .map((e) => Row(
+                children: [
+                  Text(e, style: TextStyle(color: ColorConst.error)),
+                ],
+              ))
+          .toList();
+    }
+    return [];
+  }
+
+  void resetError(cle) {
+    if (validation?.validations?[cle] != null &&
+        (validation?.validations?[cle] as List).isNotEmpty) {
+      validation?.validations?[cle] = null;
+      setState(() {});
+    }
+  }
+
+  String? firstNameValidator(String? value, [min = 3, max = 50]) {
+    if (value == null) {
+      return "Ce champ est obligartoire";
+    } else if (value.length < min) {
+      return "Vous devez entrez $min cararères au minimum";
+    } else if (value.length > max) {
+      return "Vous devez entrez $max cararères au maximum";
+    }
     return null;
-  }
-
-  onFirstNameChanged(String? value) {
-    user?.prenom = value?.trim();
-  }
-
-  String? lastNameValidator(String? value) {
-    if (value == null)
-      return "Le prénom est obligartoire";
-    else if (value.length < 3)
-      return "Vous devez entrez 3 cararères au minimum";
-    else if (value.length > 50)
-      return "Vous devez entrez 50 cararères au maximum";
-    return null;
-  }
-
-  onLastNameChanged(String? value) {
-    user?.nom = value?.trim();
   }
 
   onSubmit() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       PersonalAlert.showLoading(context);
-      context.read<AuthService>().create(user!).then((value) {
+      context.read<ZemService>().becomeZem(zem).then((value) {
         PersonalAlert.showSuccess(context,
-                message: "Vous êtes inscrit avec succès.")
+                message: "Vous demander est enregistrées evac succès")
             .then((value) {
           AppUtil.goToScreen(context, HomeScreen());
         });
-        context.read<UserService>().user = value;
+        context.read<ZemService>().zem = value;
       }).onError((error, stackTrace) {
-        PersonalAlert.showError(context, message: "$error");
+        if (error is RequestExcept) {
+          setState(() {
+            validation = error;
+          });
+        } else if (error is String) {
+          PersonalAlert.showError(context, message: "$error");
+        }
       });
     }
   }

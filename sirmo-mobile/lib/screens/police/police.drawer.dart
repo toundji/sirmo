@@ -1,24 +1,25 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
 import 'package:sirmo/screens/zem/become-zem.screen.dart';
+import 'package:sirmo/screens/zem/zem-home.screen.dart';
 
-import '../models/app-menu-item.dart';
-import '../models/user.dart';
-import '../screens/home/home.screen.dart';
-import '../screens/zem/zem-home.screen.dart';
-import '../services/user.service.dart';
-import '../utils/app-routes.dart';
-import '../utils/app-util.dart';
-import '../utils/color-const.dart';
+import '../../models/app-menu-item.dart';
+import '../../models/user.dart';
+import '../../services/user.service.dart';
+import '../../utils/app-routes.dart';
+import '../../utils/app-util.dart';
+import '../../utils/color-const.dart';
+import '../home/home.screen.dart';
 
-class UserDrawer extends StatefulWidget {
-  UserDrawer({Key? key}) : super(key: key);
+class ZemDrawer extends StatefulWidget {
+  ZemDrawer({Key? key}) : super(key: key);
 
   @override
-  _UserDrawerState createState() => _UserDrawerState();
+  _ZemDrawerState createState() => _ZemDrawerState();
 }
 
 _buildHeader(BuildContext context) {
@@ -27,7 +28,7 @@ _buildHeader(BuildContext context) {
     accountEmail: Text(""),
     currentAccountPicture: InkWell(
       onTap: () {},
-      child: const CircleAvatar(
+      child: CircleAvatar(
         backgroundColor: Colors.white,
         foregroundImage: AssetImage(
           "assets/logos/logo.png",
@@ -39,9 +40,10 @@ _buildHeader(BuildContext context) {
   );
 }
 
-class _UserDrawerState extends State<UserDrawer> {
+class _ZemDrawerState extends State<ZemDrawer> {
   List<AppMenuItem>? menus;
 
+  User? user;
   @override
   void initState() {
     super.initState();
@@ -70,24 +72,15 @@ class _UserDrawerState extends State<UserDrawer> {
 
   adminMenu(User? user) {
     menus = [
-      AppMenuItem(title: "ACCUEIL", page: HomeScreen.routeName),
-      if (user != null && user.hasRole("zem"))
+      if (user != null && !user.hasRole("zem"))
         AppMenuItem(
-          title: "Zem",
+          title: "Devinir Zem",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: ZemHomeScreen(),
+          screen: ZemBecomeScreen(),
         ),
-      AppMenuItem(
-        title: "Devenir Zem",
-        leading: const Icon(
-          Icons.motorcycle,
-          color: ColorConst.primary,
-        ),
-        screen: ZemBecomeScreen(),
-      ),
       AppMenuItem(
           title: "Mairie",
           leading: const Icon(
@@ -103,16 +96,23 @@ class _UserDrawerState extends State<UserDrawer> {
           ),
           page: UnbuildScreen.routeName),
       AppMenuItem(
-          title: "Police",
+          title: "Amande",
           leading: const Icon(
-            Icons.policy,
+            Icons.low_priority,
             color: ColorConst.primary,
           ),
           page: UnbuildScreen.routeName),
       AppMenuItem(
-          title: "Amande",
+          title: "Moto",
           leading: const Icon(
-            Icons.low_priority,
+            Icons.motorcycle,
+            color: ColorConst.primary,
+          ),
+          page: UnbuildScreen.routeName),
+      AppMenuItem(
+          title: "Appréciation",
+          leading: const Icon(
+            CupertinoIcons.hand_thumbsup,
             color: ColorConst.primary,
           ),
           page: UnbuildScreen.routeName),

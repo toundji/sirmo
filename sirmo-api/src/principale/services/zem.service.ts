@@ -69,12 +69,6 @@ export class ZemService {
     const zem:Zem = new Zem();
     Object.keys(createZemDto).forEach(cle=>{zem[cle] = createZemDto[cle]});
 
-      const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
-      const index:number = user.roles.indexOf(role);
-      if( index == -1){
-        user.roles.push(role);
-        this.userService.changeWithoutControle(user);
-      }
       zem.user = user;
       zem.statut = StatutZem.DEMANDE;
       const zemSaved: Zem= await this.zemRepository.save(zem);
@@ -96,6 +90,13 @@ export class ZemService {
 
   findAll() : Promise<Zem[]>{
     return this.zemRepository.find();
+  }
+
+  findByStatus(status: StatutZem) : Promise<Zem[]>{
+    return this.zemRepository.find({where:{statut: status}}).catch((error)=>{
+      console.log(error);
+      throw new BadRequestException("Erreur pendant la récupération des zems. Veillez reprendre ou contacter un administrateur si cela persiste");
+    });
   }
 
   findOne(id: number) {
@@ -120,7 +121,7 @@ export class ZemService {
       if(zems.length>0)return zems[0];
       throw new NotFoundException();
     })
-    
+
     .catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le zem spécifié n'existe pas");

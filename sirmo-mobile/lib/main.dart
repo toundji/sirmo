@@ -12,6 +12,7 @@ import 'package:sirmo/services/commune.service.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/services/departement.service.dart';
 import 'package:sirmo/services/user.service.dart';
+import 'package:sirmo/services/zem.sevice.dart';
 import 'package:sirmo/utils/color-const.dart';
 
 import 'screens/auth/login.screen.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CommuneService()),
         ChangeNotifierProvider(create: (context) => ArrondissementService()),
         ChangeNotifierProvider(create: (context) => CompteService()),
+        ChangeNotifierProvider(create: (context) => ZemService()),
       ],
       child: MaterialApp(
         title: 'Sirmo',

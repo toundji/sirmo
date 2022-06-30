@@ -2,8 +2,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  Logger,
-  NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
@@ -20,7 +18,6 @@ export class AuthService {
   ) {}
 
   async valideUser({ pseudo }: any) {
-    Logger.log(pseudo);
     const user = await this.userService.findOneByPseudo(pseudo);
     if (!user) {
       throw new HttpException("Invalid token", HttpStatus.UNAUTHORIZED);

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsNumber, IsNumberString } from "class-validator";
+import { IsNumber, IsNumberString, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsPositive } from 'class-validator';
 
@@ -16,6 +16,11 @@ export class CreateZemDto {
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
   nip: string;
+
+  @ApiProperty({required:true})
+  @IsNumberString({},{message:"Seules les chiffres sont valides"})
+  @IsOptional()
+  idCarde: string;
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})

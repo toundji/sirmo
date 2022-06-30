@@ -83,12 +83,12 @@ class ProprietaireMoto implements Audit {
       id: map['id']?.toInt(),
       proprietaire: map['proprietaire'] != null ? User.fromMap(map['proprietaire']) : null,
       moto: map['moto'] != null ? Moto.fromMap(map['moto']) : null,
-      date_debut: map['date_debut'] != null ? DateTime.fromMillisecondsSinceEpoch(map['date_debut']) : null,
-      date_fin: map['date_fin'] != null ? DateTime.fromMillisecondsSinceEpoch(map['date_fin']) : null,
-      created_at: map['created_at'] != null ? DateTime.fromMillisecondsSinceEpoch(map['created_at']) : null,
+      date_debut: map['date_debut'] != null ? DateTime.tryParse(map['date_debut']) : null,
+      date_fin: map['date_fin'] != null ? DateTime.tryParse(map['date_fin']) : null,
+      created_at: map['created_at'] != null ? DateTime.tryParse(map['created_at']) : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
-      updated_at: map['updated_at'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updated_at']) : null,
+      updated_at: map['updated_at'] != null ? DateTime.tryParse(map['updated_at']) : null,
     );
   }
 

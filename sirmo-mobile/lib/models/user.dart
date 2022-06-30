@@ -49,6 +49,12 @@ class User implements Audit {
   static const String MASCULIN = "MASCULIN";
   static const String FEMININ = "FEMININ";
 
+  List<String> get rolesName =>
+      roles == null ? [] : roles!.map((e) => e.nom!).toList();
+  bool hasRole(String name) {
+    return rolesName.contains(name.trim().toUpperCase());
+  }
+
   @override
   DateTime? updated_at;
   User({

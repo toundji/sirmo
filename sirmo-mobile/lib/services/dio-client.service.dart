@@ -134,7 +134,7 @@ class DioClient {
           Map<String, dynamic> reponse = error.response?.data;
           RequestExcept except = RequestExcept.fromMap(reponse);
           if (except.validations != null) {
-            throw except;
+            throw RequestExcept.fromMap(reponse);
           } else if (except.message != null) {
             throw RequestException(except.message!);
           } else {

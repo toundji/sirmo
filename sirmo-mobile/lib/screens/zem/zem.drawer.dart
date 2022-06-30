@@ -1,23 +1,25 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
 import 'package:sirmo/screens/zem/become-zem.screen.dart';
 import 'package:sirmo/screens/zem/zem-home.screen.dart';
 
-import '../models/user.dart';
-import '../screens/home/home.screen.dart';
-import '../services/user.service.dart';
-import '../utils/app-routes.dart';
-import '../utils/app-util.dart';
-import '../utils/color-const.dart';
+import '../../models/app-menu-item.dart';
+import '../../models/user.dart';
+import '../../services/user.service.dart';
+import '../../utils/app-routes.dart';
+import '../../utils/app-util.dart';
+import '../../utils/color-const.dart';
+import '../home/home.screen.dart';
 
-class AppDrawer extends StatefulWidget {
-  AppDrawer({Key? key}) : super(key: key);
+class ZemDrawer extends StatefulWidget {
+  ZemDrawer({Key? key}) : super(key: key);
 
   @override
-  _AppDrawerState createState() => _AppDrawerState();
+  _ZemDrawerState createState() => _ZemDrawerState();
 }
 
 _buildHeader(BuildContext context) {
@@ -38,8 +40,8 @@ _buildHeader(BuildContext context) {
   );
 }
 
-class _AppDrawerState extends State<AppDrawer> {
-  List<_Menu>? menus;
+class _ZemDrawerState extends State<ZemDrawer> {
+  List<AppMenuItem>? menus;
 
   User? user;
   @override
@@ -70,18 +72,8 @@ class _AppDrawerState extends State<AppDrawer> {
 
   adminMenu(User? user) {
     menus = [
-      _Menu(title: "ACCUEIL", page: HomeScreen.routeName),
-      if (user != null && user.hasRole("zem"))
-        _Menu(
-          title: "Zem",
-          leading: const Icon(
-            Icons.motorcycle,
-            color: ColorConst.primary,
-          ),
-          screen: ZemHomeScreen(),
-        ),
       if (user != null && !user.hasRole("zem"))
-        _Menu(
+        AppMenuItem(
           title: "Devinir Zem",
           leading: const Icon(
             Icons.motorcycle,
@@ -89,84 +81,43 @@ class _AppDrawerState extends State<AppDrawer> {
           ),
           screen: ZemBecomeScreen(),
         ),
-      _Menu(
+      AppMenuItem(
           title: "Mairie",
           leading: const Icon(
             Icons.policy,
             color: ColorConst.primary,
           ),
           page: UnbuildScreen.routeName),
-      _Menu(
+      AppMenuItem(
           title: "Licences",
           leading: const Icon(
             Icons.badge,
             color: ColorConst.primary,
           ),
           page: UnbuildScreen.routeName),
-      _Menu(
-          title: "Police",
-          leading: const Icon(
-            Icons.policy,
-            color: ColorConst.primary,
-          ),
-          page: UnbuildScreen.routeName),
-      _Menu(
+      AppMenuItem(
           title: "Amande",
           leading: const Icon(
             Icons.low_priority,
             color: ColorConst.primary,
           ),
           page: UnbuildScreen.routeName),
+      AppMenuItem(
+          title: "Moto",
+          leading: const Icon(
+            Icons.motorcycle,
+            color: ColorConst.primary,
+          ),
+          page: UnbuildScreen.routeName),
+      AppMenuItem(
+          title: "Appréciation",
+          leading: const Icon(
+            CupertinoIcons.hand_thumbsup,
+            color: ColorConst.primary,
+          ),
+          page: UnbuildScreen.routeName),
+      AppMenuItem.devMenu,
     ];
-  }
-}
-
-class _Menu {
-  String title;
-  String? page;
-  Widget? leading;
-  Widget? screen;
-
-  Widget? trealing;
-  List<_Menu>? childreen;
-
-  _Menu({
-    required this.title,
-    this.page,
-    this.screen,
-    this.leading,
-    this.trealing,
-    this.childreen,
-  }) {
-    assert(page == null || childreen == null);
-  }
-
-  Widget build(context) {
-    if (page != null || screen != null) {
-      return ListTile(
-          focusColor: ColorConst.primary,
-          title: Text(title),
-          leading: leading,
-          trailing: trealing,
-          onTap: () {
-            if (page != null && routes[page] != null) {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, page!);
-            } else if (screen != null) {
-              AppUtil.goToScreen(context, screen!);
-              Navigator.pushNamed(context, page!);
-            }
-          });
-    } else {
-      return ExpansionTile(
-        title: Text(title),
-        leading: leading,
-        trailing: trealing,
-        children: childreen == null
-            ? []
-            : childreen!.map((e) => e.build(context)).toList(),
-      );
-    }
   }
 }
 //

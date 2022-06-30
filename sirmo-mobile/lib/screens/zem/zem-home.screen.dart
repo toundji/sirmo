@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sirmo/components/app-bar.screen.dart';
 import 'package:sirmo/components/drawer_screen.dart';
 import 'package:sirmo/components/top_curve_path.dart';
 import 'package:sirmo/components/user-drawer.dart';
@@ -9,10 +8,12 @@ import 'package:sirmo/screens/potefeuille/compte.history.screen.dart';
 import 'package:sirmo/screens/potefeuille/credite-porte.screen.dart';
 import 'package:sirmo/screens/potefeuille/portefeuille.component.dart';
 import 'package:sirmo/screens/profile/profile.screen.dart';
+import 'package:sirmo/screens/zem/zem.drawer.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/utils/network-info.dart';
 
 import '../../components/action-card.dart';
+import '../../components/app-bar.screen.dart';
 import '../../components/curve_path_clipper.dart';
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
@@ -21,18 +22,18 @@ import '../../services/user.service.dart';
 import '../../utils/app-util.dart';
 import '../../utils/color-const.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key, this.debug = false}) : super(key: key);
+class ZemHomeScreen extends StatefulWidget {
+  ZemHomeScreen({Key? key, this.debug = false}) : super(key: key);
   static const String routeName = "home";
   static String debugRouteName = "home/debug";
 
   final bool debug;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ZemHomeScreen> createState() => _ZemHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ZemHomeScreenState extends State<ZemHomeScreen> {
   dynamic header;
   Compte? compte;
   @override
@@ -84,8 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ActionCard(name: "Payer Zem", icon: Icons.payment),
-                ActionCard(name: "Evaluer Zem", icon: Icons.edit),
+                ActionCard(name: "Moto", icon: Icons.motorcycle),
+                ActionCard(name: "Licence", icon: Icons.edit),
               ],
             ),
           ),
@@ -93,13 +94,14 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ActionCard(name: "Statistique du Zem", icon: CupertinoIcons.eye),
+              ActionCard(name: "Status", icon: Icons.info),
+              ActionCard(name: "Evaluation", icon: CupertinoIcons.star),
             ],
           ),
           PortefeuilleComponent(),
         ],
       ),
-      drawer: UserDrawer(),
+      drawer: ZemDrawer(),
     );
   }
 }

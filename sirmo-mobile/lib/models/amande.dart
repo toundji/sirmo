@@ -94,8 +94,8 @@ class Amande implements Audit {
       'montant': montant,
       'date_limite': date_limite?.millisecondsSinceEpoch,
       'restant': restant,
-      'typeAmndes': typeAmndes?.map((x) => x?.toMap())?.toList(),
-      'payements': payements?.map((x) => x?.toMap())?.toList(),
+      'typeAmndes': typeAmndes?.map((x) => x.toMap()).toList(),
+      'payements': payements?.map((x) => x.toMap()).toList(),
       'police': police?.toMap(),
       'zem': zem?.toMap(),
       'created_at': created_at?.millisecondsSinceEpoch,
@@ -125,12 +125,12 @@ class Amande implements Audit {
       police: map['police'] != null ? Police.fromMap(map['police']) : null,
       zem: map['zem'] != null ? Zem.fromMap(map['zem']) : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }

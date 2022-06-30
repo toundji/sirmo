@@ -22,17 +22,20 @@ export class Zem extends Audit {
   @JoinColumn({ name: 'zem_id'})
   user:User;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false })
   ifu: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false,})
   cip: string;
 
-  @Column({ nullable: false, unique: true, })
+  @Column({ nullable: false,  })
   nip: string;
 
   @Column({ nullable: false, unique: true })
   niz: string;
+
+  @Column()
+  idCarde: string;
 
   @Column({ unique: true })
   certificatRoute: string;
