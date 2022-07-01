@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
     context
         .read<ZemService>()
         .loadMyZemList(user!.id!)
-        .then((value) {})
+        .then((value) {
+          
+        })
         .onError((error, stackTrace) {});
   }
 
@@ -69,6 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(height: 16),
+          InkWell(
+              onTap: () {
+                log("${NetworkInfo.headers}");
+              },
+              child: Text("Cliquer pour débuger")),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(

@@ -26,7 +26,7 @@ class ZemService extends ChangeNotifier {
 
         all = list.map((e) => Zem.fromMap(e)).toList();
         if (all!.length > 0) {
-          all!.firstWhere((element) => element.statut == Zem.ACTIF,
+          zem = all!.firstWhere((element) => element.statut == Zem.ACTIF,
               orElse: () => all!.first);
         }
         notifyListeners();
@@ -58,12 +58,9 @@ class ZemService extends ChangeNotifier {
       return this.zem;
     }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
-      if (error is RequestExcept) {
-        throw error;
-      } else if (error is String) {
-        throw error;
-      }
-      throw "Les données que nous avons récues ne sont pas celle que nous espérons";
+
+      throw error ??
+          "Les données que nous avons récues ne sont pas celle que nous espérons";
     });
     await sendZemDoc(files);
     return this.zem;

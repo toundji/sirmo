@@ -154,8 +154,8 @@ class AppDecore {
       {String? helper, IconData? prefix, IconData? suffix}) {
     return InputDecoration(
       helperText: helper,
-      suffix: suffix == null ? null : Icon(suffix),
-      prefix: prefix == null ? null : Icon(prefix),
+      suffixIcon: suffix == null ? null : Icon(suffix),
+      prefixIcon: prefix == null ? null : Icon(prefix),
       label: Text(label,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.left,

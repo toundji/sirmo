@@ -19,7 +19,6 @@ export class FichierService {
  
       return this.fichierRepository.save(createFichierDto).catch((error)=>{
         console.log(error);
-      
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
 
       });
@@ -48,7 +47,7 @@ export class FichierService {
 
 
   async createZemFiles(id:number, @UploadedFiles() files: Array<Express.Multer.File>, user:User) {
-    const zem:Zem = await Zem.findOne(id).catch((error)=>{
+    const zem:Zem = await Zem.findOneOrFail(id).catch((error)=>{
       console.log("error");
       throw new BadRequestException("L'e zem indique n'existe pas");
     });

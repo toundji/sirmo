@@ -1,5 +1,14 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sirmo/components/personal_alert.dart';
+import 'package:sirmo/screens/moto/moto-update.image.dart';
+import 'package:sirmo/services/moto-service.dart';
+import 'package:sirmo/services/user.service.dart';
+import 'package:sirmo/services/zem.sevice.dart';
+import 'package:sirmo/utils/app-util.dart';
 import '../../models/moto.dart';
+import '../../utils/app-date.dart';
 import '../../utils/request-exception.dart';
 
 import '../../../components/app-decore.dart';
@@ -23,6 +32,8 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
   @override
   void initState() {
     super.initState();
+    moto.zem = context.read<ZemService>().zem;
+    moto.proprietaire = context.read<UserService>().user;
   }
 
   @override
@@ -56,7 +67,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                       decoration: AppDecore.input("Immatriculation"),
                     ),
                     ...displayError("ifu"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.numero_carte_grise,
                       validator: firstNameValidator,
@@ -67,7 +78,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                       decoration: AppDecore.input("Numero de la carte grise"),
                     ),
                     ...displayError("numero_carte_grise"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.numero_chassis,
                       validator: firstNameValidator,
@@ -78,7 +89,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                       decoration: AppDecore.input("Numero de Chassis"),
                     ),
                     ...displayError("numero_chassis"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.numero_serie_moteur,
                       validator: firstNameValidator,
@@ -89,7 +100,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                       decoration: AppDecore.input("Numero de série Moteur"),
                     ),
                     ...displayError("numero_serie_moteur"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.provenance,
                       validator: firstNameValidator,
@@ -100,7 +111,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                       decoration: AppDecore.input("Provenance"),
                     ),
                     ...displayError("provenance"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.puissance,
                       validator: firstNameValidator,
@@ -111,29 +122,85 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                       decoration: AppDecore.input("Puissance"),
                     ),
                     ...displayError("puissance"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
-                      initialValue: moto.puissance,
+                      initialValue: moto.marque,
                       validator: firstNameValidator,
                       onChanged: (String? value) {
-                        moto.puissance = value?.trim();
+                        moto.marque = value?.trim();
                         resetError('marque');
                       },
                       decoration: AppDecore.input("Marque"),
                     ),
                     ...displayError("marque"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
-                      initialValue: moto.puissance,
+                      initialValue: moto.model,
                       validator: firstNameValidator,
                       onChanged: (String? value) {
-                        moto.puissance = value?.trim();
+                        moto.model = value?.trim();
                         resetError('modele');
                       },
                       decoration: AppDecore.input("Modele"),
                     ),
                     ...displayError("modele"),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: moto.type,
+                      validator: firstNameValidator,
+                      onChanged: (String? value) {
+                        moto.type = value?.trim();
+                        resetError('type');
+                      },
+                      decoration: AppDecore.input("Type"),
+                    ),
+                    ...displayError("type"),
+                    const SizedBox(height: 16),
+                    DateTimeField(
+                        format: AppDate.dateFormat,
+                        initialValue: moto.annee_mise_circulation,
+                        onChanged: (DateTime? date) {
+                          moto.annee_mise_circulation = date;
+                          resetError('annee_mise_circulation');
+                        },
+                        validator: (value) {
+                          if (value == null) return 'La date est invalide';
+                          return null;
+                        },
+                        decoration: AppDecore.input(
+                            "Anné de mise en circulation",
+                            prefix: Icons.event),
+                        onShowPicker: AppUtil.showPicker),
+                    ...displayError("annee_mise_circulation"),
+                    const SizedBox(height: 16),
+                    DateTimeField(
+                        format: AppDate.dateFormat,
+                        initialValue: moto.derniere_revision,
+                        onChanged: (DateTime? date) {
+                          moto.derniere_revision = date;
+                          resetError('derniere_revision');
+                        },
+                        validator: (value) {
+                          if (value == null) return 'La date est invalide';
+                          return null;
+                        },
+                        decoration: AppDecore.input(
+                            "Date de la dernière revision",
+                            prefix: Icons.event),
+                        onShowPicker: AppUtil.showPicker),
+                    ...displayError("derniere_revision"),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                        decoration: AppDecore.input("Etat"),
+                        items: Moto.ETATS
+                            .map((e) =>
+                                DropdownMenuItem(child: Text(e), value: e))
+                            .toList(),
+                        onChanged: (value) {
+                          moto.etat = value?.trim();
+                        }),
+                    ...displayError("etat"),
+                    const SizedBox(height: 16),
                     const Text(
                       "* est obligatoire",
                       style: TextStyle(fontStyle: FontStyle.italic),
@@ -205,7 +272,22 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
   }
 
   onSubmit() async {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {}
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      PersonalAlert.showLoading(context);
+      context.read<MotoService>().createMoto(moto).then((value) {
+        PersonalAlert.showSuccess(context).then(
+            (value) => AppUtil.goToScreen(context, MotoUpdateImageScreen()));
+      }).onError((error, stackTrace) {
+        if (error is RequestExcept) {
+          setState(() {
+            validation = error;
+          });
+          PersonalAlert.showError(context, message: "${error.message}");
+        } else {
+          PersonalAlert.showError(context, message: "$error");
+        }
+      });
+    }
   }
 
   bool get _hasError => errorMessage != null && errorMessage!.isNotEmpty;

@@ -127,7 +127,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
                         },
                         decoration:
                             AppDecore.input("Date", prefix: Icons.event),
-                        onShowPicker: showPicker),
+                        onShowPicker: AppUtil.showPicker),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -264,16 +264,6 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
         ),
       ),
     );
-  }
-
-  Future<DateTime?> showPicker(BuildContext context, DateTime? initial) async {
-    DateTime? date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now().subtract(Duration(days: 365 * 20)),
-      firstDate: DateTime.now().subtract(Duration(days: 365 * 120)),
-      lastDate: DateTime.now(),
-    );
-    return date;
   }
 
   String? departmentValidator(Departement? value) {

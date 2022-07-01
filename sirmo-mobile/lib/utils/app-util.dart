@@ -35,4 +35,15 @@ class AppUtil {
         MaterialPageRoute(builder: (c) => screen ?? HomeScreen()),
         (route) => false);
   }
+
+  static Future<DateTime?> showPicker(
+      BuildContext context, DateTime? initial) async {
+    DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().subtract(Duration(days: 365 * 20)),
+      firstDate: DateTime.now().subtract(Duration(days: 365 * 120)),
+      lastDate: DateTime.now(),
+    );
+    return date;
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
+import 'package:sirmo/screens/moto/create-moto.dart';
 import 'package:sirmo/screens/zem/become-zem.screen.dart';
 import 'package:sirmo/services/zem.sevice.dart';
 
@@ -98,7 +99,7 @@ class _UserDrawerState extends State<UserDrawer> {
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: ZemBecomeScreen(),
+          screen: MotoCreateScreen(),
         ),
       AppMenuItem(
           title: "Mairie",

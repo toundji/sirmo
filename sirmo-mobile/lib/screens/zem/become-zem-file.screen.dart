@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sirmo/screens/moto/create-moto.dart';
 import 'package:sirmo/screens/zem/zem-home.screen.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -43,7 +44,6 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
     "cip": null,
     "nip": null,
     "idCarde": null,
-    "ancienIdentifiant": null,
     "certificatRoute": null
   };
 
@@ -52,7 +52,6 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
     "cip": "CIP",
     "nip": "NIP",
     "idCarde": "Carte d'identité",
-    "ancienIdentifiant": "Ancien identifiant",
     "certificatRoute": "Permis moto"
   };
 
@@ -61,7 +60,6 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
     "cip": TextEditingController(),
     "nip": TextEditingController(),
     "idCarde": TextEditingController(),
-    "ancienIdentifiant": TextEditingController(),
     "certificatRoute": TextEditingController()
   };
 
@@ -93,7 +91,6 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
                   _formField('cip'),
                   _formField('nip'),
                   _formField('idCarde'),
-                  _formField('ancienIdentifiant'),
                   _formField('certificatRoute'),
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
@@ -159,7 +156,7 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
         child: Card(
           margin: EdgeInsets.symmetric(horizontal: 16.0),
           child: Padding(
-            padding:const EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 16,
             ),
@@ -183,7 +180,7 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
         PersonalAlert.showSuccess(context,
                 message: "Vous demander est enregistrées evac succès")
             .then((value) {
-          AppUtil.goToScreen(context, ZemHomeScreen());
+          AppUtil.goToScreen(context, MotoCreateScreen());
         });
         context.read<ZemService>().zem = value;
       }).onError((error, stackTrace) {
@@ -191,7 +188,11 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
           setState(() {
             validation = error;
           });
-        } else if (error is String) {
+          PersonalAlert.showError(context, message: "${error.message}")
+              .then((value) {
+            Navigator.pop(context, validation);
+          });
+        } else {
           PersonalAlert.showError(context, message: "$error");
         }
       });

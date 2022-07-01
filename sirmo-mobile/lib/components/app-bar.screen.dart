@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +37,10 @@ PreferredSize AppAppBar(BuildContext context) {
                       NetworkInfo.imageProfile,
                       headers: NetworkInfo.headers,
                     ),
+                    onForegroundImageError: (error, stackTrace) {
+                      log("Profile image getting ... ",
+                          error: error, stackTrace: stackTrace);
+                    },
                     backgroundImage:
                         const AssetImage("assets/images/profile.jpg"),
                   ),
