@@ -17,7 +17,7 @@ class User implements Audit {
 
   String? prenom;
 
-  String genre;
+  String? genre;
 
   String? password;
 

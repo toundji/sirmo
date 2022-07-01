@@ -38,8 +38,6 @@ class ProprietaireMoto implements Audit {
     this.updated_at,
   });
 
-  
-
   ProprietaireMoto copyWith({
     int? id,
     User? proprietaire,
@@ -69,32 +67,42 @@ class ProprietaireMoto implements Audit {
       'id': id,
       'proprietaire': proprietaire?.toMap(),
       'moto': moto?.toMap(),
-      'date_debut': date_debut?.millisecondsSinceEpoch,
-      'date_fin': date_fin?.millisecondsSinceEpoch,
-      'created_at': created_at?.millisecondsSinceEpoch,
+      'date_debut': date_debut?.toIso8601String(),
+      'date_fin': date_fin?.toIso8601String(),
+      'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
-      'updated_at': updated_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at?.toIso8601String(),
     };
   }
 
   factory ProprietaireMoto.fromMap(Map<String, dynamic> map) {
     return ProprietaireMoto(
       id: map['id']?.toInt(),
-      proprietaire: map['proprietaire'] != null ? User.fromMap(map['proprietaire']) : null,
+      proprietaire: map['proprietaire'] != null
+          ? User.fromMap(map['proprietaire'])
+          : null,
       moto: map['moto'] != null ? Moto.fromMap(map['moto']) : null,
-      date_debut: map['date_debut'] != null ? DateTime.tryParse(map['date_debut']) : null,
-      date_fin: map['date_fin'] != null ? DateTime.tryParse(map['date_fin']) : null,
-      created_at: map['created_at'] != null ? DateTime.tryParse(map['created_at']) : null,
+      date_debut: map['date_debut'] != null
+          ? DateTime.tryParse(map['date_debut'])
+          : null,
+      date_fin:
+          map['date_fin'] != null ? DateTime.tryParse(map['date_fin']) : null,
+      created_at: map['created_at'] != null
+          ? DateTime.tryParse(map['created_at'])
+          : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
-      updated_at: map['updated_at'] != null ? DateTime.tryParse(map['updated_at']) : null,
+      updated_at: map['updated_at'] != null
+          ? DateTime.tryParse(map['updated_at'])
+          : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ProprietaireMoto.fromJson(String source) => ProprietaireMoto.fromMap(json.decode(source));
+  factory ProprietaireMoto.fromJson(String source) =>
+      ProprietaireMoto.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -104,29 +112,29 @@ class ProprietaireMoto implements Audit {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is ProprietaireMoto &&
-      other.id == id &&
-      other.proprietaire == proprietaire &&
-      other.moto == moto &&
-      other.date_debut == date_debut &&
-      other.date_fin == date_fin &&
-      other.created_at == created_at &&
-      other.createur_id == createur_id &&
-      other.editeur_id == editeur_id &&
-      other.updated_at == updated_at;
+        other.id == id &&
+        other.proprietaire == proprietaire &&
+        other.moto == moto &&
+        other.date_debut == date_debut &&
+        other.date_fin == date_fin &&
+        other.created_at == created_at &&
+        other.createur_id == createur_id &&
+        other.editeur_id == editeur_id &&
+        other.updated_at == updated_at;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      proprietaire.hashCode ^
-      moto.hashCode ^
-      date_debut.hashCode ^
-      date_fin.hashCode ^
-      created_at.hashCode ^
-      createur_id.hashCode ^
-      editeur_id.hashCode ^
-      updated_at.hashCode;
+        proprietaire.hashCode ^
+        moto.hashCode ^
+        date_debut.hashCode ^
+        date_fin.hashCode ^
+        created_at.hashCode ^
+        createur_id.hashCode ^
+        editeur_id.hashCode ^
+        updated_at.hashCode;
   }
 }

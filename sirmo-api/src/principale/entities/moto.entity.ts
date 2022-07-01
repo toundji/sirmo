@@ -14,6 +14,7 @@ import {
 import { Audit } from './audit';
 import { Fichier } from './fichier.entity';
 import { ProprietaireMoto } from './proprietaire-moto.entity';
+import { ZemMoto } from './zem-moto.entity';
 import { Zem } from './zem.entity';
 
 @Entity("motos")
@@ -74,8 +75,8 @@ export class Moto extends Audit {
   @JoinColumn({ name: 'zem_id'})
   zem: Zem;
 
-  // @OneToMany(type => ZemMoto, zemMoto => zemMoto.zem)
-  // zemMotos?: ZemMoto[];
+  @OneToMany(type => ZemMoto, zemMoto => zemMoto.moto)
+  zemMotos?: ZemMoto[];
 
   @OneToMany(type => ProprietaireMoto, prprietaireMoto => prprietaireMoto.moto)
   proprietaireMotos?: ProprietaireMoto[];

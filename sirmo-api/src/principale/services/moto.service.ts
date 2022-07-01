@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, forwardRef, Inject, Injectable, UploadedFile } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, InternalServerErrorException, UploadedFile } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMotoDto } from '../createDto/create-moto.dto';
@@ -84,34 +84,41 @@ export class MotoService {
 
     const zem: Zem = await this.zemService.findOne(motDto.zem_id)
     moto.zem = zem;
-
-    
       moto =await  this.motoRepository.save(moto).catch((error)=>{
         console.log(error);
-        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+        throw new BadRequestException("Mise à jour de la moto. Données invalides");
       });
 
      //update ZemMoto if zem.moto is not null
     zem.moto = moto;
-    
     this.zemService.update(zem.id,zem);
-    let proprietaireMoto:ProprietaireMoto =  ProprietaireMoto.create({
-      proprietaire: owner,
-      moto:moto, 
-      date_debut: new Date(),
-    });
-     proprietaireMoto = await this.proprietaireMotosService.createValidProprietaireMoto(proprietaireMoto);
-     proprietaireMoto.moto = null;
 
-    const zemMoto: ZemMoto = ZemMoto.create({
-      zem: zem, 
-      moto:moto, 
+    let proprietaireMoto:ProprietaireMoto =  ProprietaireMoto.create({
+      proprietaire: {id:owner.id},
+      moto:{id:moto.id},
       date_debut: new Date(),
     });
-      
-    await this.zemMotoService.createValidZemMoto(zemMoto);
+     proprietaireMoto = await ProprietaireMoto.save(proprietaireMoto).catch((error)=>{
+      console.log(error);
+      throw new InternalServerErrorException("Erreur pendant la sauvegarde du propriétaire de la moto");
+     });let zemMoto: ZemMoto = ZemMoto.create({
+      zem: {id:zem.id},
+      moto:{id:moto.id},
+      date_debut: new Date(),
+    });
+    zemMoto =   await ZemMoto.save(zemMoto).catch((error)=>{
+        throw new InternalServerErrorException("Erreur pendant la sauvegarde de l'association (zem et moto)");
+
+      })
+
+    proprietaireMoto.moto = null;
     zemMoto.moto = null;
+
+    moto.proprietaireMotos = [proprietaireMoto]
+    moto.zemMotos = [zemMoto];
+
     moto.zem.moto = null;
+
     return moto;
 
   }

@@ -132,7 +132,8 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
           },
           decoration: AppDecore.input(keyName[cle]!,
               helper:
-                  "Cliquer pour choisir le fichier pdf de votre ${keyName[cle]}"),
+                  "Cliquer pour choisir le fichier pdf de votre ${keyName[cle]}",
+              prefix: Icons.upload_file),
         ),
       ],
     );

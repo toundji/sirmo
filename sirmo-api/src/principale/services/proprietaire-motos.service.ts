@@ -51,7 +51,7 @@ export class ProprietaireMotosService {
   ): Promise<ProprietaireMoto> {
       return this.proprietaireMotoRepository.save(moto).catch((error)=>{
         console.log(error);
-      throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      throw new BadRequestException("Sauegarde de propiétaire de la moto. Données invalides");
     
       });
   }

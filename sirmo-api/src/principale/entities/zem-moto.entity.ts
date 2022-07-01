@@ -17,7 +17,7 @@ export class ZemMoto extends Audit{
   @Column({ nullable: false , default: ()=>'NOW()'})
   date_debut: Date ;
 
-  @Column()
+  @Column({nullable:true})
   date_fin: Date;
 
   @ManyToOne((type) => Zem,  {nullable:false})

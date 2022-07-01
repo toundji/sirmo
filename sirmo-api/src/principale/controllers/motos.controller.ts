@@ -14,8 +14,7 @@ import {
 } from '@nestjs/common';
 import { CreateMotoDto } from '../createDto/create-moto.dto';
 import { MotoService } from '../services/moto.service';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { UpdateMotoDto } from '../updateDto/update-moto.dto';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Moto } from '../entities/moto.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -66,18 +65,30 @@ export class MotoController {
   }
 
   @ApiOkResponse()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema:{
+      type: 'object',
+      properties: {
+        moto_image:{
+          type: 'string',
+          format: 'binary'
+        },
+      }
+    }
+  })
   @Post(":id/images")
   @UseInterceptors(
-    FileInterceptor('motos', {
+    FileInterceptor('moto_image', {
       storage: diskStorage({
-        destination: './files/profiles',
+        destination: './files/motos',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
     }),
   )
-  updateProfile(@UploadedFile() profile, @Param('id') id: number, @Req() request,){
+  updateProfile(@UploadedFile() moto_image, @Param('id') id: number, @Req() request,){
     const user: User = request.user;
-    return this.motosService.updateImage(+id, profile, user);
+    return this.motosService.updateImage(+id, moto_image, user);
   }
 }

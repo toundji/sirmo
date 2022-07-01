@@ -65,14 +65,14 @@ class ZemMoto implements Audit {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'date_debut': date_debut?.millisecondsSinceEpoch,
-      'date_fin': date_fin?.millisecondsSinceEpoch,
+      'date_debut': date_debut?.toIso8601String(),
+      'date_fin': date_fin?.toIso8601String(),
       'zem': zem?.toMap(),
       'moto': moto?.toMap(),
-      'created_at': created_at?.millisecondsSinceEpoch,
+      'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
-      'updated_at': updated_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at?.toIso8601String(),
     };
   }
 
@@ -80,20 +80,19 @@ class ZemMoto implements Audit {
     return ZemMoto(
       id: map['id']?.toInt(),
       date_debut: map['date_debut'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['date_debut'])
+          ? DateTime.tryParse(map['date_debut'])
           : null,
-      date_fin: map['date_fin'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['date_fin'])
-          : null,
+      date_fin:
+          map['date_fin'] != null ? DateTime.tryParse(map['date_fin']) : null,
       zem: map['zem'] != null ? Zem.fromMap(map['zem']) : null,
       moto: map['moto'] != null ? Moto.fromMap(map['moto']) : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }

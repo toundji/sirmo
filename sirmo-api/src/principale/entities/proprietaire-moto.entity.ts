@@ -14,8 +14,6 @@ export class ProprietaireMoto extends Audit{
   @PrimaryGeneratedColumn()
   id: number;
 
- 
-
   @ManyToOne((type) => User, {nullable:false})
   @JoinColumn({ name: 'proprietaire_id'})
   proprietaire:User;
@@ -27,7 +25,7 @@ export class ProprietaireMoto extends Audit{
   @Column({ nullable: false, default: ()=>'NOW()'})
   date_debut: Date ;
 
-  @Column()
+  @Column({nullable: true})
   date_fin: Date;
 
   
