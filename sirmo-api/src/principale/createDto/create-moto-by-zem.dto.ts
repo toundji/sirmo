@@ -9,7 +9,7 @@ import { CreateZemDto } from "./create-zem.dto";
 
 
 
-export class CreateMotoDto {
+export class CreateMotoByZemDto {
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
@@ -83,10 +83,8 @@ export class CreateMotoDto {
   type:string;
 
   @ApiProperty({required:true})
-  @IsObject()
-  proprietaire: CreateProprietaireDto;
+  proprietaire_id: number;
 
   @ApiProperty({required:true})
-  @IsObject()
-  zem: CreateZemMDto;
+  zem_id: number;
 }

@@ -128,6 +128,15 @@ export class ZemService {
     });
   }
 
+  findOfUser(user_id: number): Promise<Zem[]> {
+    const user:User = User.create({id: user_id});
+    return this.zemRepository.find({where:{ user: user}})
+    .catch((error)=>{
+      console.log(error);
+      throw new NotFoundException("Le zem spécifié n'existe pas");
+    });
+  }
+
   update(id: number, updateZemDto: Zem): Promise<Zem> {
    
       return this.zemRepository.update(id, updateZemDto). then((zem: UpdateResult) => zem.raw).catch((error)=>{

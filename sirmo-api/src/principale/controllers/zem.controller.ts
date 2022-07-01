@@ -72,6 +72,21 @@ export class ZemController {
     return this.zemService.findActifForUser(user.id);
   }
 
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleName.ZEM)
+  @Get("my/list")
+  findOneMyInfoList(@Req() request): Promise<Zem> {
+    const user: User = request.user;
+    return this.zemService.findActifForUser(user.id);
+  }
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleName.ZEM)
+  @Get("my/list")
+  findZemOfUser(@Req() request): Promise<Zem[]> {
+    const user: User = request.user;
+    return this.zemService.findOfUser(user.id);
+  }
+
   @Patch(":id")
   update(@Param("id") id: number, @Body() updateZemDto: Zem): Promise<Zem> {
     return this.zemService.update(id, updateZemDto);

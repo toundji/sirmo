@@ -12,15 +12,31 @@ import 'zem_moto.dart';
 class Moto implements Audit {
   int? id;
 
-  String? matricule;
+  String? immatriculation;
 
-  String? carteGrise;
+  String? numero_carte_grise;
 
-  String? chassis;
+  String? numero_chassis;
 
-  String? serie;
+  String? numero_serie_moteur;
+
+  String? provenance;
+
+  String? puissance;
+
+  String? energie;
+
+  DateTime? annee_mise_circulation;
+
+  DateTime? derniere_revision;
 
   String? etat;
+
+  String? type;
+
+  String? marque;
+
+  String? model;
 
   User? proprietaire;
 
@@ -47,11 +63,19 @@ class Moto implements Audit {
   DateTime? updated_at;
   Moto({
     this.id,
-    this.matricule,
-    this.carteGrise,
-    this.chassis,
-    this.serie,
+    this.immatriculation,
+    this.numero_carte_grise,
+    this.numero_chassis,
+    this.numero_serie_moteur,
+    this.provenance,
+    this.puissance,
+    this.energie,
+    this.annee_mise_circulation,
+    this.derniere_revision,
     this.etat,
+    this.type,
+    this.marque,
+    this.model,
     this.proprietaire,
     this.zem,
     this.zemMotos,
@@ -66,11 +90,19 @@ class Moto implements Audit {
 
   Moto copyWith({
     int? id,
-    String? matricule,
-    String? carteGrise,
-    String? chassis,
-    String? serie,
+    String? immatriculation,
+    String? numero_carte_grise,
+    String? numero_chassis,
+    String? numero_serie_moteur,
+    String? provenance,
+    String? puissance,
+    String? energie,
+    DateTime? annee_mise_circulation,
+    DateTime? derniere_revision,
     String? etat,
+    String? type,
+    String? marque,
+    String? model,
     User? proprietaire,
     Zem? zem,
     List<ZemMoto>? zemMotos,
@@ -84,11 +116,20 @@ class Moto implements Audit {
   }) {
     return Moto(
       id: id ?? this.id,
-      matricule: matricule ?? this.matricule,
-      carteGrise: carteGrise ?? this.carteGrise,
-      chassis: chassis ?? this.chassis,
-      serie: serie ?? this.serie,
+      immatriculation: immatriculation ?? this.immatriculation,
+      numero_carte_grise: numero_carte_grise ?? this.numero_carte_grise,
+      numero_chassis: numero_chassis ?? this.numero_chassis,
+      numero_serie_moteur: numero_serie_moteur ?? this.numero_serie_moteur,
+      provenance: provenance ?? this.provenance,
+      puissance: puissance ?? this.puissance,
+      energie: energie ?? this.energie,
+      annee_mise_circulation:
+          annee_mise_circulation ?? this.annee_mise_circulation,
+      derniere_revision: derniere_revision ?? this.derniere_revision,
       etat: etat ?? this.etat,
+      type: type ?? this.type,
+      marque: marque ?? this.marque,
+      model: model ?? this.model,
       proprietaire: proprietaire ?? this.proprietaire,
       zem: zem ?? this.zem,
       zemMotos: zemMotos ?? this.zemMotos,
@@ -105,11 +146,19 @@ class Moto implements Audit {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'matricule': matricule,
-      'carteGrise': carteGrise,
-      'chassis': chassis,
-      'serie': serie,
+      'immatriculation': immatriculation,
+      'numero_carte_grise': numero_carte_grise,
+      'numero_chassis': numero_chassis,
+      'numero_serie_moteur': numero_serie_moteur,
+      'provenance': provenance,
+      'puissance': puissance,
+      'energie': energie,
+      'annee_mise_circulation': annee_mise_circulation?.millisecondsSinceEpoch,
+      'derniere_revision': derniere_revision?.millisecondsSinceEpoch,
       'etat': etat,
+      'type': type,
+      'marque': marque,
+      'model': model,
       'proprietaire': proprietaire?.toMap(),
       'zem': zem?.toMap(),
       'zemMotos': zemMotos?.map((x) => x.toMap()).toList(),
@@ -126,11 +175,23 @@ class Moto implements Audit {
   factory Moto.fromMap(Map<String, dynamic> map) {
     return Moto(
       id: map['id']?.toInt(),
-      matricule: map['matricule'],
-      carteGrise: map['carteGrise'],
-      chassis: map['chassis'],
-      serie: map['serie'],
+      immatriculation: map['immatriculation'],
+      numero_carte_grise: map['numero_carte_grise'],
+      numero_chassis: map['numero_chassis'],
+      numero_serie_moteur: map['numero_serie_moteur'],
+      provenance: map['provenance'],
+      puissance: map['puissance'],
+      energie: map['energie'],
+      annee_mise_circulation: map['annee_mise_circulation'] != null
+          ? DateTime.tryParse(map['annee_mise_circulation'])
+          : null,
+      derniere_revision: map['derniere_revision'] != null
+          ? DateTime.tryParse(map['derniere_revision'])
+          : null,
       etat: map['etat'],
+      type: map['type'],
+      marque: map['marque'],
+      model: map['model'],
       proprietaire: map['proprietaire'] != null
           ? User.fromMap(map['proprietaire'])
           : null,
@@ -147,12 +208,12 @@ class Moto implements Audit {
           ? List<Fichier>.from(map['images']?.map((x) => Fichier.fromMap(x)))
           : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }
@@ -163,7 +224,7 @@ class Moto implements Audit {
 
   @override
   String toString() {
-    return 'Moto(id: $id, matricule: $matricule, carteGrise: $carteGrise, chassis: $chassis, serie: $serie, etat: $etat, proprietaire: $proprietaire, zem: $zem, zemMotos: $zemMotos, proprietaireMotos: $proprietaireMotos, image: $image, images: $images, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
+    return 'Moto(id: $id, immatriculation: $immatriculation, numero_carte_grise: $numero_carte_grise, numero_chassis: $numero_chassis, numero_serie_moteur: $numero_serie_moteur, provenance: $provenance, puissance: $puissance, energie: $energie, annee_mise_circulation: $annee_mise_circulation, derniere_revision: $derniere_revision, etat: $etat, type: $type, marque: $marque, model: $model, proprietaire: $proprietaire, zem: $zem, zemMotos: $zemMotos, proprietaireMotos: $proprietaireMotos, image: $image, images: $images, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 
   @override
@@ -172,11 +233,19 @@ class Moto implements Audit {
 
     return other is Moto &&
         other.id == id &&
-        other.matricule == matricule &&
-        other.carteGrise == carteGrise &&
-        other.chassis == chassis &&
-        other.serie == serie &&
+        other.immatriculation == immatriculation &&
+        other.numero_carte_grise == numero_carte_grise &&
+        other.numero_chassis == numero_chassis &&
+        other.numero_serie_moteur == numero_serie_moteur &&
+        other.provenance == provenance &&
+        other.puissance == puissance &&
+        other.energie == energie &&
+        other.annee_mise_circulation == annee_mise_circulation &&
+        other.derniere_revision == derniere_revision &&
         other.etat == etat &&
+        other.type == type &&
+        other.marque == marque &&
+        other.model == model &&
         other.proprietaire == proprietaire &&
         other.zem == zem &&
         listEquals(other.zemMotos, zemMotos) &&
@@ -192,11 +261,19 @@ class Moto implements Audit {
   @override
   int get hashCode {
     return id.hashCode ^
-        matricule.hashCode ^
-        carteGrise.hashCode ^
-        chassis.hashCode ^
-        serie.hashCode ^
+        immatriculation.hashCode ^
+        numero_carte_grise.hashCode ^
+        numero_chassis.hashCode ^
+        numero_serie_moteur.hashCode ^
+        provenance.hashCode ^
+        puissance.hashCode ^
+        energie.hashCode ^
+        annee_mise_circulation.hashCode ^
+        derniere_revision.hashCode ^
         etat.hashCode ^
+        type.hashCode ^
+        marque.hashCode ^
+        model.hashCode ^
         proprietaire.hashCode ^
         zem.hashCode ^
         zemMotos.hashCode ^

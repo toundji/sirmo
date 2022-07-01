@@ -21,6 +21,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../utilis/utils';
 import { User } from '../entities/user.entity';
+import { CreateMotoByZemDto } from './../createDto/create-moto-by-zem.dto';
 
 
 @ApiTags('Moto')
@@ -30,32 +31,37 @@ export class MotoController {
   constructor(private readonly motosService: MotoService) {}
 
   @Post()
-  create(@Body() createMotoDto: CreateMotoDto) {
+  create(@Body() createMotoDto: CreateMotoDto):Promise<Moto> {
     return this.motosService.create(createMotoDto);
   }
 
+  @Post("by-zem")
+  createByZem(@Body() createMotoDto: CreateMotoByZemDto):Promise<Moto> {
+    return this.motosService.createByZem(createMotoDto);
+  }
+
   @Get()
-  findAll() {
+  findAll():Promise<Moto[]> {
     return this.motosService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number):Promise<Moto> {
     return this.motosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMotoDto: Moto) {
+  update(@Param('id') id: number, @Body() updateMotoDto: Moto) {
     return this.motosService.update(+id, updateMotoDto);
   }
 
   @Put(':id')
-  edit(@Param('id') id: string, @Body() updateMotoDto: Moto) {
+  edit(@Param('id') id: number, @Body() updateMotoDto: Moto):Promise<Moto> {
     return this.motosService.edit(+id, updateMotoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.motosService.remove(+id);
   }
 

@@ -33,9 +33,9 @@ class ZemService extends ChangeNotifier {
       "userId": 1,
     };
     await DioClient().post("zems/request/by/user", body: body).then((value) {
-      zem = Zem.fromMap(value);
+      this.zem = Zem.fromMap(value);
       notifyListeners();
-      return zem;
+      return this.zem;
     }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       if (error is RequestExcept) {
@@ -46,7 +46,7 @@ class ZemService extends ChangeNotifier {
       throw "Les données que nous avons récues ne sont pas celle que nous espérons";
     });
     await sendZemDoc(files);
-    return zem;
+    return this.zem;
   }
 
   Future sendZemDoc(Map<String, File?> files) async {
@@ -58,8 +58,6 @@ class ZemService extends ChangeNotifier {
         'idCarde': await MultipartFile.fromFile(files["idCarde"]!.path),
         'certificatRoute':
             await MultipartFile.fromFile(files["certificatRoute"]!.path),
-        'ancienIdentifiant':
-            await MultipartFile.fromFile(files["ancienIdentifiant"]!.path),
       },
     );
 

@@ -10,13 +10,10 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
-  CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { Audit } from './audit';
 import { Fichier } from './fichier.entity';
 import { ProprietaireMoto } from './proprietaire-moto.entity';
-import { ZemMoto } from './zem-moto.entity';
 import { Zem } from './zem.entity';
 
 @Entity("motos")
@@ -57,11 +54,17 @@ export class Moto extends Audit {
   @Column({ default: EtatMoto.OCASION, nullable: false })
   etat: EtatMoto;
 
-  @Column({ default: EtatMoto.OCASION, nullable: false })
+  @Column({ nullable: true })
+  marque:string;
+
+  @Column({ nullable: true })
+  modele:string;
+
+  @Column({ nullable: true })
   type:string;
 
   @ManyToOne((type) => User)
-  @JoinColumn({ name: 'proprietaire_id' })
+  @JoinColumn({ name: 'proprietaire_id'})
   proprietaire: User;
 
   @ManyToOne((type) => Zem)

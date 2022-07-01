@@ -15,6 +15,7 @@ import { ZemMoto } from './../entities/zem-moto.entity';
 import { NotFoundException } from '@nestjs/common';
 import { FichierService } from './fichier.service';
 import { Fichier } from '../entities/fichier.entity';
+import { CreateMotoByZemDto } from '../createDto/create-moto-by-zem.dto';
 
 @Injectable()
 export class MotoService {
@@ -69,6 +70,49 @@ export class MotoService {
     
 
     
+
+  }
+
+
+  async createByZem(motDto: CreateMotoByZemDto): Promise<Moto> {
+    let moto: Moto = new Moto();
+    Object.keys(motDto).forEach((cle) => {
+      moto[cle] = motDto[cle];
+    });
+    const owner: User = await this.userService.findOne(motDto.proprietaire_id)
+    moto.proprietaire = owner;
+
+    const zem: Zem = await this.zemService.findOne(motDto.zem_id)
+    moto.zem = zem;
+
+    
+      moto =await  this.motoRepository.save(moto).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      });
+
+     //update ZemMoto if zem.moto is not null
+    zem.moto = moto;
+    
+    this.zemService.update(zem.id,zem);
+    let proprietaireMoto:ProprietaireMoto =  ProprietaireMoto.create({
+      proprietaire: owner,
+      moto:moto, 
+      date_debut: new Date(),
+    });
+     proprietaireMoto = await this.proprietaireMotosService.createValidProprietaireMoto(proprietaireMoto);
+     proprietaireMoto.moto = null;
+
+    const zemMoto: ZemMoto = ZemMoto.create({
+      zem: zem, 
+      moto:moto, 
+      date_debut: new Date(),
+    });
+      
+    await this.zemMotoService.createValidZemMoto(zemMoto);
+    zemMoto.moto = null;
+    moto.zem.moto = null;
+    return moto;
 
   }
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sirmo/screens/zem/zem-home.screen.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import 'package:sirmo/components/app-decore.dart';
@@ -158,7 +159,7 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
         child: Card(
           margin: EdgeInsets.symmetric(horizontal: 16.0),
           child: Padding(
-            padding: EdgeInsets.symmetric(
+            padding:const EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 16,
             ),
@@ -182,7 +183,7 @@ class _BecomeZemFileScreenState extends State<BecomeZemFileScreen> {
         PersonalAlert.showSuccess(context,
                 message: "Vous demander est enregistrées evac succès")
             .then((value) {
-          AppUtil.goToScreen(context, HomeScreen());
+          AppUtil.goToScreen(context, ZemHomeScreen());
         });
         context.read<ZemService>().zem = value;
       }).onError((error, stackTrace) {

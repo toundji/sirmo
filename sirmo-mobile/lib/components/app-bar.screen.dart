@@ -31,11 +31,12 @@ PreferredSize AppAppBar(BuildContext context, dynamic headers) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CircleAvatar(
-                    foregroundImage: NetworkImage(NetworkInfo.imageProfile,
-                        headers: headers  == null && NetworkInfo.token == null
-                            ? null
-                            : NetworkInfo.headers),
-                    backgroundImage: AssetImage("assets/images/profile.jpg"),
+                    foregroundImage: NetworkImage(
+                      NetworkInfo.imageProfile,
+                      headers: NetworkInfo.headers,
+                    ),
+                    backgroundImage:
+                        const AssetImage("assets/images/profile.jpg"),
                   ),
                   const Icon(Icons.arrow_drop_down_outlined,
                       color: ColorConst.white)
