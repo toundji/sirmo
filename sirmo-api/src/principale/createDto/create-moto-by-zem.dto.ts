@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNotEmpty, IsNumber, IsObject, Min } from "class-validator";
+import { IsDateString, IsNotEmpty, IsNumber, IsObject, IsOptional, Min } from "class-validator";
 import { EtatMoto } from "src/enums/etat-moto";
 import { IsString } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
@@ -38,7 +38,7 @@ export class CreateMotoByZemDto {
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le  est obligatoire"})
+  @IsNotEmpty({message:"L'état de la moto  est obligatoire"})
   etat: EtatMoto;
 
   
@@ -64,22 +64,23 @@ export class CreateMotoByZemDto {
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le numero energie de la plaque est obligatoire"})
+  @IsNotEmpty({message:"L'énergie de la moto est obligatoire"})
+  @IsOptional()
   energie:string;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le  est obligatoire"})
+  @IsNotEmpty({message:"La marque de la moto   est obligatoire"})
   marque:string;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le numero energie de la plaque est obligatoire"})
+  @IsNotEmpty({message:"Le modèle de la moto  est obligatoire"})
   modele:string;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le  est obligatoire"})
+  @IsNotEmpty({message:"Le type de la moto  est obligatoire"})
   type:string;
 
   @ApiProperty({required:true})
