@@ -63,14 +63,14 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                         moto.immatriculation = value?.trim();
                         resetError('immatriculation');
                       },
-                      validator: firstNameValidator,
+                      validator: validator,
                       decoration: AppDecore.input("Immatriculation"),
                     ),
                     ...displayError("ifu"),
                     const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.numero_carte_grise,
-                      validator: firstNameValidator,
+                      validator: validator,
                       onChanged: (String? value) {
                         moto.numero_carte_grise = value?.trim();
                         resetError('numero_carte_grise');
@@ -81,7 +81,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.numero_chassis,
-                      validator: firstNameValidator,
+                      validator: validator,
                       onChanged: (String? value) {
                         moto.numero_chassis = value?.trim();
                         resetError('numero_chassis');
@@ -92,7 +92,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.numero_serie_moteur,
-                      validator: firstNameValidator,
+                      validator: validator,
                       onChanged: (String? value) {
                         moto.numero_serie_moteur = value?.trim();
                         resetError('numero_serie_moteur');
@@ -102,8 +102,19 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                     ...displayError("numero_serie_moteur"),
                     const SizedBox(height: 16),
                     TextFormField(
+                      initialValue: moto.numero_serie,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        moto.numero_serie = value?.trim();
+                        resetError('numero_serie');
+                      },
+                      decoration: AppDecore.input("Numero série"),
+                    ),
+                    ...displayError("numero_serie"),
+                    const SizedBox(height: 16),
+                    TextFormField(
                       initialValue: moto.provenance,
-                      validator: firstNameValidator,
+                      validator: validator,
                       onChanged: (String? value) {
                         moto.provenance = value?.trim();
                         resetError('provenance');
@@ -114,7 +125,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.puissance,
-                      validator: firstNameValidator,
+                      validator: validator,
                       onChanged: (String? value) {
                         moto.puissance = value?.trim();
                         resetError('puissance');
@@ -125,7 +136,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.marque,
-                      validator: firstNameValidator,
+                      validator: validator,
                       onChanged: (String? value) {
                         moto.marque = value?.trim();
                         resetError('marque');
@@ -135,10 +146,10 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                     ...displayError("marque"),
                     const SizedBox(height: 16),
                     TextFormField(
-                      initialValue: moto.model,
-                      validator: firstNameValidator,
+                      initialValue: moto.modele,
+                      validator: validator,
                       onChanged: (String? value) {
-                        moto.model = value?.trim();
+                        moto.modele = value?.trim();
                         resetError('modele');
                       },
                       decoration: AppDecore.input("Modele"),
@@ -147,7 +158,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       initialValue: moto.type,
-                      validator: firstNameValidator,
+                      validator: validator,
                       onChanged: (String? value) {
                         moto.type = value?.trim();
                         resetError('type');
@@ -249,7 +260,7 @@ class _MotoCreateScreenState extends State<MotoCreateScreen> {
     }
   }
 
-  String? firstNameValidator(String? value, [min = 3, max = 50]) {
+  String? validator(String? value, [min = 3, max = 50]) {
     if (value == null) {
       return "Ce champ est obligartoire";
     } else if (value.length < min) {

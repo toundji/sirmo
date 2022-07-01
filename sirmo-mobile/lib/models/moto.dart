@@ -18,6 +18,8 @@ class Moto implements Audit {
 
   String? numero_chassis;
 
+  String? numero_serie;
+
   String? numero_serie_moteur;
 
   String? provenance;
@@ -36,7 +38,7 @@ class Moto implements Audit {
 
   String? marque;
 
-  String? model;
+  String? modele;
 
   String? couleur;
 
@@ -63,19 +65,12 @@ class Moto implements Audit {
 
   @override
   DateTime? updated_at;
-
-  static String get NEUF => 'NEUF';
-  static String get OCASION => 'OCASION';
-  static String get GATE => 'GATE';
-  static String get SUPPRIMER => 'SUPPRIMER';
-
-  static List<String> get ETATS => ["NEUF", "OCASION", "GATE", "SUPPRIMER"];
-
   Moto({
     this.id,
     this.immatriculation,
     this.numero_carte_grise,
     this.numero_chassis,
+    this.numero_serie,
     this.numero_serie_moteur,
     this.provenance,
     this.puissance,
@@ -85,7 +80,7 @@ class Moto implements Audit {
     this.etat,
     this.type,
     this.marque,
-    this.model,
+    this.modele,
     this.couleur,
     this.proprietaire,
     this.zem,
@@ -99,11 +94,19 @@ class Moto implements Audit {
     this.updated_at,
   });
 
+  static String get NEUF => 'NEUF';
+  static String get OCASION => 'OCASION';
+  static String get GATE => 'GATE';
+  static String get SUPPRIMER => 'SUPPRIMER';
+
+  static List<String> get ETATS => ["NEUF", "OCASION", "GATE", "SUPPRIMER"];
+
   Moto copyWith({
     int? id,
     String? immatriculation,
     String? numero_carte_grise,
     String? numero_chassis,
+    String? numero_serie,
     String? numero_serie_moteur,
     String? provenance,
     String? puissance,
@@ -113,7 +116,7 @@ class Moto implements Audit {
     String? etat,
     String? type,
     String? marque,
-    String? model,
+    String? modele,
     String? couleur,
     User? proprietaire,
     Zem? zem,
@@ -131,6 +134,7 @@ class Moto implements Audit {
       immatriculation: immatriculation ?? this.immatriculation,
       numero_carte_grise: numero_carte_grise ?? this.numero_carte_grise,
       numero_chassis: numero_chassis ?? this.numero_chassis,
+      numero_serie: numero_serie ?? this.numero_serie,
       numero_serie_moteur: numero_serie_moteur ?? this.numero_serie_moteur,
       provenance: provenance ?? this.provenance,
       puissance: puissance ?? this.puissance,
@@ -141,7 +145,7 @@ class Moto implements Audit {
       etat: etat ?? this.etat,
       type: type ?? this.type,
       marque: marque ?? this.marque,
-      model: model ?? this.model,
+      modele: modele ?? this.modele,
       couleur: couleur ?? this.couleur,
       proprietaire: proprietaire ?? this.proprietaire,
       zem: zem ?? this.zem,
@@ -162,6 +166,7 @@ class Moto implements Audit {
       'immatriculation': immatriculation,
       'numero_carte_grise': numero_carte_grise,
       'numero_chassis': numero_chassis,
+      'numero_serie': numero_serie,
       'numero_serie_moteur': numero_serie_moteur,
       'provenance': provenance,
       'puissance': puissance,
@@ -171,7 +176,7 @@ class Moto implements Audit {
       'etat': etat,
       'type': type,
       'marque': marque,
-      'model': model,
+      'modele': modele,
       'couleur': couleur,
       'proprietaire': proprietaire?.toMap(),
       'zem': zem?.toMap(),
@@ -188,9 +193,11 @@ class Moto implements Audit {
 
   Map<String, dynamic> toCreateMap() {
     return {
+      'id': id,
       'immatriculation': immatriculation,
       'numero_carte_grise': numero_carte_grise,
       'numero_chassis': numero_chassis,
+      'numero_serie': numero_serie,
       'numero_serie_moteur': numero_serie_moteur,
       'provenance': provenance,
       'puissance': puissance,
@@ -200,9 +207,9 @@ class Moto implements Audit {
       'etat': etat,
       'type': type,
       'marque': marque,
-      'model': model,
+      'modele': modele,
       'couleur': couleur,
-      'proprietaire_id': proprietaire?.id,
+      'proprietaire': proprietaire?.id,
       'zem_id': zem?.id,
     };
   }
@@ -213,6 +220,7 @@ class Moto implements Audit {
       immatriculation: map['immatriculation'],
       numero_carte_grise: map['numero_carte_grise'],
       numero_chassis: map['numero_chassis'],
+      numero_serie: map['numero_serie'],
       numero_serie_moteur: map['numero_serie_moteur'],
       provenance: map['provenance'],
       puissance: map['puissance'],
@@ -226,7 +234,7 @@ class Moto implements Audit {
       etat: map['etat'],
       type: map['type'],
       marque: map['marque'],
-      model: map['model'],
+      modele: map['modele'],
       couleur: map['couleur'],
       proprietaire: map['proprietaire'] != null
           ? User.fromMap(map['proprietaire'])
@@ -260,7 +268,7 @@ class Moto implements Audit {
 
   @override
   String toString() {
-    return 'Moto(id: $id, immatriculation: $immatriculation, numero_carte_grise: $numero_carte_grise, numero_chassis: $numero_chassis, numero_serie_moteur: $numero_serie_moteur, provenance: $provenance, puissance: $puissance, energie: $energie, annee_mise_circulation: $annee_mise_circulation, derniere_revision: $derniere_revision, etat: $etat, type: $type, marque: $marque, model: $model, couleur: $couleur, proprietaire: $proprietaire, zem: $zem, zemMotos: $zemMotos, proprietaireMotos: $proprietaireMotos, image: $image, images: $images, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
+    return 'Moto(id: $id, immatriculation: $immatriculation, numero_carte_grise: $numero_carte_grise, numero_chassis: $numero_chassis, numero_serie: $numero_serie, numero_serie_moteur: $numero_serie_moteur, provenance: $provenance, puissance: $puissance, energie: $energie, annee_mise_circulation: $annee_mise_circulation, derniere_revision: $derniere_revision, etat: $etat, type: $type, marque: $marque, modele: $modele, couleur: $couleur, proprietaire: $proprietaire, zem: $zem, zemMotos: $zemMotos, proprietaireMotos: $proprietaireMotos, image: $image, images: $images, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 
   @override
@@ -272,6 +280,7 @@ class Moto implements Audit {
         other.immatriculation == immatriculation &&
         other.numero_carte_grise == numero_carte_grise &&
         other.numero_chassis == numero_chassis &&
+        other.numero_serie == numero_serie &&
         other.numero_serie_moteur == numero_serie_moteur &&
         other.provenance == provenance &&
         other.puissance == puissance &&
@@ -281,7 +290,7 @@ class Moto implements Audit {
         other.etat == etat &&
         other.type == type &&
         other.marque == marque &&
-        other.model == model &&
+        other.modele == modele &&
         other.couleur == couleur &&
         other.proprietaire == proprietaire &&
         other.zem == zem &&
@@ -301,6 +310,7 @@ class Moto implements Audit {
         immatriculation.hashCode ^
         numero_carte_grise.hashCode ^
         numero_chassis.hashCode ^
+        numero_serie.hashCode ^
         numero_serie_moteur.hashCode ^
         provenance.hashCode ^
         puissance.hashCode ^
@@ -310,7 +320,7 @@ class Moto implements Audit {
         etat.hashCode ^
         type.hashCode ^
         marque.hashCode ^
-        model.hashCode ^
+        modele.hashCode ^
         couleur.hashCode ^
         proprietaire.hashCode ^
         zem.hashCode ^

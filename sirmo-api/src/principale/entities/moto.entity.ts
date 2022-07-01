@@ -27,28 +27,28 @@ export class Moto extends Audit {
   @Column({ nullable: false })
   immatriculation: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   numero_carte_grise: string;
 
-  @Column({ nullable: false})
+  @Column({ nullable: true})
   numero_chassis: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   numero_serie_moteur: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   provenance:string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   puissance:string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   energie:string;
 
   @Column({ nullable: false })
   annee_mise_circulation:Date;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   derniere_revision:Date;
 
   @Column({ default: EtatMoto.OCASION, nullable: false })
