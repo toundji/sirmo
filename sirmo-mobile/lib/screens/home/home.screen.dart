@@ -10,6 +10,7 @@ import 'package:sirmo/screens/potefeuille/credite-porte.screen.dart';
 import 'package:sirmo/screens/potefeuille/portefeuille.component.dart';
 import 'package:sirmo/screens/profile/profile.screen.dart';
 import 'package:sirmo/services/compte.service.dart';
+import 'package:sirmo/services/zem.sevice.dart';
 import 'package:sirmo/utils/network-info.dart';
 
 import '../../components/action-card.dart';
@@ -33,11 +34,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  dynamic header;
   Compte? compte;
+  User? user;
   @override
   void initState() {
     super.initState();
+    user = context.read<UserService>().user;
+
+    loadMyZemList();
+
     context
         .read<CompteService>()
         .loadCompte()
@@ -45,36 +50,21 @@ class _HomeScreenState extends State<HomeScreen> {
         .onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "êrror");
     });
-    if (widget.debug) {
-      login();
-    }
   }
 
-  login() {
+  loadMyZemList() {
     context
-        .read<UserService>()
-        .login("+22994851785", "Baba@1234")
-        .then((value) {
-      setState(() {
-        header = NetworkInfo.headers;
-      });
-      context
-          .read<CompteService>()
-          .loadCompte()
-          .then((value) {})
-          .onError((error, stackTrace) {
-        PersonalAlert.showError(context, message: "êrror");
-      });
-      setState(() {});
-    }).onError((error, stackTrace) {
-      PersonalAlert.showError(context, message: "$error").then((value) {});
-    });
+        .read<ZemService>()
+        .loadMyZemList(user!.id!)
+        .then((value) {})
+        .onError((error, stackTrace) {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBar(context, header),
+      appBar: AppAppBar(context),
+      drawer: UserDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -83,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 ActionCard(name: "Payer Zem", icon: Icons.payment),
                 ActionCard(name: "Evaluer Zem", icon: Icons.edit),
               ],
@@ -99,7 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
           PortefeuilleComponent(),
         ],
       ),
-      drawer: UserDrawer(),
     );
   }
 }

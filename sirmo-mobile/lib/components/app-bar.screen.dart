@@ -7,7 +7,7 @@ import '../utils/color-const.dart';
 import '../utils/network-info.dart';
 import 'curve_path_clipper.dart';
 
-PreferredSize AppAppBar(BuildContext context, dynamic headers) {
+PreferredSize AppAppBar(BuildContext context) {
   return PreferredSize(
     preferredSize: Size(MediaQuery.of(context).size.width, 150),
     child: ClipPath(

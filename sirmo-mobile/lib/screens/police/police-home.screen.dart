@@ -35,9 +35,6 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
         .onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "êrror");
     });
-    if (widget.debug) {
-      login();
-    }
   }
 
   login() {
@@ -64,7 +61,7 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBar(context, header),
+      appBar: AppAppBar(context),
       body: Column(
         children: [
           SizedBox(height: 16),

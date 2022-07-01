@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
 import 'package:sirmo/screens/zem/become-zem.screen.dart';
+import 'package:sirmo/services/zem.sevice.dart';
 
 import '../models/app-menu-item.dart';
 import '../models/user.dart';
+import '../models/zem.dart';
 import '../screens/home/home.screen.dart';
 import '../screens/zem/zem-home.screen.dart';
 import '../services/user.service.dart';
@@ -49,9 +51,7 @@ class _UserDrawerState extends State<UserDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    User? user = context.watch<UserService>().user;
-
-    adminMenu(user);
+    adminMenu(context);
     return Container(
       width: MediaQuery.of(context).size.width * 0.7,
       child: Drawer(
@@ -68,7 +68,9 @@ class _UserDrawerState extends State<UserDrawer> {
     );
   }
 
-  adminMenu(User? user) {
+  adminMenu(BuildContext context) {
+    User? user = context.watch<UserService>().user;
+    Zem? zem = context.watch<ZemService>().zem;
     menus = [
       AppMenuItem(title: "ACCUEIL", page: HomeScreen.routeName),
       if (user != null && user.hasRole("zem"))
@@ -80,14 +82,24 @@ class _UserDrawerState extends State<UserDrawer> {
           ),
           screen: ZemHomeScreen(),
         ),
-      AppMenuItem(
-        title: "Devenir Zem",
-        leading: const Icon(
-          Icons.motorcycle,
-          color: ColorConst.primary,
+      if (zem == null)
+        AppMenuItem(
+          title: "Devenir Zem",
+          leading: const Icon(
+            Icons.motorcycle,
+            color: ColorConst.primary,
+          ),
+          screen: ZemBecomeScreen(),
         ),
-        screen: ZemBecomeScreen(),
-      ),
+      if (zem != null && zem.statut == Zem.DEMANDE)
+        AppMenuItem(
+          title: "Créer un moto",
+          leading: const Icon(
+            Icons.motorcycle,
+            color: ColorConst.primary,
+          ),
+          screen: ZemBecomeScreen(),
+        ),
       AppMenuItem(
           title: "Mairie",
           leading: const Icon(

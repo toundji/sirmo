@@ -63,6 +63,9 @@ export class Moto extends Audit {
   @Column({ nullable: true })
   type:string;
 
+  @Column({ nullable: true })
+  couleur:string;
+
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'proprietaire_id'})
   proprietaire: User;

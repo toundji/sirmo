@@ -72,6 +72,7 @@ class Police implements Audit {
 
   factory Police.fromMap(Map<String, dynamic> map) {
     return Police(
+    
       user: map['user'] != null ? User.fromMap(map['user']) : null,
       id: map['id']?.toInt(),
       ifu: map['ifu'],

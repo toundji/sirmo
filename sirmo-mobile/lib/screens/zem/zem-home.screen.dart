@@ -43,7 +43,7 @@ class _ZemHomeScreenState extends State<ZemHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBar(context, header),
+      appBar: AppAppBar(context),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -19,6 +19,26 @@ class ZemService extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<Zem>?> loadMyZemList(int user_id, {bool refresh = false}) async {
+    if (zem == null || refresh) {
+      return await DioClient().get("zems/my/list").then((value) {
+        List list = value;
+
+        all = list.map((e) => Zem.fromMap(e)).toList();
+        if (all!.length > 0) {
+          all!.firstWhere((element) => element.statut == Zem.ACTIF,
+              orElse: () => all!.first);
+        }
+        notifyListeners();
+        return all;
+      }).onError((error, stackTrace) {
+        log("Error de conexion ", error: error, stackTrace: stackTrace);
+        throw "Les données que nous avons récues ne sont pas celle que nous espérons";
+      });
+    }
+    return all;
+  }
+
   Future<Zem?> becomeZem(Zem zem, Map<String, File?> files) async {
     if (this.zem != null) {
       throw "Vous êtes déjà un Zem";

@@ -63,6 +63,11 @@ class Zem implements Audit {
 
   @override
   DateTime? updated_at;
+
+  static String get ACTIF => "ACTIF";
+  static String get DESATIVE => "DESACTIVE";
+  static String get DEMANDE => "DEMANDE";
+
   Zem({
     this.user,
     this.id,
