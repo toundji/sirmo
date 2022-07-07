@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/home/home.screen.dart';
 
 class AppUtil {
-  static String appName = "Zem🏍";
+  static String appName = "Conducteur🏍";
   static String kikiapayKey = "08dc6a00e3e911eb96cbffe4cc632e8e";
 
   static void goToScreen(BuildContext context, Widget screen) {
@@ -45,5 +47,10 @@ class AppUtil {
       lastDate: DateTime.now(),
     );
     return date;
+  }
+
+  static String getFileName(File? file) {
+    String value = file?.path == null ? "" : file!.path.split("/").last;
+    return value;
   }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsNotEmpty, IsNumber, IsPositive, Min } from "class-validator";
-import { EtatMoto } from "src/enums/etat-moto";
+import { EtatVehicule } from "src/enums/etat-vehicule";
 import { IsString } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNumberString } from 'class-validator';

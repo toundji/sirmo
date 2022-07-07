@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -259,6 +261,26 @@ class AppDecore {
               fontWeight: FontWeight.w600,
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  static Widget dispayImageRatio(File file,
+      {double? ratio, double? margin, EdgeInsets? padding}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: AspectRatio(
+        aspectRatio: ratio ?? 4 / 3,
+        child: Card(
+          margin: EdgeInsets.symmetric(horizontal: margin ?? 16.0),
+          child: Padding(
+              padding: padding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 16,
+                  ),
+              child: Image.file(file)),
         ),
       ),
     );

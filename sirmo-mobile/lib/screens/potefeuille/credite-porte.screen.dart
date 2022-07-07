@@ -100,10 +100,9 @@ class _CreditPortefeuilleScreenState extends State<CreditPortefeuilleScreen> {
       callback: onPaymentSuccess,
       apikey: AppUtil.kikiapayKey,
       phone: tel,
-      name: "Ola BABA",
-      data: "ola@gmail.com",
+      name: "${user.nom} ${user.prenom}",
       sandbox: true,
-      theme: "#009688",
+      theme: "#${ColorConst.primary.value.toRadixString(16)}",
     );
     String? id = await Navigator.push(
       context,
@@ -111,9 +110,7 @@ class _CreditPortefeuilleScreenState extends State<CreditPortefeuilleScreen> {
           builder: (context) => Scaffold(
                 body: SafeArea(child: payer),
               )),
-    ) as String;
-
-    print("id : $id");
+    ) as String?;
     if (id != null) {
       await verifyPayment(id);
     } else {

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { EtatMoto } from 'src/enums/etat-moto';
+import { EtatVehicule } from 'src/enums/etat-vehicule';
 import { User } from 'src/principale/entities/user.entity';
 import {
   Column,
@@ -13,7 +13,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Zem } from './zem.entity';
+import { Conducteur } from './conducteur.entity';
 import { TypeAmande } from './type-amande.entity';
 import { Police } from './police.entity';
 import { Payement } from './payement.entity';
@@ -59,9 +59,9 @@ export class Amande {
   @JoinColumn({ name: 'police_id' })
   police: Police;
 
-  @ManyToOne((type) => Zem, {nullable:false,eager:true})
-  @JoinColumn({ name: 'zem_id' })
-  zem: Zem;
+  @ManyToOne((type) => Conducteur, {nullable:false,eager:true})
+  @JoinColumn({ name: 'conducteur_id' })
+  conducteur: Conducteur;
 
  
   @Column()

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/action-card.dart';
 import 'package:sirmo/components/app-bar.screen.dart';
-import 'package:sirmo/screens/zem/zem.drawer.dart';
+import 'package:sirmo/screens/conducteur/conducteur.drawer.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/utils/network-info.dart';
 
@@ -71,7 +71,7 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 ActionCard(name: "Ammande", icon: Icons.motorcycle),
-                ActionCard(name: "Status Zem", icon: Icons.edit),
+                ActionCard(name: "Status Conducteur", icon: Icons.edit),
               ],
             ),
           ),
@@ -86,7 +86,7 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
           // portefeuile,
         ],
       ),
-      drawer: ZemDrawer(),
+      drawer: ConducteurDrawer(),
     );
   }
 }

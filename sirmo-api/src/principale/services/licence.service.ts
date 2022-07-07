@@ -6,19 +6,20 @@ import { CreateLicenceDto } from '../createDto/create-licence.dto';
 import { Licence } from '../entities/licence.entity';
 import { Mairie } from '../entities/mairie.entity';
 import { User } from '../entities/user.entity';
-import { Zem } from '../entities/zem.entity';
+import { Conducteur } from '../entities/conducteur.entity';
 import { UpdateLicenceDto } from '../updateDto/update-licence.dto';
-import { ZemService } from './zem.service';
+import { ConducteurService } from './conducteur.service';
 import { MairieService } from './mairie.service';
 import { PayementService } from './payement.service';
 import { Payement } from './../entities/payement.entity';
 import { error } from 'console';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class LicenceService {
   constructor(
     @InjectRepository(Licence) private licenceRepository: Repository<Licence>,
-    private readonly zemService: ZemService,
+    private readonly conducteurService: ConducteurService,
     private readonly mairieService: MairieService,
     private readonly payementService: PayementService,
   ) {}
@@ -29,8 +30,8 @@ export class LicenceService {
       licence[cle] = createLicenceDto[cle];
     });
 
-    const zem: Zem = await this.zemService.findOne(createLicenceDto.zem_id);
-    licence.zem = zem;
+    const conducteur: Conducteur = await this.conducteurService.findOne(createLicenceDto.conducteur_id);
+    licence.conducteur = conducteur;
 
     const mairie: Mairie = await this.mairieService.findOne(createLicenceDto.mairie_id);
     licence.mairie = mairie;
@@ -40,10 +41,13 @@ export class LicenceService {
 
     licence.createur_id = createur?.id;
 
-    const payement: Payement = await this.payementService.payLicence(licence.montant, zem, createur);
+    const payement: Payement = await this.payementService.payLicence(licence.montant, conducteur, createur);
     licence.payement = payement;
 
-    return this.licenceRepository.save(licence);
+    return this.licenceRepository.save(licence).catch((error)=>{
+      console.log(error);
+      throw new InternalServerErrorException("Erreur pendant la sauvergarde de la licence. Veillez reprendre ou contacter un administrateur si cela persiste");
+    });
   }
 
   createAll(createLicenceDto: CreateLicenceDto[],  createur: User) {
@@ -56,8 +60,8 @@ export class LicenceService {
         licence[cle] = body[cle];
       });
 
-      const zem: Zem = await this.zemService.findOne(body.zem_id);
-      licence.zem = zem;
+      const conducteur: Conducteur = await this.conducteurService.findOne(body.conducteur_id);
+      licence.conducteur = conducteur;
 
       const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
       licence.mairie = mairie;
@@ -67,7 +71,7 @@ export class LicenceService {
 
       licence.createur_id = createur?.id;
 
-      const payement: Payement = await this.payementService.payLicence(licence.montant, zem, createur);
+      const payement: Payement = await this.payementService.payLicence(licence.montant, conducteur, createur);
       licence.payement = payement;
       
       licences.push(licence);

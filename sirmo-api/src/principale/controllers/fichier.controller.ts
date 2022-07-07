@@ -36,7 +36,7 @@ export class FichierController {
   }
 
   @ApiBearerAuth("token")
-  @Post("zems/:id/files")
+  @Post("conducteurs/:id/files")
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema:{
@@ -74,7 +74,7 @@ export class FichierController {
       {name: 'certificatRoute', maxCount: 1}
     ],{
       storage: diskStorage({
-        destination: './files/zems-files',
+        destination: './files/conducteurs-files',
         filename: editFileName,
       }),
       fileFilter: imageOrPdfFileFilter,
@@ -91,7 +91,7 @@ export class FichierController {
       @Req() request){
     const user: User = request.user;
     console.log(files);
-    return  this.fichierService.createZemFiles(id, files, user);
+    return  this.fichierService.createConducteurFiles(id, files, user);
   }
 
 
@@ -102,18 +102,18 @@ export class FichierController {
 
   }
 
-  @Get('zems/:id/dossiers')
-  async findZemDossier(@Param('id') id: number, @Res() res) {
-    const files:Fichier[] = await this.fichierService.getZemFiles(+id);
+  @Get('conducteurs/:id/dossiers')
+  async findConducteurDossier(@Param('id') id: number, @Res() res) {
+    const files:Fichier[] = await this.fichierService.getConducteurFiles(+id);
     files.forEach((file)=>{
       res.sendFile(file.path, { root: './' })
     });
     return res;
   }
 
-  @Get('zems/:id/dossiers/details')
-   findZemDossierInfo(@Param('id') id: number):Promise<Fichier[]> {
-    return this.fichierService.getZemFiles(+id);
+  @Get('conducteurs/:id/dossiers/details')
+   findConducteurDossierInfo(@Param('id') id: number):Promise<Fichier[]> {
+    return this.fichierService.getConducteurFiles(+id);
    
   }
 

@@ -42,7 +42,7 @@ async function bootstrap() {
   app.enableCors({ origin: true });
   const config = new DocumentBuilder()
                 .setTitle("SIRMO API")
-                .setDescription("Système d'Identification RFID Mobile des conducteurs motos(Zems) au Bénin")
+                .setDescription("Système d'Identification RFID Mobile des conducteurs vehicules(Conducteurs) au Bénin")
                 .setVersion("1.0")
                 .addTag("cast")
                 .addBearerAuth(

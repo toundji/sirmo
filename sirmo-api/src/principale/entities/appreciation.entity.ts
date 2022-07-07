@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity';
-import { Zem } from './zem.entity';
+import { Conducteur } from './conducteur.entity';
 import { TypeAppreciation } from 'src/enums/type-appreciation';
 import { Fichier } from './fichier.entity';
+import { Audit } from './audit';
 
 @Entity("appreciations")
-export class Appreciation {
+export class Appreciation extends Audit {
   static  entityName  = "appreciations";
 
   @PrimaryGeneratedColumn()
@@ -21,26 +22,13 @@ export class Appreciation {
   @Column({nullable:false})
   phone:string;
 
-  @JoinColumn({ name: 'zem_id',  })
-  @ManyToOne((type) => Zem, {nullable:false, eager:true})
-  zem: Zem;
+  @JoinColumn({ name: 'conducteur_id',  })
+  @ManyToOne((type) => Conducteur, {nullable:false, eager:true})
+  conducteur: Conducteur;
 
   @JoinColumn({ name: 'fichier_id' })
   @ManyToOne((type) => Fichier, {eager:true})
   fichier: Fichier;
 
-
-  @Column({nullable:true})
-  createur_id:number;
-
-  
-  @Column({nullable:true})
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
 
 }

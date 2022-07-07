@@ -11,10 +11,10 @@ import { Arrondissement } from './entities/arrondissement.entity';
 import { Licence } from './entities/licence.entity';
 import { Mairie } from './entities/mairie.entity';
 import { Departement } from './entities/departement.entity';
-import { Moto } from './entities/moto.entity';
-import { ProprietaireMoto } from './entities/proprietaire-moto.entity';
+import { Vehicule } from './entities/vehicule.entity';
+import { ProprietaireVehicule } from './entities/proprietaire-vehicule.entity';
 import { TypeAmande } from './entities/type-amande.entity';
-import { Zem } from './entities/zem.entity';
+import { Conducteur } from './entities/conducteur.entity';
 import { TypeAmandeService } from './services/type-amande.service';
 import { ArrondissementService } from './services/arrondissement.service';
 import { CommuneService } from './services/commune.service';
@@ -22,8 +22,8 @@ import { LicenceService } from './services/licence.service';
 import { MairieService } from './services/mairie.service';
 import { DepartementService } from './services/departement.service';
 import { RoleService } from './services/roles.service';
-import { ProprietaireMotosService } from './services/proprietaire-motos.service';
-import { MotoService } from './services/moto.service';
+import { ProprietaireVehiculesService } from './services/proprietaire-vehicule.service';
+import { VehiculeService } from './services/vehicule.service';
 import { UserController } from './controllers/user.controller';
 import { RolesController } from './controllers/roles.controller';
 import { ArrondissementController } from './controllers/arrondissement.controller';
@@ -31,11 +31,9 @@ import { CommuneController } from './controllers/commune.controller';
 import { LicenceController } from './controllers/licence.controller';
 import { MairieController } from './controllers/mairie.controller';
 import { DepartementController } from './controllers/departement.controller';
-import { ProprietaireMotosController } from './controllers/proprietaire-motos.controller';
 import { TypeAmandeController } from './controllers/type-amande.controller';
-import { MotoController } from './controllers/motos.controller';
-import { ZemService } from './services/zem.service';
-import { ZemController } from './controllers/zem.controller';
+import { ConducteurService } from './services/conducteur.service';
+import { ConducteurController } from './controllers/conducteur.controller';
 import { Amande } from './entities/amande.entity';
 import { Appreciation } from './entities/appreciation.entity';
 import { Compte } from './entities/compte.entity';
@@ -43,8 +41,8 @@ import { Fichier } from './entities/fichier.entity';
 import { Localisation } from './entities/localisation.entity';
 import { Payement } from './entities/payement.entity';
 import { Police } from './entities/police.entity';
-import { ZemMoto } from './entities/zem-moto.entity';
-import { ZemMotoService } from './services/zem-moto.service';
+import { ConducteurVehicule } from './entities/conducteur-vehicule.entity';
+import { ConducteurVehiculeService } from './services/conducteur-vehicule.service';
 import { LocalisationService } from './services/localisation.service';
 import { FichierService } from './services/fichier.service';
 import { PoliceService } from './services/police.service';
@@ -56,7 +54,7 @@ import { FichierController } from './controllers/fichier.controller';
 import { LocalisationController } from './controllers/localisation.controller';
 import { PayementController } from './controllers/payement.controller';
 import { PoliceController } from './controllers/police.controller';
-import { ZemMotoController } from './controllers/zem-moto.controller';
+import { ConducteurVehiculeController } from './controllers/conducteur-vehicule.controller';
 import { AppreciationService } from './services/appreciation.service';
 import { CompteService } from './services/compte.service';
 
@@ -65,6 +63,10 @@ import { SeederService } from './services/seeder.service';
 import { SeedController } from './controllers/seeder.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { CompteController } from './controllers/compte.controller';
+import { Constante } from './entities/constante.entity';
+import { ConstanteService } from './services/constante.service';
+import { ProprietaireVehiculesController } from './controllers/proprietaire-vehicule.controller';
+import { VehiculeController } from './controllers/vehicule.controller';
 
 
 
@@ -80,10 +82,10 @@ import { CompteController } from './controllers/compte.controller';
       Licence,
       Mairie,
       Departement,
-      Moto,
-      ProprietaireMoto,
+      Vehicule,
+      ProprietaireVehicule,
       TypeAmande,
-      Zem,
+      Conducteur,
       Amande,
       Appreciation,
       Compte,
@@ -91,7 +93,8 @@ import { CompteController } from './controllers/compte.controller';
       Localisation,
       Payement,
       Police,
-      ZemMoto,
+      ConducteurVehicule,
+      Constante,
     ]),
   ],
   exports: [
@@ -102,19 +105,20 @@ import { CompteController } from './controllers/compte.controller';
     LicenceService,
     MairieService,
     DepartementService,
-    MotoService,
-    ProprietaireMotosService,
+    VehiculeService,
+    ProprietaireVehiculesService,
     TypeAmandeService,
-    ZemService,
+    ConducteurService,
     PrincipaleService,
-    ZemMotoService,
+    ConducteurVehiculeService,
     LocalisationService,
     FichierService,
     PoliceService,
     AmandeService,
     PayementService,
     CompteService,
-    AppreciationService
+    AppreciationService,
+    ConstanteService,
   ],
   controllers: [
     PrincipaleController,
@@ -125,17 +129,17 @@ import { CompteController } from './controllers/compte.controller';
       LicenceController,
       MairieController,
       DepartementController,
-      MotoController,
-      ProprietaireMotosController,
+      VehiculeController,
+      ProprietaireVehiculesController,
       TypeAmandeController,
-      ZemController,
+      ConducteurController,
       AmandeController,
       AppreciationController,
       FichierController,
       LocalisationController,
       PayementController,
       PoliceController,
-      ZemMotoController,
+      ConducteurVehiculeController,
       SeedController,
       CompteController,
   ],
@@ -149,12 +153,12 @@ import { CompteController } from './controllers/compte.controller';
     LicenceService,
     MairieService,
     DepartementService,
-    MotoService,
-    ProprietaireMotosService,
+    VehiculeService,
+    ProprietaireVehiculesService,
     TypeAmandeService,
-    ZemService,
+    ConducteurService,
     PrincipaleService,
-    ZemMotoService,
+    ConducteurVehiculeService,
     LocalisationService,
     FichierService,
     PoliceService,
@@ -162,6 +166,7 @@ import { CompteController } from './controllers/compte.controller';
     PayementService,
     AppreciationService,
     CompteService,
+    ConstanteService,
   ],
 })
 export class PrincipaleModule {}

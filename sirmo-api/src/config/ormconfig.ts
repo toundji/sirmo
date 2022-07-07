@@ -4,7 +4,7 @@ import 'dotenv/config'
 
 
 const ormConfig: TypeOrmOptionsFactory|any = {
-    type: process.env.DATABASE_SG,
+    type: "postgres" ?? process.env.DATABASE_SG,
     url: process.env.DB_URL,
     ssl: {
         rejectUnauthorized: false

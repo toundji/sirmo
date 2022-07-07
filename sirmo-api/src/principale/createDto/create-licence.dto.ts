@@ -2,6 +2,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsNumber, Min } from "class-validator";
 import { IsPositive } from 'class-validator';
+import { IsDateString } from 'class-validator';
 
 export class CreateLicenceDto {
 
@@ -11,17 +12,17 @@ export class CreateLicenceDto {
   montant: number;
 
   @ApiProperty({required:true})
-  @IsDate({always:true})
+  @IsDateString()
   dateDebut: Date;
 
   @ApiProperty({required:true})
-  @IsDate({always:true})
+  @IsDateString()
   dateFin: Date;
 
   @ApiProperty({required:true})
   @IsNumber()
   @IsPositive()
-  zem_id: number;
+  conducteur_id: number;
 
   @ApiProperty({required:true})
   @IsNumber()

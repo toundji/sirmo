@@ -53,6 +53,11 @@ dependencies:
   datetime_picker_formfield:
   image_picker:
   kkiapay_flutter_sdk:
+  syncfusion_flutter_charts: ^20.1.55
+  firebase_ml_vision: ^0.12.0
+  firebase_core:
+
+
 
 
 dev_dependencies:

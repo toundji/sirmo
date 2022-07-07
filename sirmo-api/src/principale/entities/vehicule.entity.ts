@@ -1,0 +1,130 @@
+/* eslint-disable prettier/prettier */
+import { EtatVehicule } from 'src/enums/etat-vehicule';
+import { User } from 'src/principale/entities/user.entity';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+  Index,
+} from 'typeorm';
+import { Audit } from './audit';
+import { Fichier } from './fichier.entity';
+import { ProprietaireVehicule } from './proprietaire-vehicule.entity';
+import { ConducteurVehicule } from './conducteur-vehicule.entity';
+import { Conducteur } from './conducteur.entity';
+
+@Entity("vehicules")
+export class Vehicule extends Audit {
+  static entityName  = "vehicules";
+
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ nullable: false })
+
+  immatriculation: string;
+
+  @Column({ nullable: true })
+  @Index({ unique: true, where: "niv IS NOT NULL" })
+  niv: string;
+
+  @Column({ nullable: true })
+  @Index({ unique: true, where: "niv IS NOT NULL" })
+  ci_er: string;
+
+  @Column({ nullable: true })
+  pays_immatriculation: string;
+
+  @Column({ nullable: true })
+  numero_carte_grise: string;
+
+  @Column({ nullable: true})
+  numero_chassis: string;
+
+  @Column({ nullable: true })
+  numero_serie_moteur: string;
+
+  @Column({ nullable: true })
+  provenance:string;
+
+  @Column({ nullable: true })
+  puissance:string;
+
+  @Column({ nullable: true })
+  puissance_fiscale:string;
+
+  @Column({ nullable: true })
+  carosserie:string;
+
+  @Column({ nullable: true })
+  categorie:string;
+
+  @Column({ nullable: true })
+  energie:string;
+
+  @Column({ nullable: false })
+  annee_mise_circulation:Date;
+
+  @Column({ nullable: true })
+  derniere_revision:Date;
+
+  @Column({ default: EtatVehicule.OCASION, nullable: false })
+  etat: EtatVehicule;
+
+  @Column({ nullable: true })
+  marque:string;
+
+  @Column({ nullable: true })
+  modele:string;
+
+  @Column({ nullable: true })
+  type:string;
+
+  @Column({ nullable: false, default:1 })
+  place_assise:number;
+
+  @Column({ nullable: true })
+  couleur: string;
+
+  @Column({ nullable: true })
+  ptac: string;
+
+  @Column({ nullable: true })
+  pv: string;
+
+  @Column({ nullable: true })
+  cv: string;
+
+  @ManyToOne((type) => User)
+  @JoinColumn({ name: 'proprietaire_id'})
+  proprietaire: User;
+
+  @ManyToOne((type) => Conducteur)
+  @JoinColumn({ name: 'conducteur_id'})
+  conducteur: Conducteur;
+
+  @OneToMany(type => ConducteurVehicule, conducteurVehicule => conducteurVehicule.vehicule)
+  conducteurVehicules?: ConducteurVehicule[];
+
+  @OneToMany(type => ProprietaireVehicule, prprietaireVehicule => prprietaireVehicule.vehicule)
+  proprietaireVehicules?: ProprietaireVehicule[];
+
+  @JoinColumn({ name: 'fichier_id' , })
+  @ManyToOne(type => Fichier, {eager:true})
+  image: Fichier;
+
+  @ManyToMany(type=>Fichier)
+  @JoinTable({
+    name: 'vehicules_images',
+    joinColumn: { name: 'vehicule_id', referencedColumnName: 'id'},
+    inverseJoinColumn: { name: 'fichier_id', referencedColumnName: 'id'},
+  })
+  images?: Fichier[];
+
+
+}

@@ -2,7 +2,7 @@
 import { IsArray, IsDate, IsNotEmpty, IsNumber, IsObject, IsOptional, Min } from "class-validator";
 import { Police } from "../entities/police.entity";
 import { TypeAmande } from "../entities/type-amande.entity";
-import { Zem } from "../entities/zem.entity";
+import { Conducteur } from "../entities/conducteur.entity";
 import { IsString } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString } from 'class-validator';
@@ -25,7 +25,7 @@ export class CreateAmandeDto {
   typeAmndeIds?: number[];
 
   @ApiProperty({required:true})
-  @IsNumber({},{message:"Le zem amander est requise"})
-  @IsPositive( {message: "Le zem spécifié n'existe pas"})
-  zem_id: number;
+  @IsNumber({},{message:"Le conducteur amander est requise"})
+  @IsPositive( {message: "Le conducteur spécifié n'existe pas"})
+  conducteur_id: number;
 }

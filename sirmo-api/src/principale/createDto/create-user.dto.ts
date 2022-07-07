@@ -39,6 +39,6 @@ export class CreateUserDto {
     @ApiProperty({required:true})
     @IsNumber()
     @IsPositive()
-    arrondissement: number;
+    arrondissement_id: number;
 }
 

@@ -27,6 +27,7 @@ import { Compte } from "../entities/compte.entity";
 import { ChangePasswordDto } from './../createDto/change-password.dto';
 import { compare, hash } from "bcrypt";
 import { ChangeEmailDto } from "../createDto/change-emeail.dto";
+import { UserDG_Dto } from './../createDto/user-dg.dto';
 
 @Injectable()
 export class UserService {
@@ -65,9 +66,34 @@ export class UserService {
   
   }
 
+
+  async register(createUserDto: CreateUserDto): Promise<User> {
+    const user: User = new User();
+    Object.keys(createUserDto).forEach((cle) => {
+      user[cle] = createUserDto[cle];
+    });
+    const role: Role = await this.roleService.findOneByName(RoleName.USER);
+    user.roles = [role];
+
+  
+      const arrondisement: Arrondissement =
+        await this.arrondissementService.findOne(createUserDto.arrondissement_id);
+      user.arrondissement = arrondisement;
+     
+      const u: User = await this.userRepository.save(user).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
+      });
+      const compte:Compte = Compte.create({user:u, montant:0});
+      Compte.save(compte);
+
+      return u;
+  
+  }
+
   async createWithProfile(
     createUserDto: CreateUserDto,
-    @UploadedFile() profile,
+    @UploadedFile() profile
   ): Promise<User> {
     const user: User = new User();
     Object.keys(createUserDto).forEach((cle) => {
@@ -78,7 +104,7 @@ export class UserService {
       user.roles = [role];
 
       const arrondisement: Arrondissement =
-        await this.arrondissementService.findOne(+createUserDto.arrondissement);
+        await this.arrondissementService.findOne(+createUserDto.arrondissement_id);
       user.arrondissement = arrondisement;
       console.log(arrondisement);
       const name = profile.originalname.split(".")[0];
@@ -159,7 +185,7 @@ export class UserService {
    }
 
   async createWithRole(
-    createUserDto: CreateUserDto,
+    createUserDto: CreateUserDto|UserDG_Dto,
     roles: Role[],
   ): Promise<User> {
     const user: User = new User();
@@ -167,11 +193,17 @@ export class UserService {
       user[cle] = createUserDto[cle];
     });
     user.roles = roles;
-
     
-      const arrondisement: Arrondissement =
-        await this.arrondissementService.findOne(createUserDto.arrondissement);
-      user.arrondissement = arrondisement;
+    if(createUserDto['arrondissement_id']){
+        const arrondisement: Arrondissement =
+        await this.arrondissementService.findOne(createUserDto['arrondissement_id']);
+        user.arrondissement = arrondisement;
+      }
+      if(createUserDto['arrondissement']){
+        const arrondisement: Arrondissement =
+        await this.arrondissementService.findFirstByName(createUserDto['arrondissement']);
+        user.arrondissement = arrondisement;
+      }
 
       const u: User = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
@@ -181,7 +213,6 @@ export class UserService {
       Compte.save(compte);
 
       return u;
-   
   }
 
   findAll(): Promise<User[]> {

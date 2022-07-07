@@ -12,7 +12,7 @@ class Onboarding {
 
   static Onboarding get first {
     return Onboarding(
-        title: "Zem",
+        title: "Conducteur",
         content: "Obtenez votre licence de conduire en un clique",
         image: "assets/images/onboarding-first.gif",
         isSvg: false);
@@ -21,14 +21,15 @@ class Onboarding {
   static Onboarding get second {
     return Onboarding(
         title: "Mairie",
-        content: "Obtenez les information sur les zems de votre commune",
+        content: "Obtenez les information sur les conducteurs de votre commune",
         image: "assets/images/onboarding-second.gif");
   }
 
   static Onboarding get third {
     return Onboarding(
         title: "Police",
-        content: "Controllez les zems à partir de votre assistant mobile",
+        content:
+            "Controllez les conducteurs à partir de votre assistant mobile",
         image: "assets/images/onboarding-third.gif");
   }
 }

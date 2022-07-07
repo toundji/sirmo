@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { CreateArrondissementDto } from '../createDto/create-arrondissement.dto';
 import { UpdateArrondissementDto } from '../updateDto/update-arrondissement.dto';
 import { Arrondissement } from '../entities/arrondissement.entity';
@@ -41,6 +41,25 @@ export class ArrondissementService {
 });
 
 }
+
+  findFirstByName(name: string):Promise<Arrondissement> {
+    return this.arrondissementRepository.find({where:{nom: ILike(name)}})
+    .then((list:Arrondissement[]) =>{
+      console.log(list);
+      if(list.length>0){
+
+        return list[0];}
+        throw "Arondissemant n'existepas"
+    })
+    .catch((error)=>{
+
+      throw new HttpException(
+        "Impossible de trouver l'arrondissement démandé",
+        HttpStatus.UNAUTHORIZED,
+      );
+      });
+
+  }
 
   update(id: number, updateArrondissementDto: UpdateArrondissementDto) {
     return this.arrondissementRepository.update(id,updateArrondissementDto).catch((error)=>{

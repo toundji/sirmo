@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { TypeOptions } from 'class-transformer';
-import { EtatMoto } from 'src/enums/etat-moto';
+import { EtatVehicule } from 'src/enums/etat-vehicule';
 import { TypeOperation } from 'src/enums/type-operation';
 import { TypePayement } from 'src/enums/type-payement';
 import { User } from 'src/principale/entities/user.entity';

@@ -3,15 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
-import 'package:sirmo/screens/moto/create-moto.dart';
-import 'package:sirmo/screens/zem/become-zem.screen.dart';
-import 'package:sirmo/services/zem.sevice.dart';
+import 'package:sirmo/screens/vehicule/create-vehicule.dart';
+import 'package:sirmo/screens/conducteur/become-conducteur.screen.dart';
+import 'package:sirmo/services/conducteur.sevice.dart';
 
 import '../models/app-menu-item.dart';
 import '../models/user.dart';
-import '../models/zem.dart';
+import '../models/conducteur.dart';
 import '../screens/home/home.screen.dart';
-import '../screens/zem/zem-home.screen.dart';
+import '../screens/conducteur/conducteur-home.screen.dart';
 import '../services/user.service.dart';
 import '../utils/app-routes.dart';
 import '../utils/app-util.dart';
@@ -71,35 +71,35 @@ class _UserDrawerState extends State<UserDrawer> {
 
   adminMenu(BuildContext context) {
     User? user = context.watch<UserService>().user;
-    Zem? zem = context.watch<ZemService>().zem;
+    Conducteur? conducteur = context.watch<ConducteurService>().conducteur;
     menus = [
       AppMenuItem(title: "ACCUEIL", page: HomeScreen.routeName),
-      if (user != null && user.hasRole("zem"))
+      if (user != null && user.hasRole("conducteur"))
         AppMenuItem(
-          title: "Zem",
+          title: "Conducteur",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: ZemHomeScreen(),
+          screen: ConducteurHomeScreen(),
         ),
-      if (zem == null)
+      if (conducteur == null)
         AppMenuItem(
-          title: "Devenir Zem",
+          title: "Devenir Conducteur",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: ZemBecomeScreen(),
+          screen: ConducteurBecomeScreen(),
         ),
-      if (zem != null && zem.statut == Zem.DEMANDE)
+      if (conducteur != null && conducteur.statut == Conducteur.DEMANDE)
         AppMenuItem(
-          title: "Créer un moto",
+          title: "Créer un vehicule",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: MotoCreateScreen(),
+          screen: vehiculeCreateScreen(),
         ),
       AppMenuItem(
           title: "Mairie",

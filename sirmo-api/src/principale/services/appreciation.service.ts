@@ -1,12 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UploadedFile } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAppreciationDto } from '../createDto/create-appreciation.dto';
 import { Appreciation } from '../entities/appreciation.entity';
 import { User } from '../entities/user.entity';
-import { Zem } from '../entities/zem.entity';
-import { ZemService } from './zem.service';
+import { Conducteur } from '../entities/conducteur.entity';
+import { ConducteurService } from './conducteur.service';
+import { Fichier } from '../entities/fichier.entity';
+import { FichierService } from './fichier.service';
 
 
 
@@ -14,8 +16,8 @@ import { ZemService } from './zem.service';
 export class AppreciationService {
   constructor(
     @InjectRepository(Appreciation) private appreciationRepository: Repository<Appreciation>,
-    private readonly zemService: ZemService,
-
+    private readonly conducteurService: ConducteurService,
+    private readonly fichierService: FichierService,
 
   ) {}
 
@@ -26,8 +28,8 @@ export class AppreciationService {
       appreciation[cle] = createAppreciationDto[cle];
     });
 
-    const zem: Zem = await this.zemService.findOne(createAppreciationDto.zem_id);
-    appreciation.zem= zem;
+    const conducteur: Conducteur = await this.conducteurService.findOne(createAppreciationDto.conducteur_id);
+    appreciation.conducteur= conducteur;
 
     appreciation.createur_id = user?.id;
 
@@ -47,8 +49,8 @@ export class AppreciationService {
 
       createAppreciationDtos.forEach(body=>{
         const appreciation : Appreciation = new Appreciation();
-        const zem: Zem = new Zem();
-        zem.id = body.zem_id;
+        const conducteur: Conducteur = new Conducteur();
+        conducteur.id = body.conducteur_id;
         appreciation.createur_id = user?.id;
         appreciation.phone =  body.phone;
         appreciation.message = body.message;
@@ -80,6 +82,23 @@ export class AppreciationService {
       });
 
   
+  }
+
+  async updateImage(id: number, @UploadedFile() profile, user:User){
+    const appreciation: Appreciation = await this.findOne(id);
+    const image: Fichier = await this.fichierService.createOneWith(
+      profile,
+      Appreciation.entityName,
+      id,
+      user
+    );
+    appreciation.fichier = image;
+   
+    
+      return await this.appreciationRepository.save(appreciation).catch((error)=>{
+        console.log(error);
+      throw new NotFoundException("Le payement spécifié n'existe pas");
+      });
   }
 
   async update(id: number, appreciation: Appreciation) {

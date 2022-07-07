@@ -5,7 +5,7 @@ import { Repository } from "typeorm/repository/Repository";
 import { Fichier } from "../entities/fichier.entity";
 import { User } from "../entities/user.entity";
 import { Express } from 'multer';
-import { Zem } from "../entities/zem.entity";
+import { Conducteur } from "../entities/conducteur.entity";
 import { In } from "typeorm";
 
 
@@ -46,10 +46,10 @@ export class FichierService {
   }
 
 
-  async createZemFiles(id:number, @UploadedFiles() files: Array<Express.Multer.File>, user:User) {
-    const zem:Zem = await Zem.findOneOrFail(id).catch((error)=>{
+  async createConducteurFiles(id:number, @UploadedFiles() files: Array<Express.Multer.File>, user:User) {
+    const conducteur:Conducteur = await Conducteur.findOneOrFail(id).catch((error)=>{
       console.log("error");
-      throw new BadRequestException("L'e zem indique n'existe pas");
+      throw new BadRequestException("L'e conducteur indique n'existe pas");
     });
     const fichiers: Fichier[] = [];
     Object.keys(files).forEach((cle)=>{
@@ -59,7 +59,7 @@ export class FichierService {
       path: fichier.path,
       mimetype: fichier.mimetype,
       size: fichier.size,
-      entity: "zems",
+      entity: "conducteurs",
       entityId: id,
       createur_id:user?.id,
     });
@@ -73,11 +73,11 @@ export class FichierService {
   
 }
 
-async getZemFiles(id:number):Promise<Fichier[]> {
+async getConducteurFiles(id:number):Promise<Fichier[]> {
   return await this.fichierRepository.find({where: {
     nom: In(["ifu", "cip", "nip", "idCarde", "ancienIdentifiant"]),
     entityId: id,
-    entity: "zems"
+    entity: "conducteurs"
   }}).catch((error)=>{
     console.log(error);
     throw new BadRequestException(" Erreur pendant la récuperation des fichiers. Veillez contacter un administrateur si cela persiste")

@@ -1,10 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Mairie } from './mairie.entity';
-import { User } from './user.entity';
-import { Zem } from './zem.entity';
+import { Conducteur } from './conducteur.entity';
 import { Payement } from './payement.entity';
 import { Audit } from './audit';
+import { StatusLicence } from 'src/enums/status-licence';
+import { DateTime } from './../../../node_modules/@types/luxon/src/datetime.d';
+import { Expose } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
+
 
 @Entity("licences")
 export class Licence extends Audit{
@@ -23,9 +27,20 @@ export class Licence extends Audit{
   @Column()
   date_fin:Date;
 
-  @JoinColumn({ name: 'zem_id'})
-  @ManyToOne((type) => Zem)
-  zem: Zem;
+  @Expose()
+  @ApiProperty({enum: StatusLicence})
+ public get status(): StatusLicence{
+    if( this.date_fin == null){
+      return StatusLicence.DESACTIVEE;
+    }
+    
+    const now: Date = new Date();
+    return now > this.date_debut ? StatusLicence.DESACTIVEE: StatusLicence.ACTIVEE;
+  }
+
+  @JoinColumn({ name: 'conducteur_id'})
+  @ManyToOne((type) => Conducteur)
+  conducteur: Conducteur;
 
   @JoinColumn({ name: 'marie' })
   @ManyToOne((type) => Mairie, {nullable:false, eager:true})
@@ -34,7 +49,5 @@ export class Licence extends Audit{
   @JoinColumn({ name: 'payement' })
   @ManyToOne((type) => Payement, {eager: true})
   payement: Payement;
-
-
 
 }

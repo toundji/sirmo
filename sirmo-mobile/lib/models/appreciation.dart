@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:sirmo/models/audit.dart';
 
+import 'conducteur.dart';
 import 'fichier.dart';
-import 'zem.dart';
+import 'conducteur.dart';
 
 class Appreciation implements Audit {
   int? id;
@@ -12,9 +13,9 @@ class Appreciation implements Audit {
 
   String? message;
 
-  String? tel;
+  String? phone;
 
-  Zem? zem;
+  Conducteur? conducteur;
 
   Fichier? fichier;
 
@@ -35,8 +36,8 @@ class Appreciation implements Audit {
     this.id,
     this.typeAppreciation,
     this.message,
-    this.tel,
-    this.zem,
+    this.phone,
+    this.conducteur,
     this.fichier,
     this.createur_id,
     this.editeur_id,
@@ -50,8 +51,8 @@ class Appreciation implements Audit {
     int? id,
     String? typeAppreciation,
     String? message,
-    String? tel,
-    Zem? zem,
+    String? phone,
+    Conducteur? conducteur,
     Fichier? fichier,
     int? createur_id,
     int? editeur_id,
@@ -64,8 +65,8 @@ class Appreciation implements Audit {
       id: id ?? this.id,
       typeAppreciation: typeAppreciation ?? this.typeAppreciation,
       message: message ?? this.message,
-      tel: tel ?? this.tel,
-      zem: zem ?? this.zem,
+      phone: phone ?? this.phone,
+      conducteur: conducteur ?? this.conducteur,
       fichier: fichier ?? this.fichier,
       createur_id: createur_id ?? this.createur_id,
       editeur_id: editeur_id ?? this.editeur_id,
@@ -81,8 +82,8 @@ class Appreciation implements Audit {
       'id': id,
       'typeAppreciation': typeAppreciation,
       'message': message,
-      'tel': tel,
-      'zem': zem?.toMap(),
+      'phone': phone,
+      'conducteur': conducteur?.toMap(),
       'fichier': fichier?.toMap(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
@@ -93,27 +94,38 @@ class Appreciation implements Audit {
     };
   }
 
+  Map<String, dynamic> toCreateMap() {
+    return {
+      'typeAppreciation': typeAppreciation,
+      'message': message,
+      'phone': phone,
+      'conducteur_id': conducteur?.id,
+    };
+  }
+
   factory Appreciation.fromMap(Map<String, dynamic> map) {
     return Appreciation(
       id: map['id']?.toInt(),
       typeAppreciation: map['typeAppreciation'],
       message: map['message'],
-      tel: map['tel'],
-      zem: map['zem'] != null ? Zem.fromMap(map['zem']) : null,
+      phone: map['phone'],
+      conducteur: map['conducteur'] != null
+          ? Conducteur.fromMap(map['conducteur'])
+          : null,
       fichier: map['fichier'] != null ? Fichier.fromMap(map['fichier']) : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       create_at: map['create_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['create_at'])
+          ? DateTime.tryParse(map['create_at'])
           : null,
       upDateTime_at: map['upDateTime_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['upDateTime_at'])
+          ? DateTime.tryParse(map['upDateTime_at'])
           : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }
@@ -125,7 +137,7 @@ class Appreciation implements Audit {
 
   @override
   String toString() {
-    return 'Appreciation(id: $id, typeAppreciation: $typeAppreciation, message: $message, tel: $tel, zem: $zem, fichier: $fichier, createur_id: $createur_id, editeur_id: $editeur_id, create_at: $create_at, upDateTime_at: $upDateTime_at, created_at: $created_at, updated_at: $updated_at)';
+    return 'Appreciation(id: $id, typeAppreciation: $typeAppreciation, message: $message, phone: $phone, conducteur: $conducteur, fichier: $fichier, createur_id: $createur_id, editeur_id: $editeur_id, create_at: $create_at, upDateTime_at: $upDateTime_at, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -136,8 +148,8 @@ class Appreciation implements Audit {
         other.id == id &&
         other.typeAppreciation == typeAppreciation &&
         other.message == message &&
-        other.tel == tel &&
-        other.zem == zem &&
+        other.phone == phone &&
+        other.conducteur == conducteur &&
         other.fichier == fichier &&
         other.createur_id == createur_id &&
         other.editeur_id == editeur_id &&
@@ -152,8 +164,8 @@ class Appreciation implements Audit {
     return id.hashCode ^
         typeAppreciation.hashCode ^
         message.hashCode ^
-        tel.hashCode ^
-        zem.hashCode ^
+        phone.hashCode ^
+        conducteur.hashCode ^
         fichier.hashCode ^
         createur_id.hashCode ^
         editeur_id.hashCode ^

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { ConstanteVisibility } from 'src/enums/constante-visibility';
+import { Column,  Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Audit } from './audit';
-import { User } from './user.entity';
 
 @Entity("constantes")
 export class Constante extends Audit {
@@ -13,8 +13,14 @@ export class Constante extends Audit {
   @Column({ nullable: false})
   nom: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false})
   valeur: string;
+
+  @Column({default: ConstanteVisibility.PUBLIC})
+  visibilite:ConstanteVisibility;
+
+  @Column({default:true})
+  status:boolean;
 
   @Column({ nullable: false})
   description: string;

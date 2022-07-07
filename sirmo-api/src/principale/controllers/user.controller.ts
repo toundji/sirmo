@@ -43,7 +43,7 @@ export class UserController {
   @Public()
   @Post("register")
   async register(@Body() body: CreateUserDto):Promise<LoginRespo> {
-     await this.userService.create(body);
+     await this.userService.register(body);
      return await this.authService.login({"username": body.phone, "password": body.password})
   }
 

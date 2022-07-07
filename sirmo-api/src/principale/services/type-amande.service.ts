@@ -108,7 +108,7 @@ export class TypeAmandeService {
       {
         "nom":"Licence",
         "montant": 5000,
-        "description": "Cette amande à appliquer à un zem non inscrire ou n'ayant pas rénouveler sa licence"
+        "description": "Cette amande à appliquer à un conducteur non inscrire ou n'ayant pas rénouveler sa licence"
       },{
         "nom":"Casque",
         "montant": 5000,

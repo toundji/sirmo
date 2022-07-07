@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
-import 'package:sirmo/screens/zem/become-zem.screen.dart';
-import 'package:sirmo/screens/zem/zem-home.screen.dart';
+import 'package:sirmo/screens/conducteur/become-conducteur.screen.dart';
+import 'package:sirmo/screens/conducteur/conducteur-home.screen.dart';
 
 import '../models/user.dart';
 import '../screens/home/home.screen.dart';
@@ -71,23 +71,23 @@ class _AppDrawerState extends State<AppDrawer> {
   adminMenu(User? user) {
     menus = [
       _Menu(title: "ACCUEIL", page: HomeScreen.routeName),
-      if (user != null && user.hasRole("zem"))
+      if (user != null && user.hasRole("conducteur"))
         _Menu(
-          title: "Zem",
+          title: "Conducteur",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: ZemHomeScreen(),
+          screen: ConducteurHomeScreen(),
         ),
-      if (user != null && !user.hasRole("zem"))
+      if (user != null && !user.hasRole("conducteur"))
         _Menu(
-          title: "Devinir Zem",
+          title: "Devinir Conducteur",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: ZemBecomeScreen(),
+          screen: ConducteurBecomeScreen(),
         ),
       _Menu(
           title: "Mairie",

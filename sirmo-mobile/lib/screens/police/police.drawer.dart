@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/unbuild.screen.dart';
-import 'package:sirmo/screens/zem/become-zem.screen.dart';
-import 'package:sirmo/screens/zem/zem-home.screen.dart';
+import 'package:sirmo/screens/conducteur/become-conducteur.screen.dart';
+import 'package:sirmo/screens/conducteur/conducteur-home.screen.dart';
 
 import '../../models/app-menu-item.dart';
 import '../../models/user.dart';
@@ -15,11 +15,11 @@ import '../../utils/app-util.dart';
 import '../../utils/color-const.dart';
 import '../home/home.screen.dart';
 
-class ZemDrawer extends StatefulWidget {
-  ZemDrawer({Key? key}) : super(key: key);
+class ConducteurDrawer extends StatefulWidget {
+  ConducteurDrawer({Key? key}) : super(key: key);
 
   @override
-  _ZemDrawerState createState() => _ZemDrawerState();
+  _ConducteurDrawerState createState() => _ConducteurDrawerState();
 }
 
 _buildHeader(BuildContext context) {
@@ -40,7 +40,7 @@ _buildHeader(BuildContext context) {
   );
 }
 
-class _ZemDrawerState extends State<ZemDrawer> {
+class _ConducteurDrawerState extends State<ConducteurDrawer> {
   List<AppMenuItem>? menus;
 
   User? user;
@@ -72,14 +72,14 @@ class _ZemDrawerState extends State<ZemDrawer> {
 
   adminMenu(User? user) {
     menus = [
-      if (user != null && !user.hasRole("zem"))
+      if (user != null && !user.hasRole("conducteur"))
         AppMenuItem(
-          title: "Devinir Zem",
+          title: "Devinir Conducteur",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,
           ),
-          screen: ZemBecomeScreen(),
+          screen: ConducteurBecomeScreen(),
         ),
       AppMenuItem(
           title: "Mairie",
@@ -103,7 +103,7 @@ class _ZemDrawerState extends State<ZemDrawer> {
           ),
           page: UnbuildScreen.routeName),
       AppMenuItem(
-          title: "Moto",
+          title: "vehicule",
           leading: const Icon(
             Icons.motorcycle,
             color: ColorConst.primary,

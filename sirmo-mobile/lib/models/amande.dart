@@ -7,7 +7,7 @@ import 'package:sirmo/models/audit.dart';
 import 'payement.dart';
 import 'police.dart';
 import 'type-amande.dart';
-import 'zem.dart';
+import 'conducteur.dart';
 
 class Amande implements Audit {
   int? id;
@@ -26,7 +26,7 @@ class Amande implements Audit {
 
   Police? police;
 
-  Zem? zem;
+  Conducteur? conducteur;
 
   @override
   DateTime? created_at;
@@ -48,7 +48,7 @@ class Amande implements Audit {
     this.typeAmndes,
     this.payements,
     this.police,
-    this.zem,
+    this.conducteur,
     this.created_at,
     this.createur_id,
     this.editeur_id,
@@ -64,7 +64,7 @@ class Amande implements Audit {
     List<TypeAmande>? typeAmndes,
     List<Payement>? payements,
     Police? police,
-    Zem? zem,
+    Conducteur? conducteur,
     DateTime? created_at,
     int? createur_id,
     int? editeur_id,
@@ -79,7 +79,7 @@ class Amande implements Audit {
       typeAmndes: typeAmndes ?? this.typeAmndes,
       payements: payements ?? this.payements,
       police: police ?? this.police,
-      zem: zem ?? this.zem,
+      conducteur: conducteur ?? this.conducteur,
       created_at: created_at ?? this.created_at,
       createur_id: createur_id ?? this.createur_id,
       editeur_id: editeur_id ?? this.editeur_id,
@@ -97,7 +97,7 @@ class Amande implements Audit {
       'typeAmndes': typeAmndes?.map((x) => x.toMap()).toList(),
       'payements': payements?.map((x) => x.toMap()).toList(),
       'police': police?.toMap(),
-      'zem': zem?.toMap(),
+      'conducteur': conducteur?.toMap(),
       'created_at': created_at?.millisecondsSinceEpoch,
       'createur_id': createur_id,
       'editeur_id': editeur_id,
@@ -123,7 +123,9 @@ class Amande implements Audit {
               map['payements']?.map((x) => Payement.fromMap(x)))
           : null,
       police: map['police'] != null ? Police.fromMap(map['police']) : null,
-      zem: map['zem'] != null ? Zem.fromMap(map['zem']) : null,
+      conducteur: map['conducteur'] != null
+          ? Conducteur.fromMap(map['conducteur'])
+          : null,
       created_at: map['created_at'] != null
           ? DateTime.tryParse(map['created_at'])
           : null,
@@ -141,7 +143,7 @@ class Amande implements Audit {
 
   @override
   String toString() {
-    return 'Amande(id: $id, message: $message, montant: $montant, date_limite: $date_limite, restant: $restant, typeAmndes: $typeAmndes, payements: $payements, police: $police, zem: $zem, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
+    return 'Amande(id: $id, message: $message, montant: $montant, date_limite: $date_limite, restant: $restant, typeAmndes: $typeAmndes, payements: $payements, police: $police, conducteur: $conducteur, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 
   @override
@@ -157,7 +159,7 @@ class Amande implements Audit {
         listEquals(other.typeAmndes, typeAmndes) &&
         listEquals(other.payements, payements) &&
         other.police == police &&
-        other.zem == zem &&
+        other.conducteur == conducteur &&
         other.created_at == created_at &&
         other.createur_id == createur_id &&
         other.editeur_id == editeur_id &&
@@ -174,7 +176,7 @@ class Amande implements Audit {
         typeAmndes.hashCode ^
         payements.hashCode ^
         police.hashCode ^
-        zem.hashCode ^
+        conducteur.hashCode ^
         created_at.hashCode ^
         createur_id.hashCode ^
         editeur_id.hashCode ^

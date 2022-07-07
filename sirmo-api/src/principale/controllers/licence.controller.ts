@@ -18,7 +18,7 @@ import { RoleGuard } from "../role.guard";
 import { User } from "../entities/user.entity";
 
 @UseGuards(JwtAuthGuard, RoleGuard)
-@ApiTags("Licences des Zems")
+@ApiTags("Licences des Conducteurs")
 @ApiBearerAuth("token")
 @Controller("licences")
 export class LicenceController {

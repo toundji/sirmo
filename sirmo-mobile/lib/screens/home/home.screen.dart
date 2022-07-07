@@ -11,18 +11,19 @@ import 'package:sirmo/screens/potefeuille/compte.history.screen.dart';
 import 'package:sirmo/screens/potefeuille/credite-porte.screen.dart';
 import 'package:sirmo/screens/potefeuille/portefeuille.component.dart';
 import 'package:sirmo/screens/profile/profile.screen.dart';
+import 'package:sirmo/screens/statistique-conducteur/evaluate-conduteur.screen.dart';
 import 'package:sirmo/services/compte.service.dart';
-import 'package:sirmo/services/zem.sevice.dart';
+import 'package:sirmo/services/conducteur.sevice.dart';
+import 'package:sirmo/utils/app-util.dart';
 import 'package:sirmo/utils/network-info.dart';
 
 import '../../components/action-card.dart';
-import '../../components/curve_path_clipper.dart';
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
 import '../../models/user.dart';
 import '../../services/user.service.dart';
-import '../../utils/app-util.dart';
-import '../../utils/color-const.dart';
+import '../conducteur/choice-driver.screen.dart';
+import '../statistique-conducteur/statistique-conducteur.screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, this.debug = false}) : super(key: key);
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     user = context.read<UserService>().user;
 
-    loadMyZemList();
+    loadMyConducteurList();
 
     context
         .read<CompteService>()
@@ -54,13 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  loadMyZemList() {
+  loadMyConducteurList() {
     context
-        .read<ZemService>()
-        .loadMyZemList(user!.id!)
-        .then((value) {
-          
-        })
+        .read<ConducteurService>()
+        .loadMyConducteurList(user!.id!)
+        .then((value) {})
         .onError((error, stackTrace) {});
   }
 
@@ -82,9 +81,26 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                ActionCard(name: "Payer Zem", icon: Icons.payment),
-                ActionCard(name: "Evaluer Zem", icon: Icons.edit),
+              children: [
+                ActionCard(
+                  name: "Payer Conducteur",
+                  icon: Icons.payment,
+                  screen: ChoiceDriverScreen(
+                    onSubmit: (conducteur) {
+                      AppUtil.goToScreen(
+                          context, StatistiqueConducteurScreen());
+                    },
+                  ),
+                ),
+                ActionCard(
+                  name: "Evaluer Conducteur",
+                  icon: Icons.edit,
+                  screen: ChoiceDriverScreen(
+                    onSubmit: (conducteur) {
+                      AppUtil.goToScreen(context, EvaluateConducteurScreen());
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -92,7 +108,15 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ActionCard(name: "Statistique du Zem", icon: CupertinoIcons.eye),
+              ActionCard(
+                name: "Statistique du Conducteur",
+                icon: CupertinoIcons.eye,
+                screen: ChoiceDriverScreen(
+                  onSubmit: (conducteur) {
+                    AppUtil.goToScreen(context, StatistiqueConducteurScreen());
+                  },
+                ),
+              ),
             ],
           ),
           PortefeuilleComponent(),

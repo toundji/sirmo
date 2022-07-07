@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "238069738211",
+    "project_id": "sappmobile-d8450",
+    "storage_bucket": "sappmobile-d8450.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238069738211:android:9024853cf41931091f33d6",
+        "android_client_info": {
+          "package_name": "com.example.sappmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238069738211-4q4uh05rvp4o989lb11s52vreik9hlkp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sappmobile",
+            "certificate_hash": "59c95b9a4350cac6fd42a95a37f77c009d8c27e7"
+          }
+        },
+        {
+          "client_id": "238069738211-ucol7a47h32j269apvsdgaho0cpiiu8l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwFjqk3AoKieNtEmTj9Ui-w-GKbjlfAVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238069738211-ucol7a47h32j269apvsdgaho0cpiiu8l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

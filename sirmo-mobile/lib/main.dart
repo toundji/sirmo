@@ -5,15 +5,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
-import 'package:sirmo/models/onboarding.dart';
+
 import 'package:sirmo/screens/welcome/onboarding-first.dart';
 import 'package:sirmo/services/arrondissement.service.dart';
 import 'package:sirmo/services/commune.service.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/services/departement.service.dart';
-import 'package:sirmo/services/moto-service.dart';
+import 'package:sirmo/services/vehicule-service.dart';
 import 'package:sirmo/services/user.service.dart';
-import 'package:sirmo/services/zem.sevice.dart';
+import 'package:sirmo/services/conducteur.sevice.dart';
 import 'package:sirmo/utils/color-const.dart';
 
 import 'screens/auth/login.screen.dart';
@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CommuneService()),
         ChangeNotifierProvider(create: (context) => ArrondissementService()),
         ChangeNotifierProvider(create: (context) => CompteService()),
-        ChangeNotifierProvider(create: (context) => ZemService()),
-        ChangeNotifierProvider(create: (context) => MotoService()),
+        ChangeNotifierProvider(create: (context) => ConducteurService()),
+        ChangeNotifierProvider(create: (context) => VehiculeService()),
       ],
       child: MaterialApp(
         title: 'Sirmo',
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           primaryColor: ColorConst.primary,
         ),
         routes: routes,
-        initialRoute: LoginScreen.routeName,
+        initialRoute: OnboardingFirst.routeName,
         // onGenerateInitialRoutes: (settings) {
         //   return [MaterialPageRoute(builder: (_) => authGuard)];
         // },

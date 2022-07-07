@@ -7,6 +7,9 @@ import { hash } from 'bcrypt';
 import { Fichier } from 'src/principale/entities/fichier.entity';
 import { Audit } from "./audit";
 import { Genre } from 'src/enums/genre';
+import { Exclude } from 'class-transformer';
+import { Commune } from './commune.entity';
+import { ApiProperty } from "@nestjs/swagger";
 
 
 @Entity("users")
@@ -25,6 +28,7 @@ export class User extends Audit{
   @Column()
   genre: Genre;
 
+  @Exclude()
   @Column({ nullable: false })
   password: string;
 
@@ -56,6 +60,16 @@ export class User extends Audit{
   @JoinColumn({ name: 'fichier_id' , })
   @ManyToOne(type => Fichier)
   profile: Fichier;
+
+//   @ApiProperty()
+//   get departement():string{
+//     return this.arrondissement?.commune?.departement?.nom;
+//   }
+// 
+//   @ApiProperty()
+//   get commune():string{
+//     return this.arrondissement?.commune?.nom;
+//   }
 
   @ManyToMany(type=>Fichier)
   @JoinTable({

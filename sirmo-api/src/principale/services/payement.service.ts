@@ -11,7 +11,7 @@ import { Logger } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TypeOperation } from 'src/enums/type-operation';
 import { TypePayement } from 'src/enums/type-payement';
-import { Zem } from './../entities/zem.entity';
+import { Conducteur } from './../entities/conducteur.entity';
 import { error } from 'console';
 
 @Injectable()
@@ -51,13 +51,13 @@ export class PayementService {
      })
   }
 
-  async payLicence(montant:number,  zem: Zem, user?: User,){
+  async payLicence(montant:number,  conducteur: Conducteur, user?: User,){
     const payement: Payement = new Payement();
     payement.type = TypePayement.DEBIT;
     payement.operation = TypeOperation.PAYEMENT_LICENCE;
     payement.createur_id = user?.id;
     payement.montant = montant;
-    const compte: Compte = await this.compteService.debit(zem.id, montant);
+    const compte: Compte = await this.compteService.debit(conducteur.id, montant);
     payement.compte = compte;
     payement.solde = compte.montant;
     try {
@@ -69,13 +69,13 @@ export class PayementService {
     }
   }
 
-  async payAmande(montant:number,  zem: Zem, user?: User,){
+  async payAmande(montant:number,  conducteur: Conducteur, user?: User,){
     const payement: Payement = new Payement();
     payement.type = TypePayement.DEBIT;
     payement.operation = TypeOperation.PAYEMENT_AMANDE;
     payement.createur_id = user?.id;
     payement.montant = montant;
-    const compte: Compte = await this.compteService.debit(zem.id, montant);
+    const compte: Compte = await this.compteService.debit(conducteur.id, montant);
     payement.compte = compte;
     payement.solde = compte.montant;
     try {

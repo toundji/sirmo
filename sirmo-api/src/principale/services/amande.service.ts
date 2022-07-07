@@ -6,13 +6,13 @@ import { CreateAmandeDto } from '../createDto/create-amande.dto';
 import { Amande } from '../entities/amande.entity';
 import { Police } from '../entities/police.entity';
 import { TypeAmande } from '../entities/type-amande.entity';
-import { Zem } from '../entities/zem.entity';
+import { Conducteur } from '../entities/conducteur.entity';
 import { PoliceService } from './police.service';
-import { ZemService } from './zem.service';
 import { User } from '../entities/user.entity';
 import { TypeAmandeService } from './type-amande.service';
 import { PayementService } from './payement.service';
 import { Payement } from './../entities/payement.entity';
+import { ConducteurService } from './conducteur.service';
 
 
 
@@ -21,7 +21,7 @@ export class AmandeService {
   constructor(
     @InjectRepository(Amande) private amandeRepository: Repository<Amande>,
     private readonly policeService: PoliceService,
-    private readonly zemService: ZemService,
+    private readonly conducteurService: ConducteurService,
     private readonly typeAmandeService: TypeAmandeService,
     private readonly payementService: PayementService,
   ) {}
@@ -37,8 +37,8 @@ export class AmandeService {
     const police:Police = await this.policeService.findOne(user.id);
     amande.police = police;
 
-    const zem: Zem = await this.zemService.findOne(createAmandeDto.zem_id);
-    amande.zem= zem;
+    const conducteur: Conducteur = await this.conducteurService.findOne(createAmandeDto.conducteur_id);
+    amande.conducteur= conducteur;
 
    const typeAmandes: TypeAmande[] =  await this.typeAmandeService.findBysIds(createAmandeDto.typeAmndeIds);
    let montant =0
@@ -58,7 +58,7 @@ export class AmandeService {
   }
   async payAmande(id:number, montant:number, user:User){
     const amande:Amande = await this.findOne(id);
-    const paiement: Payement = await this.payementService.payAmande(montant, amande.zem, user);
+    const paiement: Payement = await this.payementService.payAmande(montant, amande.conducteur, user);
     amande.payements ??= [];
     amande.payements.push(paiement);
 
