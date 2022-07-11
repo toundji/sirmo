@@ -33,7 +33,7 @@ export class User extends Audit{
   password: string;
 
   @Column({nullable:true})
-  // @Index({ unique: true, where: "email IS NOT NULL" })
+  @Index({ unique: true, where: "email IS NOT NULL" })
   email: string;
 
   @Column({nullable:true})
@@ -81,7 +81,7 @@ export class User extends Audit{
 
   @BeforeInsert()  async hashPassword() {
     this.email = this.email?.toLowerCase()?.trim();
-    this.phone = this.phone.trim();
+    this.phone = this.phone?.trim();
     this.password = await hash(this.password, 10);  
   }
 }

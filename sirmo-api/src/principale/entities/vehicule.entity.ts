@@ -17,6 +17,7 @@ import { Fichier } from './fichier.entity';
 import { ProprietaireVehicule } from './proprietaire-vehicule.entity';
 import { ConducteurVehicule } from './conducteur-vehicule.entity';
 import { Conducteur } from './conducteur.entity';
+import { LicenceVehicule } from './licence-vehicule.entity';
 
 @Entity("vehicules")
 export class Vehicule extends Audit {
@@ -108,15 +109,26 @@ export class Vehicule extends Audit {
   @JoinColumn({ name: 'conducteur_id'})
   conducteur: Conducteur;
 
+  @ManyToOne((type) => LicenceVehicule,
+  { nullable:true})
+  @JoinColumn({ name: 'licence_vehicule_id'})
+  licence?:LicenceVehicule;
+
+  @JoinColumn({ name: 'fichier_id' , })
+  @ManyToOne(type => Fichier, {eager:true})
+  image: Fichier;
+
+
+
+  @OneToMany(type => LicenceVehicule, licence => licence.vehicule)
+  licences?: LicenceVehicule[];
+
   @OneToMany(type => ConducteurVehicule, conducteurVehicule => conducteurVehicule.vehicule)
   conducteurVehicules?: ConducteurVehicule[];
 
   @OneToMany(type => ProprietaireVehicule, prprietaireVehicule => prprietaireVehicule.vehicule)
   proprietaireVehicules?: ProprietaireVehicule[];
 
-  @JoinColumn({ name: 'fichier_id' , })
-  @ManyToOne(type => Fichier, {eager:true})
-  image: Fichier;
 
   @ManyToMany(type=>Fichier)
   @JoinTable({
@@ -125,6 +137,9 @@ export class Vehicule extends Audit {
     inverseJoinColumn: { name: 'fichier_id', referencedColumnName: 'id'},
   })
   images?: Fichier[];
+
+
+  
 
 
 }

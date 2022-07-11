@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNumberString, IsObject, IsOptional, MinLength, ValidateNested } from "class-validator";
+import { IsDateString, IsNumberString, IsObject, IsOptional, IsPositive, MinLength, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { CreateUserDto } from './create-user.dto';
 import { Type } from "class-transformer";
+import { IsNumber } from 'class-validator';
 
 export class CreateUserConducteurDto {
 
@@ -43,8 +44,15 @@ export class CreateUserConducteurDto {
   ancienIdentifiant: string;
 
   @ApiProperty({required:true})
+  @IsNumber({},{message : "Mairie non valide"})
+  @IsPositive()
+  mairie_id:number;
+
+  @ApiProperty({required:true})
   @ValidateNested({ each: true })
   @Type(() => CreateUserDto)
   user:CreateUserDto;
+
+
 
 }

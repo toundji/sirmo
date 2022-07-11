@@ -28,6 +28,7 @@ import { ChangePasswordDto } from './../createDto/change-password.dto';
 import { compare, hash } from "bcrypt";
 import { ChangeEmailDto } from "../createDto/change-emeail.dto";
 import { UserDG_Dto } from './../createDto/user-dg.dto';
+import { ProprietaireDto } from './../createDto/proprietaireDto';
 
 @Injectable()
 export class UserService {
@@ -66,6 +67,35 @@ export class UserService {
   
   }
 
+  async createOwner(createUserDto: ProprietaireDto): Promise<User> {
+    const user: User = new User();
+    Object.keys(createUserDto).forEach((cle) => {
+      user[cle] = createUserDto[cle];
+    });
+    const role: Role = await this.roleService.findOneByName(RoleName.PROPRIETAIRE);
+    user.roles = [role];
+
+
+      const arrondisement: Arrondissement =
+        await this.arrondissementService.findFirstByName(createUserDto.arrondissement);
+      user.arrondissement = arrondisement;
+
+      user.password = user.nom +( user.updated_at ?? '');
+     
+      const u: User = await this.userRepository.save(user).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
+      });
+      const compte:Compte = Compte.create({user:u, montant:0});
+      Compte.save(compte);
+
+      return u;
+  
+  }
+
+
+
+ 
 
   async register(createUserDto: CreateUserDto): Promise<User> {
     const user: User = new User();

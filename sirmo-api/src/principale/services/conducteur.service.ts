@@ -3,7 +3,6 @@ import { BadRequestException, forwardRef, Inject, Injectable, Logger, NotFoundEx
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { Conducteur } from '../entities/conducteur.entity';
 import { UserService } from './user.service';
 import { RoleService } from './roles.service';
 import { Role } from '../entities/role.entity';
@@ -16,15 +15,18 @@ import { StatutConducteur } from 'src/enums/statut-zem copy';
 import { UserConducteurDG_Dto } from './../createDto/user-conducteur-dg.dto';
 import { VehiculeService } from './vehicule.service';
 import { ArrondissementService } from 'src/principale/services/arrondissement.service';
-import { Licence } from '../entities/licence.entity';
-import { PreLicenceDto } from './../createDto/pre-licence.dto';
-import { CreateLicenceDto } from './../createDto/create-licence.dto';
+import { CreateLicenceDto } from '../createDto/create-licence.dto';
+import { Mairie } from './../entities/mairie.entity';
+import { MairieService } from './mairie.service';
+import { Conducteur } from './../entities/conducteur.entity';
+import { CreateUserConducteurCptDto } from './../createDto/user-conducteur-cpt.dto';
 
 @Injectable()
 export class ConducteurService {
   constructor(@InjectRepository(Conducteur) private conducteurRepository: Repository<Conducteur>,
     private readonly userService:UserService,
     private readonly roleService:RoleService,
+    private readonly mairieService:MairieService,
     private readonly compteService:CompteService,
     @Inject(forwardRef(() => VehiculeService))
     private readonly vehiculeService:VehiculeService,
@@ -32,14 +34,58 @@ export class ConducteurService {
 
     
   ) {}
-  async create(createConducteurDto: CreateUserConducteurDto) {
+  async create(body: CreateUserConducteurDto) {
     const conducteur:Conducteur = new Conducteur();
 
-    Object.keys(createConducteurDto).forEach(cle=>{conducteur[cle] = createConducteurDto[cle]});
+    Object.keys(body).forEach(cle=>{conducteur[cle] = body[cle]});
     const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
-    const user: User = await this.userService.createWithRole(createConducteurDto.user, [role]);
+    const user: User = await this.userService.createWithRole(body.user, [role]);
     conducteur.user = user;
+    const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
+    conducteur.mairie = mairie;
     const conducteurSaved : Conducteur= await this.conducteurRepository.save(conducteur);
+
+    // const compte: Compte = 
+   
+      await this.compteService.create( Compte.create({user:user, montant:0})).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");  
+      });
+      return conducteurSaved;
+  }
+
+  async createConducteur(body: CreateUserConducteurCptDto) {
+    const conducteur:Conducteur = new Conducteur();
+
+    conducteur.ifu=body.ifu;
+    conducteur.nip=body.nip; 
+    conducteur.cip=body.cip;
+    conducteur. permis=body.permis;
+    conducteur.date_optention_permis=body.date_optention_permis;
+    conducteur.date_delivrance_ifu=body.date_delivrance_ifu; 
+    conducteur.idCarde=body.idCarde;
+    conducteur. ancienIdentifiant=body.ancienIdentifiant;
+
+    const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
+
+   
+    const data:any = {
+      nom: body.nom,
+      prenom: body.prenom,
+      genre:body.genre, 
+      password: body.password,
+      date_naiss: body.date_naiss, 
+      phone:body.phone,
+      arrondissement: body.arrondissement
+    };
+   
+    const user: User = await this.userService.createWithRole(data, [role]);
+    conducteur.user = user;
+
+    const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
+    conducteur.mairie = mairie;
+    const conducteurSaved : Conducteur= await this.conducteurRepository.save(conducteur);
+
     // const compte: Compte = 
    
       await this.compteService.create( Compte.create({user:user, montant:0})).catch((error)=>{
@@ -52,32 +98,40 @@ export class ConducteurService {
   async createByDG(body: UserConducteurDG_Dto) {
     const conducteur:Conducteur = new Conducteur();
 
-    Object.keys(body).forEach(cle=>{conducteur[cle] = body[cle]});
+    const {mairie_id, ...res} = body;
+
+    Object.keys(res).forEach(cle=>{conducteur[cle] = res[cle]});
+
     const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
     const user: User = await this.userService.createWithRole(body.user, [role]);
     conducteur.user = user;
-    const conducteurSaved : Conducteur= await this.conducteurRepository.save(conducteur);
+
+    const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
+    conducteur.mairie = mairie;
+
+    let conducteurSaved : Conducteur = await this.conducteurRepository.save(conducteur);
+
     // const compte: Compte = 
    
       await this.compteService.create( Compte.create({user:user, montant:0})).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");  
       });
+
       let owner: User = user
       if(body.proprietaire!=null){
         const role:Role = await this.roleService.findOneByName(RoleName.PROPRIETAIRE);
-        const owner: User = await this.userService.createWithRole(body.user, [role]);
+         owner= await this.userService.createWithRole(body.user, [role]);
       }
 
-      const vehicule = this.vehiculeService.createWith(body.vehicule, owner, conducteurSaved);
+      const vehicule = await this.vehiculeService.createWith(body.vehicule, owner, conducteurSaved, mairie);
+      vehicule.conducteur = null;
+      conducteurSaved.vehicule = vehicule;
 
-      // const current: new Date();
-      // const licenDto:CreateLicenceDto = {
-      //   montant:20200,
-      //   dateDebut:new Date(),
-      //   dateFin:new Date()
-      // }
-
+     conducteurSaved = await Conducteur.save(conducteurSaved).catch((error)=>{
+      console.log(conducteurSaved);
+        throw new BadRequestException("Nous ne parvenons pas à mettre à jour le véhicule");
+      });
       return conducteurSaved;
   }
 
@@ -142,7 +196,7 @@ export class ConducteurService {
   }
 
   findOne(id: number) {
-    return this.conducteurRepository.findOneOrFail(id).catch((error)=>{
+    return this.conducteurRepository.findOneOrFail(id, {relations:["mairie", "vehicule"]}).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le conducteur spécifié n'existe pas");
     });

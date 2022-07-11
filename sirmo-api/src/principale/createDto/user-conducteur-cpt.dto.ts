@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNumber, IsNumberString, IsObject, IsOptional, IsPositive, MinLength, ValidateNested } from "class-validator";
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumberString, IsObject, IsOptional, IsPhoneNumber, IsPositive, IsString, MinLength, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { CreateUserDto } from './create-user.dto';
 import { Type } from "class-transformer";
-import { VehiculeSubDto } from "./vehicule-sub.dto";
-import { UserDG_Dto } from './user-dg.dto';
+import { IsNumber } from 'class-validator';
+import { Genre } from "src/enums/genre";
+import { Conducteur } from './../entities/conducteur.entity';
 
-export class UserConducteurDG_Dto {
+export class CreateUserConducteurCptDto {
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
@@ -45,23 +46,57 @@ export class UserConducteurDG_Dto {
   ancienIdentifiant: string;
 
   @ApiProperty({required:true})
-  @ValidateNested({ each: true })
-  @Type(() => UserDG_Dto)
-  user: UserDG_Dto;
-
-  @ApiProperty({required:true})
-  @ValidateNested({ each: true })
-  @Type(() => VehiculeSubDto)
-  vehicule: VehiculeSubDto;
-
-  @ApiProperty({required:true})
-  @ValidateNested({ each: true })
-  @Type(() => UserDG_Dto )
-  @IsOptional()
-  proprietaire: UserDG_Dto ;
-
-  @ApiProperty({required:true})
   @IsNumberString({},{message : "Mairie non valide"})
-  mairie_id?:number;
+  mairie_id:number;
+
+  get conducteur(){
+    return {
+      ifu:this.ifu,nip: this.nip, cip:this.cip, permis:this.permis,
+      date_optention_permis: this.date_optention_permis,
+      date_delivrance_ifu: this.date_delivrance_ifu, idCarde: this.idCarde,
+      ancienIdentifiant: this.ancienIdentifiant
+    };
+  }
+
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsNotEmpty()
+  nom: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsNotEmpty()
+  prenom: string;
+
+  @ApiProperty({required:true, default:Genre.MASCULIN})
+  @IsEnum(Genre)
+  genre: Genre;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+
+  @ApiProperty()
+  @IsString()
+  date_naiss: Date;
+
+  @ApiProperty({required:true})
+  @IsPhoneNumber("BJ")
+  phone: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  arrondissement: string;
+
+  get user(){
+    return {nom: this.nom, prenom: this.prenom, genre:this.genre, 
+      password: this.password,date_naiss: this.date_naiss, phone:this.phone,
+       arrondissement: this.arrondissement}
+  }
+
+
 
 }

@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNotEmpty, IsNumber, IsObject, IsPositive, Min } from "class-validator";
+import { IsDateString, IsNotEmpty, IsNumber, IsObject, IsOptional, IsPositive, Min } from "class-validator";
 import { EtatVehicule } from "src/enums/etat-vehicule";
 import { IsString } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
+import { IsNumberString } from 'class-validator';
 
 export class VehiculeSubDto {
 
@@ -83,9 +84,9 @@ export class VehiculeSubDto {
   type:string;
 
   @ApiProperty({required:true})
-  @IsNumber()
-  @IsPositive({message:"Le nombre de places d'assise doit être suppérieur ou égale à 1"})
-  place_assise:number;
+  @IsNumberString()
+  @IsOptional()
+  place_assise:any;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})

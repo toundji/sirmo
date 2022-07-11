@@ -17,9 +17,11 @@ import { Conducteur } from './conducteur.entity';
 import { TypeAmande } from './type-amande.entity';
 import { Police } from './police.entity';
 import { Payement } from './payement.entity';
+import { Audit } from './audit';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity("amandes")
-export class Amande {
+export class Amande extends Audit{
 
   static  entityName  = "amandes";
 
@@ -31,6 +33,9 @@ export class Amande {
 
   @Column()
   montant:number;
+
+  @Column({ nullable: true, unique: true })
+  code?: string = uuidv4();
 
   @Column()
   date_limite:Date;
@@ -63,13 +68,4 @@ export class Amande {
   @JoinColumn({ name: 'conducteur_id' })
   conducteur: Conducteur;
 
- 
-  @Column()
-  editeur_id: number;
-
-  @CreateDateColumn()
-  create_at:Date;
-
-  @UpdateDateColumn()
-  update_at:Date;
-}
+  }

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsObject, Min } from "class-validator";
+import { IsNotEmpty, IsNumber, IsObject, IsOptional, Min } from "class-validator";
 import { IsString } from 'class-validator';
 import { CreateLocalisationDto } from './create-localisation.dto';
 
@@ -20,6 +20,7 @@ export class CreateMairieDto {
     arrondissementId: number;
 
     @ApiProperty()
+    @IsOptional()
     localisation?: CreateLocalisationDto;
 
 }

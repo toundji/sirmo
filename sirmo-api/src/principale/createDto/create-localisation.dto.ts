@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { IsNull } from 'typeorm';
 export class CreateLocalisationDto {
 
@@ -20,15 +20,14 @@ export class CreateLocalisationDto {
   altitude?: number;
 
   @ApiProperty({required:true})
-  @IsNumber({}, {message:"Speed doit être un nombre"})
+  @IsString({message:"place non valide"})
   @IsOptional()
-  speed?: number;
+  place_id?: string;
 
+  
   @ApiProperty({required:true})
-  @IsNumber({},{message:"Occuracy doit être un nombre"})
+  @IsString({message:"place non valide"})
   @IsOptional()
-  accuracy?: number;
-
   entity?: string;
 
   @ApiProperty({required:true})

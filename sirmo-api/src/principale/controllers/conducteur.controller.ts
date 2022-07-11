@@ -22,6 +22,7 @@ import { CreateUserConducteurDto } from "../createDto/user-conducteur.dto";
 import { CreateConducteurDto } from "../createDto/conducteur.dto";
 import { StatutConducteur } from "src/enums/statut-zem copy";
 import { UserConducteurDG_Dto } from './../createDto/user-conducteur-dg.dto';
+import { CreateUserConducteurCptDto } from './../createDto/user-conducteur-cpt.dto';
 
 @ApiTags("Conducteurs")
 @ApiBearerAuth("token")
@@ -45,9 +46,16 @@ export class ConducteurController {
 
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleName.ADMIN, RoleName.MAIRIE)
-  @Post("admin")
-  createConducteurByDG(@Body() body: UserConducteurDG_Dto) : Promise<Conducteur>{
+  @Post("with-vehicule")
+  createConducteurWithVehiculeByDG(@Body() body: UserConducteurDG_Dto) : Promise<Conducteur>{
     return this.conducteurService.createByDG(body);
+  }
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleName.ADMIN, RoleName.MAIRIE)
+  @Post("without-vehicule")
+  createConducteurByDG(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur>{
+    return this.conducteurService.createConducteur(body);
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)

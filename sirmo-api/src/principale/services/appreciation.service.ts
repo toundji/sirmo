@@ -84,6 +84,7 @@ export class AppreciationService {
   
   }
 
+  async 
   async updateImage(id: number, @UploadedFile() profile, user:User){
     const appreciation: Appreciation = await this.findOne(id);
     const image: Fichier = await this.fichierService.createOneWith(
@@ -93,8 +94,6 @@ export class AppreciationService {
       user
     );
     appreciation.fichier = image;
-   
-    
       return await this.appreciationRepository.save(appreciation).catch((error)=>{
         console.log(error);
       throw new NotFoundException("Le payement spécifié n'existe pas");

@@ -8,6 +8,7 @@ import { ConducteurVehicule } from './conducteur-vehicule.entity';
 import { User } from './user.entity';
 import { Audit } from './audit';
 import { StatutConducteur } from 'src/enums/statut-zem copy';
+import { Mairie } from './mairie.entity';
 
 
 
@@ -59,6 +60,10 @@ export class Conducteur extends Audit {
   @JoinColumn({ name: 'licence_id'})
   licence?:Licence;
 
+  @JoinColumn({ name: 'mairie_id' })
+  @ManyToOne((type) => Mairie, {nullable:false, eager:true})
+  mairie: Mairie;
+
   @ManyToOne((type) => Vehicule, vehicule=>vehicule.conducteur, { nullable:true})
   @JoinColumn({ name: 'vehicule_id'})
   vehicule?:Vehicule;
@@ -90,6 +95,5 @@ export class Conducteur extends Audit {
     const time = `${dif}${seconds}${minutes}${hours}${date}${month}${year}`;
     this.nic = time;
   }
-
 }
 

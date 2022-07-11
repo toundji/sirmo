@@ -52,7 +52,7 @@ export class ArrondissementService {
         throw "Arondissemant n'existepas"
     })
     .catch((error)=>{
-
+console.log(error);
       throw new HttpException(
         "Impossible de trouver l'arrondissement démandé",
         HttpStatus.UNAUTHORIZED,

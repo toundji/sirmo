@@ -47,4 +47,9 @@ export class CreateConducteurDto {
   @IsNumber({},{message : "Utilisateur invalide"})
   @IsPositive({message: "L'utilisaeur invalide"})
   userId:number;
+
+  @ApiProperty({required:true})
+  @IsNumber({},{message : "Mairie non valide"})
+  @IsPositive({message: "La mairie introuvable"})
+  mairie_id:number;
 }

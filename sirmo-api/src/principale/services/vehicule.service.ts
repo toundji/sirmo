@@ -17,6 +17,9 @@ import { ConducteurVehiculeService } from './conducteur-vehicule.service';
 import { CreateVehiculeDto } from '../createDto/vehicule.dto';
 import { CreateVehiculeByConducteurDto } from '../createDto/vehicule-by-conducteur.dto';
 import { VehiculeSubDto } from '../createDto/vehicule-sub.dto';
+import { LicenceVehicule } from '../entities/licence-vehicule.entity';
+import {  TypePayementLicence } from 'src/enums/type-payement';
+import { Mairie } from './../entities/mairie.entity';
 
 @Injectable()
 export class VehiculeService {
@@ -84,10 +87,9 @@ export class VehiculeService {
     Object.keys(motDto).forEach((cle) => {
       vehicule[cle] = motDto[cle];
     });
-    const owner: User = await this.userService.findOne(motDto.proprietaire_id)
-    vehicule.proprietaire = owner;
+   
 
-    const conducteur: Conducteur = await this.conducteurService.findOne(motDto.conducteur_id)
+    const conducteur: Conducteur = await this.conducteurService.findOne(+motDto.conducteur_id)
     vehicule.conducteur = conducteur;
       vehicule =await  this.vehiculeRepository.save(vehicule).catch((error)=>{
         console.log(error);
@@ -97,6 +99,16 @@ export class VehiculeService {
      //update ConducteurVehicule if conducteur.vehicule is not null
     conducteur.vehicule = vehicule;
     this.conducteurService.update(conducteur.id,conducteur);
+
+    let owner: User;
+    if(motDto.proprietaire_id)
+    {
+      owner = await this.userService.findOne(motDto.proprietaire_id)
+      vehicule.proprietaire = owner;
+    }else{
+      owner = conducteur.user;
+      vehicule.proprietaire = owner;
+    } 
 
     let proprietaireVehicule:ProprietaireVehicule =  ProprietaireVehicule.create({
       proprietaire: {id:owner.id},
@@ -124,13 +136,39 @@ export class VehiculeService {
 
     vehicule.conducteur.vehicule = null;
 
+    const now = new Date();
+
+
+
+    const licenceTmp:LicenceVehicule = LicenceVehicule.create({
+      montant: 20200,
+      solde_mairie: conducteur.mairie.solde,
+      date_fin: new Date(now.getFullYear()+1, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()),
+      conducteur: conducteur,
+      vehicule: vehicule,
+      mairie: conducteur.mairie,
+      type_payement: TypePayementLicence.MANUEL
+    });
+
+    const licence: LicenceVehicule =   await LicenceVehicule.save(licenceTmp).catch((error)=>{
+      console.log(error);
+      throw "Erreur de création de la licence";
+    });
+    licence.vehicule = null;
+    licence.mairie = null;
+    licence.conducteur =null;
+    
+    vehicule.licence = licence;
+    vehicule = await Vehicule.save(vehicule);
+   
+
     return vehicule;
 
   }
 
 
 
-  async createWith(motDto: VehiculeSubDto, owner : User, conducteur: Conducteur): Promise<Vehicule> {
+  async createWith(motDto: VehiculeSubDto, owner : User, conducteur: Conducteur, mairie:Mairie): Promise<Vehicule> {
     let vehicule: Vehicule = new Vehicule();
     Object.keys(motDto).forEach((cle) => {
       vehicule[cle] = motDto[cle];
@@ -174,7 +212,29 @@ export class VehiculeService {
     vehicule.conducteurVehicules = [conducteurVehicule];
 
     vehicule.conducteur.vehicule = null;
+    const now = new Date();
 
+    const licenceTmp:LicenceVehicule = LicenceVehicule.create({
+      montant: 20200,
+      solde_mairie: mairie.solde,
+      date_fin: new Date(now.getFullYear()+1, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()),
+      conducteur: conducteur,
+      vehicule: vehicule,
+      mairie: mairie,
+      type_payement: TypePayementLicence.MANUEL
+    });
+
+    const licence: LicenceVehicule =   await LicenceVehicule.save(licenceTmp).catch((error)=>{
+      console.log(error);
+      throw "Erreur de création de la licence";
+    });
+    licence.vehicule = null;
+    licence.mairie = null;
+    licence.conducteur =null;
+    
+    vehicule.licence = licence;
+    vehicule = await Vehicule.save(vehicule);
+   
     return vehicule;
 
   }
@@ -187,11 +247,23 @@ export class VehiculeService {
   }
 
   findOne(id: number): Promise<Vehicule> {
-    return this.vehiculeRepository.findOne(id).catch((error)=>{
+    return this.vehiculeRepository.findOneOrFail(id).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le payement spécifié n'existe pas");
         });
       }
+
+      findByCi_er(ci_er: string) :Promise<Vehicule> {
+        return this.vehiculeRepository.find({where:{ci_er: ci_er}}).then((list:Vehicule[])=>{
+          if(list.length>0){
+            return list[0];
+          }
+        })
+        .catch((error)=>{
+          console.log(error);
+          throw new NotFoundException("Le payement spécifié n'existe pas");
+            });
+          }
 
   edit(id: number, vehicule: Vehicule) {
     this.findOne(id);

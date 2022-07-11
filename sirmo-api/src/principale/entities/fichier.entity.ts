@@ -28,9 +28,6 @@ export class Fichier extends Audit {
   @Column({nullable:true})
   entityId: number;
 
-  
-
-
   static  fromMap({nom, path, mimetype,size, entity}):Fichier{
     const fichier:Fichier = new Fichier();
     fichier.nom = nom;

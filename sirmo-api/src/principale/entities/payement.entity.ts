@@ -36,10 +36,17 @@ export class Payement extends Audit{
   @Column()
   info: string
 
+
   @Column()
   operation:TypeOperation
 
   @ManyToOne((type) => Compte)
   @JoinColumn({ name : 'compte_id' })
   compte: Compte;
+  
+  @Column({nullable:true, name: "entity_name"})
+   entityName: string;
+
+   @Column({nullable:true, name: "entity_id"})
+   entityId: number;
 }

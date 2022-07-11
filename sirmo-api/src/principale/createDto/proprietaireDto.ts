@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsPositive, IsString, Length } from "class-validator";
+import {  IsDate, IsDateString, IsEmail, IsEnum, IsNotEmpty,  IsOptional, IsPhoneNumber,  IsString, Length, Min } from "class-validator";
 import { Genre } from 'src/enums/genre';
-import { Departement } from './../entities/departement.entity';
 
-export class UserDG_Dto {
+export class ProprietaireDto {
     @ApiProperty({required:true})
     @IsString()
     @IsNotEmpty()
@@ -19,16 +18,6 @@ export class UserDG_Dto {
     @IsEnum(Genre)
     genre: Genre;
 
-    @ApiProperty({required:true})
-    @IsString()
-    @IsNotEmpty()
-    password: string;
-
-    @ApiProperty()
-    @IsEmail()
-    @IsOptional()
-    email?: string;
-
     @ApiProperty()
     @IsString()
     date_naiss: Date;
@@ -42,5 +31,13 @@ export class UserDG_Dto {
     @IsNotEmpty()
     arrondissement: string;
 
+
+//     @ApiProperty({required:true})
+//     @IsDateString({message:"La date de début est obligatoir pour le champs date debut", always:true})
+//     date_debut: Date = new Date();
+// 
+//     @ApiProperty({required:true})
+//     @IsDateString()
+//     date_fin: Date;
 }
 

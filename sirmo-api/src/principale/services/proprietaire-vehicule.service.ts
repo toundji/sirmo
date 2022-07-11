@@ -10,6 +10,10 @@ import { UserService } from './user.service';
 import { forwardRef } from '@nestjs/common';
 import { UpdateProprietaireVehiculeDto } from '../updateDto/update-proprietaire-vehicule.dto';
 import { CreateProprietaireVehiculeDto } from '../createDto/proprietaire-vehicule.dto';
+import { ProprietaireDto } from '../createDto/proprietaireDto';
+import { Role } from '../entities/role.entity';
+import { RoleService } from './roles.service';
+import { RoleName } from 'src/enums/role-name';
 
 @Injectable()
 export class ProprietaireVehiculesService {
@@ -19,6 +23,8 @@ export class ProprietaireVehiculesService {
     @Inject(forwardRef(() => VehiculeService))
     private readonly vehiculeService: VehiculeService,
     private readonly userService: UserService,
+    private readonly roleService: RoleService,
+
   ) {}
 
   async create(
@@ -46,6 +52,36 @@ export class ProprietaireVehiculesService {
   
 
   }
+
+
+//   async createNotExistePoprietaire(
+//     propre: ProprietaireDto,
+//   ): Promise<ProprietaireVehicule> {
+//     const proprietaireVehicule: ProprietaireVehicule = new ProprietaireVehicule();
+//     Object.keys(propre).forEach((cle) => {
+//       proprietaireVehicule[cle] = propre[cle];
+//     });
+//     const role: Role = await this.roleService.findOneByName(RoleName.PROPRIETAIRE);
+//     const user: User = await this.userService.createWithRole(propre, [role]);
+//     proprietaireVehicule.proprietaire = user;
+// 
+//     const vehicule: Vehicule = await this.vehiculeService.findByCi_er(propre.ci_er);
+//     
+//     if(vehicule.proprietaire){}
+//     proprietaireVehicule.vehicule = vehicule;
+// 
+//     vehicule.proprietaire = user;
+//     await this.vehiculeService.edit(vehicule.id, vehicule);
+// 
+//       return this.proprietaireVehiculeRepository.save(proprietaireVehicule).catch((error)=>{ console.log(error);
+//         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+//       });
+//   
+// 
+//   }
+
+
+  
   createValidProprietaireVehicule(
     vehicule: ProprietaireVehicule,
   ): Promise<ProprietaireVehicule> {

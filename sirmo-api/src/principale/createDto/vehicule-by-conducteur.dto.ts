@@ -33,11 +33,6 @@ export class CreateVehiculeByConducteurDto {
   @IsNotEmpty({message:"Le numéro serie moteur est obligatoire"})
   numero_serie_moteur:  string;
 
-  @ApiProperty({required:true})
-  @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"L'état de la vehicule  est obligatoire"})
-  etat: EtatVehicule;
-
   
   @ApiProperty({required:true})
   @IsDateString({message:"Format invalide"})
@@ -92,9 +87,7 @@ export class CreateVehiculeByConducteurDto {
   categorie:string;
 
   @ApiProperty({required:true})
-  @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le  est obligatoire"})
-  place_assise:number;
+  place_assise:any;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
@@ -127,8 +120,9 @@ export class CreateVehiculeByConducteurDto {
   pays_immatriculation: string;
 
   @ApiProperty({required:true})
-  proprietaire_id: number;
+  @IsOptional()
+  proprietaire_id: any;
 
   @ApiProperty({required:true})
-  conducteur_id: number;
+  conducteur_id: any;
 }

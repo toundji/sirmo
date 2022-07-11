@@ -32,6 +32,10 @@ export class Mairie extends Audit{
         nullable: false, default : 0 })
     solde:number;
 
+    @Column({
+        nullable: false, default : 0 })
+    accumulation:number;
+
     @JoinColumn({ name: 'arrondissement_id' })
     @ManyToOne(type => Arrondissement)
     arrondissement?: Arrondissement;

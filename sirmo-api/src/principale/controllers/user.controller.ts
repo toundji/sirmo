@@ -21,6 +21,7 @@ import { Role } from '../entities/role.entity';
 import { ChangePasswordDto } from './../createDto/change-password.dto';
 import { ChangePhoneDto } from '../createDto/change-phone.dto';
 import { ChangeEmailDto } from '../createDto/change-emeail.dto';
+import { ProprietaireDto } from './../createDto/proprietaireDto';
 
 
 
@@ -37,6 +38,15 @@ export class UserController {
   @Roles(RoleName.ADMIN)
   async create(@Body() createUserDto: CreateUserWithRoleDto): Promise<User> {
     return await this.userService.create(createUserDto);
+  }
+
+
+  @ApiOkResponse({type:User})
+  @ApiBearerAuth("token")
+  @Post("proprietaire")
+  @Roles(RoleName.ADMIN)
+  async createProprietaire(@Body() createUserDto: ProprietaireDto): Promise<User> {
+    return await this.userService.createOwner(createUserDto);
   }
 
 

@@ -20,13 +20,13 @@ export class Localisation {
     @Column()
     altitude: number;
 
-    @Column()
-    place_id: number;
+    @Column({nullable:false})
+    place_id: string;
 
-    @Column()
+    @Column({nullable:null})
     entity:string;
 
-    @Column()
+    @Column({nullable:null})
     entityId:number;
 
 }
