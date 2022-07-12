@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNotEmpty,IsOptional } from "class-validator";
+import { IsDateString, IsNotEmpty,IsNumber,IsOptional, IsPositive } from "class-validator";
 import { EtatVehicule } from "src/enums/etat-vehicule";
 import { IsString } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
@@ -87,7 +87,7 @@ export class CreateVehiculeByConducteurDto {
   categorie:string;
 
   @ApiProperty({required:true})
-  place_assise:any;
+  place_assise:number;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
@@ -120,9 +120,13 @@ export class CreateVehiculeByConducteurDto {
   pays_immatriculation: string;
 
   @ApiProperty({required:true})
+  @IsNumber()
+  @IsPositive()
   @IsOptional()
-  proprietaire_id: any;
+  proprietaire_id: number;
 
+  @IsNumber()
+  @IsPositive()
   @ApiProperty({required:true})
-  conducteur_id: any;
+  conducteur_id: number;
 }

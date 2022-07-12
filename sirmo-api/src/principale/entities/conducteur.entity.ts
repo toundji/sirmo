@@ -54,6 +54,8 @@ export class Conducteur extends Audit {
   @Column({ nullable: false })
   ancienIdentifiant: string;
 
+  
+
   //licence en cours
   @ManyToOne((type) => Licence,
    { nullable:true, eager:true })
@@ -81,6 +83,12 @@ export class Conducteur extends Audit {
 
   @OneToMany(type => Amande, amande  => amande.conducteur )
   amandes?: Amande[];
+
+  @Column({ unique: true })
+  profile_image: string;
+
+  @Column({ unique: true })
+  idCarde_image: string;
 
   
   @BeforeInsert()  async generateNiz() {

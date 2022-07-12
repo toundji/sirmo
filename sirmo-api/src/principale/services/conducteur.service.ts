@@ -65,6 +65,8 @@ export class ConducteurService {
     conducteur.date_delivrance_ifu=body.date_delivrance_ifu; 
     conducteur.idCarde=body.idCarde;
     conducteur. ancienIdentifiant=body.ancienIdentifiant;
+    conducteur.idCarde_image = body.profile_image;
+    conducteur.idCarde_image = body.idCarde_image;
 
     const role:Role = await this.roleService.findOneByName(RoleName.ZEM);
 

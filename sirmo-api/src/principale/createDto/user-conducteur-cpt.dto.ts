@@ -10,6 +10,16 @@ import { Conducteur } from './../entities/conducteur.entity';
 export class CreateUserConducteurCptDto {
 
   @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  profile_image: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  idCarde_image: string;
+
+  @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
   @MinLength(13, {message: "Ifu invalide, Ifu trop court"})
   ifu: string;

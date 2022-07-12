@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNumber, IsNumberString, IsOptional } from "class-validator";
+import { IsDateString, IsNumber, IsNumberString, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsPositive } from 'class-validator';
 
@@ -52,4 +52,15 @@ export class CreateConducteurDto {
   @IsNumber({},{message : "Mairie non valide"})
   @IsPositive({message: "La mairie introuvable"})
   mairie_id:number;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  profile_image: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  idCarde_image: string;
+
 }

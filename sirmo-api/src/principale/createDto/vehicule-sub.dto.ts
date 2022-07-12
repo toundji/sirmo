@@ -86,7 +86,7 @@ export class VehiculeSubDto {
   @ApiProperty({required:true})
   @IsNumberString()
   @IsOptional()
-  place_assise:any;
+  place_assise:number;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})

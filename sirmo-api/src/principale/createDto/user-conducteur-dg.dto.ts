@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNumber, IsNumberString, IsObject, IsOptional, IsPositive, MinLength, ValidateNested } from "class-validator";
+import { IsDateString, IsNumber, IsNumberString, IsObject, IsOptional, IsPositive, IsString, MinLength, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { CreateUserDto } from './create-user.dto';
 import { Type } from "class-transformer";
@@ -39,6 +39,17 @@ export class UserConducteurDG_Dto {
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
   @IsOptional()
   idCarde: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  profile_image: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  idCarde_image: string;
+
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
