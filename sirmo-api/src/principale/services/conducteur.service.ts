@@ -136,8 +136,10 @@ export class ConducteurService {
   }
 
   async createForUser(createConducteurDto: CreateConducteurDto) {
+    const {mairie_id, ...res} = createConducteurDto;
+
     const conducteur:Conducteur = new Conducteur();
-    Object.keys(createConducteurDto).forEach(cle=>{conducteur[cle] = createConducteurDto[cle]});
+    Object.keys(res).forEach(cle=>{conducteur[cle] = createConducteurDto[cle]});
 
       const user: User =  await this.userService.findOne(createConducteurDto.userId);
       const role:Role = await this.roleService.findOneByName(RoleName.ZEM);

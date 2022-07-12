@@ -7,8 +7,6 @@ import ormConfig from './config/ormconfig';
 
 import { PrincipaleModule } from './principale/principale.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { RoleGuard } from './principale/role.guard';
 
 
 
