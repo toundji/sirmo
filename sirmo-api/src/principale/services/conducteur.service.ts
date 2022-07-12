@@ -20,6 +20,7 @@ import { Mairie } from './../entities/mairie.entity';
 import { MairieService } from './mairie.service';
 import { Conducteur } from './../entities/conducteur.entity';
 import { CreateUserConducteurCptDto } from './../createDto/user-conducteur-cpt.dto';
+import { writeFileSync } from 'fs';
 
 @Injectable()
 export class ConducteurService {
@@ -151,6 +152,8 @@ export class ConducteurService {
         this.userService.changeWithoutControle(user);
       }
       conducteur.user = user;
+
+      // const file:File = fs.writeFileSync();
 
       const mairie:Mairie = await this.mairieService.findOne(createConducteurDto.mairie_id);
       conducteur.mairie = mairie;
