@@ -84,10 +84,10 @@ export class Conducteur extends Audit {
   @OneToMany(type => Amande, amande  => amande.conducteur )
   amandes?: Amande[];
 
-  @Column({ unique: true })
+  @Column({ nullable: true, unique:false })
   profile_image: string;
 
-  @Column({ unique: true })
+  @Column({ nullable: true,  unique:false  })
   idCarde_image: string;
 
   
