@@ -149,6 +149,10 @@ export class ConducteurService {
         this.userService.changeWithoutControle(user);
       }
       conducteur.user = user;
+
+      const mairie:Mairie = await this.mairieService.findOne(createConducteurDto.mairie_id);
+      conducteur.mairie = mairie;
+
       const conducteurSaved: Conducteur= await this.conducteurRepository.save(conducteur);
       // const compte: Compte = 
       await this.compteService.create(Compte.create({user:user, montant:0, id:user?.id})).catch((error)=>{
