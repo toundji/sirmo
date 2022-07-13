@@ -13,6 +13,7 @@ import {
     Req,
   } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { CreateVehiculeByConducteurDto } from 'src/principale/createDto/vehicule-by-conducteur.dto';
 import { CreateVehiculeDto } from 'src/principale/createDto/vehicule.dto';
 import { Vehicule } from 'src/principale/entities/vehicule.entity';
 import { VehiculeAdminService } from '../services/vehicule-admin.service';
@@ -25,8 +26,8 @@ import { VehiculeAdminService } from '../services/vehicule-admin.service';
     constructor(private readonly vehiculesService: VehiculeAdminService) {}
   
     @Post()
-    create(@Body() createVehiculeDto: CreateVehiculeDto):Promise<Vehicule> {
-      return this.vehiculesService.create(createVehiculeDto);
+    create(@Body() createVehiculeDto: CreateVehiculeByConducteurDto):Promise<Vehicule> {
+      return this.vehiculesService.createByConducteur(createVehiculeDto);
     }
   
     // @Get(':id')

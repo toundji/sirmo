@@ -14,6 +14,9 @@ import { ConducteurService } from '../../services/conducteur.service';
 import { ProprietaireVehiculesService } from '../../services/proprietaire-vehicule.service';
 import { ConducteurVehiculeService } from '../../services/conducteur-vehicule.service';
 import { CreateVehiculeDto } from '../../createDto/vehicule.dto';
+import { TypePayementLicence } from 'src/enums/type-payement';
+import { LicenceVehicule } from 'src/principale/entities/licence-vehicule.entity';
+import { CreateVehiculeByConducteurDto } from 'src/principale/createDto/vehicule-by-conducteur.dto';
 
 @Injectable()
 export class VehiculeAdminService {
@@ -67,6 +70,91 @@ export class VehiculeAdminService {
     return vehicule;
 
   }
+
+  async createByConducteur(motDto: CreateVehiculeByConducteurDto): Promise<Vehicule> {
+    let vehicule: Vehicule = new Vehicule();
+    Object.keys(motDto).forEach((cle) => {
+      vehicule[cle] = motDto[cle];
+    });
+   
+
+    const conducteur: Conducteur = await this.conducteurService.findOne(+motDto.conducteur_id)
+    vehicule.conducteur = conducteur;
+      vehicule =await  this.vehiculeRepository.save(vehicule).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Mise à jour de la vehicule. Données invalides");
+      });
+
+     //update ConducteurVehicule if conducteur.vehicule is not null
+    conducteur.vehicule = vehicule;
+    this.conducteurService.update(conducteur.id,conducteur);
+
+    let owner: User;
+    if(motDto.proprietaire_id)
+    {
+      owner = await this.userService.findOne(motDto.proprietaire_id)
+      vehicule.proprietaire = owner;
+    }else{
+      owner = conducteur.user;
+      vehicule.proprietaire = owner;
+    } 
+
+    let proprietaireVehicule:ProprietaireVehicule =  ProprietaireVehicule.create({
+      proprietaire: {id:owner.id},
+      vehicule:{id:vehicule.id},
+      date_debut: new Date(),
+    });
+     proprietaireVehicule = await ProprietaireVehicule.save(proprietaireVehicule).catch((error)=>{
+      console.log(error);
+      throw new InternalServerErrorException("Erreur pendant la sauvegarde du propriétaire de la vehicule");
+     });let conducteurVehicule: ConducteurVehicule = ConducteurVehicule.create({
+      conducteur: {id:conducteur.id},
+      vehicule:{id:vehicule.id},
+      date_debut: new Date(),
+    });
+    conducteurVehicule =   await ConducteurVehicule.save(conducteurVehicule).catch((error)=>{
+        throw new InternalServerErrorException("Erreur pendant la sauvegarde de l'association (conducteur et vehicule)");
+
+      })
+
+    proprietaireVehicule.vehicule = null;
+    conducteurVehicule.vehicule = null;
+
+    vehicule.proprietaireVehicules = [proprietaireVehicule]
+    vehicule.conducteurVehicules = [conducteurVehicule];
+
+    vehicule.conducteur.vehicule = null;
+
+    const now = new Date();
+
+
+
+    const licenceTmp:LicenceVehicule = LicenceVehicule.create({
+      montant: 20200,
+      solde_mairie: conducteur.mairie.solde,
+      date_fin: new Date(now.getFullYear()+1, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()),
+      conducteur: conducteur,
+      vehicule: vehicule,
+      mairie: conducteur.mairie,
+      type_payement: TypePayementLicence.MANUEL
+    });
+
+    const licence: LicenceVehicule =   await LicenceVehicule.save(licenceTmp).catch((error)=>{
+      console.log(error);
+      throw "Erreur de création de la licence";
+    });
+    licence.vehicule = null;
+    licence.mairie = null;
+    licence.conducteur =null;
+    
+    vehicule.licence = licence;
+    vehicule = await Vehicule.save(vehicule);
+   
+
+    return vehicule;
+
+  }
+
 
 
   findByCi_er(ci_er: string) :Promise<Vehicule> {
