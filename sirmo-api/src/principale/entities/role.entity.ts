@@ -3,8 +3,7 @@ import { RoleName } from "src/enums/role-name";
 import { Column,  Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Audit } from "./audit";
 
-@Entity("roles")
-export class Role extends Audit{
+export class Role {
   static entityName  = "roles";
 
     @PrimaryGeneratedColumn()

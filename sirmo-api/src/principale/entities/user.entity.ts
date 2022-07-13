@@ -8,8 +8,7 @@ import { Fichier } from 'src/principale/entities/fichier.entity';
 import { Audit } from "./audit";
 import { Genre } from 'src/enums/genre';
 import { Exclude } from 'class-transformer';
-import { Commune } from './commune.entity';
-import { ApiProperty } from "@nestjs/swagger";
+import { RoleName } from 'src/enums/role-name';
 
 
 @Entity("users")
@@ -45,13 +44,9 @@ export class User extends Audit{
   @Column({ nullable: false, unique: true })
   code?: string = uuidv4();
 
-  @ManyToMany(type=>Role, {eager:true})
-  @JoinTable({
-    name: 'users_roles',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id'},
-    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id'},
-  })
-  roles?: Role[];
+ 
+  @Column("simple-array",{default: [RoleName.USER]})
+  roles?: RoleName[];
 
   @JoinColumn({ name: 'arrondissement_id' , })
   @ManyToOne(type => Arrondissement, {nullable:false, eager:true})

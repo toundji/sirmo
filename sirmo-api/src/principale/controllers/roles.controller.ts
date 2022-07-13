@@ -4,41 +4,15 @@ import { RoleService } from '../services/roles.service';
 import { CreateRoleDto } from '../createDto/create-role.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateRoleDto } from '../updateDto/update-role.dto';
+import { RoleName } from 'src/enums/role-name';
 
 @ApiTags("Roles")
 @ApiBearerAuth("token")
 @Controller('roles')
 export class RolesController {
-  constructor(private readonly rolesService: RoleService) {}
-
-  @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
-    return this.rolesService.create(createRoleDto);
-  }
-
-
-  @Post("/all")
-  createAll(@Body() createRoleDto: CreateRoleDto[]) {
-    return this.rolesService.createAll(createRoleDto);
-  }
 
   @Get()
-  findAll() {
-    return this.rolesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.rolesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.update(+id, updateRoleDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rolesService.remove(+id);
+  findAll():RoleName[] {
+    return Object.values(RoleName);
   }
 }

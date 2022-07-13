@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsPositive, IsString, Length } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsPositive, IsString } from "class-validator";
 import { Genre } from 'src/enums/genre';
+import { RoleName } from 'src/enums/role-name';
 
 export class CreateUserWithRoleDto {
     @ApiProperty({required:true})
@@ -43,8 +44,11 @@ export class CreateUserWithRoleDto {
     arrondissement: number;
 
     @ApiProperty({required:true})
-    @IsNumber({},{each:true})
-    @IsPositive({each:true})
-    role_ids?: number[];
+    @IsEnum(RoleName,{each:true})
+    roles?: RoleName[];
+}
+
+function AppState(AppState: any) {
+    throw new Error("Function not implemented.");
 }
 

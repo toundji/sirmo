@@ -27,14 +27,13 @@ import { Compte } from "../entities/compte.entity";
 import { ChangePasswordDto } from './../createDto/change-password.dto';
 import { compare, hash } from "bcrypt";
 import { ChangeEmailDto } from "../createDto/change-emeail.dto";
-import { UserDG_Dto } from './../createDto/user-dg.dto';
+import { UserDG_Dto } from '../admin/dto/user-dg.dto';
 import { ProprietaireDto } from './../createDto/proprietaireDto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    private readonly roleService: RoleService,
     private readonly arrondissementService: ArrondissementService,
     private readonly fichierService: FichierService,
   ) {}
@@ -44,18 +43,16 @@ export class UserService {
     Object.keys(createUserDto).forEach((cle) => {
       user[cle] = createUserDto[cle];
     });
-    const role: Role = await this.roleService.findOneByName(RoleName.USER);
-    user.roles = [];
-
-    if(createUserDto.role_ids){
-      user.roles = await this.roleService.findAllByIds(createUserDto.role_ids)
+    user.roles = createUserDto.roles;
+    user.roles ??= [];
+    if(user.roles.indexOf(RoleName.USER) == -1){
+      user.roles.push(RoleName.USER);
     }
-    user.roles.push(role);
 
-      const arrondisement: Arrondissement =
-        await this.arrondissementService.findOne(createUserDto.arrondissement);
-      user.arrondissement = arrondisement;
-     
+    const arrondisement: Arrondissement =
+      await this.arrondissementService.findOne(createUserDto.arrondissement);
+    user.arrondissement = arrondisement;
+    
       const u: User = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
@@ -72,8 +69,7 @@ export class UserService {
     Object.keys(createUserDto).forEach((cle) => {
       user[cle] = createUserDto[cle];
     });
-    const role: Role = await this.roleService.findOneByName(RoleName.PROPRIETAIRE);
-    user.roles = [role];
+    user.roles = [RoleName.PROPRIETAIRE];
 
 
       const arrondisement: Arrondissement =
@@ -102,8 +98,7 @@ export class UserService {
     Object.keys(createUserDto).forEach((cle) => {
       user[cle] = createUserDto[cle];
     });
-    const role: Role = await this.roleService.findOneByName(RoleName.USER);
-    user.roles = [role];
+    user.roles = [RoleName.USER];
 
   
       const arrondisement: Arrondissement =
@@ -130,8 +125,7 @@ export class UserService {
       user[cle] = createUserDto[cle];
     });
     
-      const role: Role = await this.roleService.findOneByName(RoleName.USER);
-      user.roles = [role];
+      user.roles = [RoleName.USER];
 
       const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(+createUserDto.arrondissement_id);
@@ -216,7 +210,7 @@ export class UserService {
 
   async createWithRole(
     createUserDto: CreateUserDto|UserDG_Dto,
-    roles: Role[],
+    roles: RoleName[],
   ): Promise<User> {
     const user: User = new User();
     Object.keys(createUserDto).forEach((cle) => {
@@ -400,15 +394,8 @@ export class UserService {
     } catch (e) {}
     if (user) return;
     user = new User();
-
-    const roles: Role[] = await this.roleService.findAll();
-    if (!roles) {
-      throw new HttpException(
-        "Vous devez initialiser les roles avants",
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    user.roles = roles;
+  
+    user.roles = Object.values(RoleName);
 
     const arrondis = await this.arrondissementService.findOne(103);
     if (!arrondis) {
@@ -430,12 +417,5 @@ export class UserService {
     Compte.save(compte);
     return u;
 
-  }
-
-  async grandAllRole() {
-    const user: User = await this.findOne(1);
-    const roles: Role[] = await this.roleService.findAll();
-    user.roles = roles;
-    this.userRepository.save(user);
   }
 }

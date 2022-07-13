@@ -7,7 +7,7 @@ import { UserService } from 'src/principale/services/user.service';
 
 @Injectable()
 export class SeederService {
-    constructor(private readonly roleService: RoleService, 
+    constructor(
         private readonly departementService: DepartementService,
         private readonly typeAmandeService : TypeAmandeService, 
         private readonly userService : UserService, 
@@ -15,17 +15,10 @@ export class SeederService {
         ){}
 
     async seed(){
-       await this.roleService.init();
        await this.departementService.initDepComAr();
        await this.typeAmandeService.init();
        await this.userService.initOneAdmin();
     }
-
-    async grantAll(){
-        await this.userService.grandAllRole();
-     }
-
-    
 
 //     @Post('upload')
 //   @UseInterceptors(FileInterceptor('file'))

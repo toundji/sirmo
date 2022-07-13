@@ -40,16 +40,6 @@ export class UserController {
     return await this.userService.create(createUserDto);
   }
 
-
-  @ApiOkResponse({type:User})
-  @ApiBearerAuth("token")
-  @Post("proprietaire")
-  @Roles(RoleName.ADMIN)
-  async createProprietaire(@Body() createUserDto: ProprietaireDto): Promise<User> {
-    return await this.userService.createOwner(createUserDto);
-  }
-
-
   @Public()
   @Post("register")
   async register(@Body() body: CreateUserDto):Promise<LoginRespo> {

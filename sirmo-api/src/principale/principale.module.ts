@@ -67,6 +67,12 @@ import { Constante } from './entities/constante.entity';
 import { ConstanteService } from './services/constante.service';
 import { ProprietaireVehiculesController } from './controllers/proprietaire-vehicule.controller';
 import { VehiculeController } from './controllers/vehicule.controller';
+import { VehiculeAdminService } from './admin/services/vehicule-admin.service';
+import { UserAdminService } from './admin/services/user-admin.service';
+import { UserAdminController } from './admin/controllers/user-admin-controller.dto';
+import { ConducteurAdminController } from './admin/controllers/conducteur-admin.controller';
+import { VehiculeAdminController } from './admin/controllers/vehicule-admin.controller.dto';
+import { ConducteurAdminService } from './admin/services/conducteur-admin.service';
 
 
 
@@ -76,7 +82,6 @@ import { VehiculeController } from './controllers/vehicule.controller';
     forwardRef(() =>AuthModule),
   TypeOrmModule.forFeature([
       User,
-      Role,
       Arrondissement,
       Commune,
       Licence,
@@ -99,7 +104,6 @@ import { VehiculeController } from './controllers/vehicule.controller';
   ],
   exports: [
     UserService,
-    RoleService,
     ArrondissementService,
     CommuneService,
     LicenceService,
@@ -123,12 +127,9 @@ import { VehiculeController } from './controllers/vehicule.controller';
   controllers: [
     PrincipaleController,
     UserController,
-      RolesController,
-      ArrondissementController,
-      CommuneController,
       LicenceController,
       MairieController,
-      DepartementController,
+     
       VehiculeController,
       ProprietaireVehiculesController,
       TypeAmandeController,
@@ -140,20 +141,31 @@ import { VehiculeController } from './controllers/vehicule.controller';
       PayementController,
       PoliceController,
       ConducteurVehiculeController,
-      SeedController,
       CompteController,
+      UserAdminController,
+      ConducteurAdminController,
+      VehiculeAdminController,
+
+      ArrondissementController,
+      CommuneController,
+      DepartementController,
+      SeedController,
+      RolesController,
+
+
   ],
   providers: [
     SeederService,
     PrincipaleService,
     UserService,
-    RoleService,
+    UserAdminService,
     ArrondissementService,
     CommuneService,
     LicenceService,
     MairieService,
     DepartementService,
     VehiculeService,
+    VehiculeAdminService,
     ProprietaireVehiculesService,
     TypeAmandeService,
     ConducteurService,
@@ -167,6 +179,8 @@ import { VehiculeController } from './controllers/vehicule.controller';
     AppreciationService,
     CompteService,
     ConstanteService,
+    ConducteurAdminService,
+
   ],
 })
 export class PrincipaleModule {}

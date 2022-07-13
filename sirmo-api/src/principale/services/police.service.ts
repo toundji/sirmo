@@ -16,7 +16,6 @@ export class PoliceService {
   constructor(
     @InjectRepository(Police) private policeRepository: Repository<Police>,
     private readonly userService:UserService,
-    private readonly roleService:RoleService,
   ) {}
 
   async create(createPoliceWithUserDto: CreatePoliceWithUserDto): Promise<Police> {
@@ -25,8 +24,7 @@ export class PoliceService {
       police[cle] = createPoliceWithUserDto[cle];
     });
 
-    const role:Role = await this.roleService.findOneByName(RoleName.POLICE);
-    const user: User = await this.userService.createWithRole(createPoliceWithUserDto.user, [role]);
+    const user: User = await this.userService.createWithRole(createPoliceWithUserDto.user, [RoleName.POLICE]);
     police.user = user;
 
   
@@ -46,19 +44,16 @@ export class PoliceService {
 
   
       const user: User = await this.userService.findOne(createPoliceDto.userId);
-      const role:Role = await this.roleService.findOneByName(RoleName.POLICE);
-      const index:number = user.roles.indexOf(role);
+      const index:number = user.roles.indexOf(RoleName.POLICE);
       if( index == -1){
-        user.roles.push(role);
+        user.roles.push(RoleName.POLICE);
         this.userService.changeWithoutControle(user);
       }
       police.user = user;
       return this.policeRepository.save(police).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-      
       });
-   
   }
 
   

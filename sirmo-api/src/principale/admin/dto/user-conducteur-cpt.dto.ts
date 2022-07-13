@@ -1,11 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumberString, IsObject, IsOptional, IsPhoneNumber, IsPositive, IsString, MinLength, ValidateNested } from "class-validator";
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumberString,  IsOptional, IsPhoneNumber, IsPositive, IsString, MinLength, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { CreateUserDto } from './create-user.dto';
-import { Type } from "class-transformer";
-import { IsNumber } from 'class-validator';
 import { Genre } from "src/enums/genre";
-import { Conducteur } from './../entities/conducteur.entity';
+import { IsNumber } from 'class-validator';
 
 export class CreateUserConducteurCptDto {
 
@@ -56,18 +53,8 @@ export class CreateUserConducteurCptDto {
   ancienIdentifiant: string;
 
   @ApiProperty({required:true})
-  @IsNumberString({},{message : "Mairie non valide"})
+  @IsNumber({},{message : "Mairie non valide"})
   mairie_id:number;
-
-  get conducteur(){
-    return {
-      ifu:this.ifu,nip: this.nip, cip:this.cip, permis:this.permis,
-      date_optention_permis: this.date_optention_permis,
-      date_delivrance_ifu: this.date_delivrance_ifu, idCarde: this.idCarde,
-      ancienIdentifiant: this.ancienIdentifiant
-    };
-  }
-
 
   @ApiProperty({required:true})
   @IsString()
@@ -100,13 +87,5 @@ export class CreateUserConducteurCptDto {
   @ApiProperty({required:true})
   @IsString()
   arrondissement: string;
-
-  get user(){
-    return {nom: this.nom, prenom: this.prenom, genre:this.genre, 
-      password: this.password,date_naiss: this.date_naiss, phone:this.phone,
-       arrondissement: this.arrondissement}
-  }
-
-
 
 }

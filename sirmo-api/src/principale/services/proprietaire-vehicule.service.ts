@@ -10,10 +10,6 @@ import { UserService } from './user.service';
 import { forwardRef } from '@nestjs/common';
 import { UpdateProprietaireVehiculeDto } from '../updateDto/update-proprietaire-vehicule.dto';
 import { CreateProprietaireVehiculeDto } from '../createDto/proprietaire-vehicule.dto';
-import { ProprietaireDto } from '../createDto/proprietaireDto';
-import { Role } from '../entities/role.entity';
-import { RoleService } from './roles.service';
-import { RoleName } from 'src/enums/role-name';
 
 @Injectable()
 export class ProprietaireVehiculesService {
@@ -23,7 +19,6 @@ export class ProprietaireVehiculesService {
     @Inject(forwardRef(() => VehiculeService))
     private readonly vehiculeService: VehiculeService,
     private readonly userService: UserService,
-    private readonly roleService: RoleService,
 
   ) {}
 

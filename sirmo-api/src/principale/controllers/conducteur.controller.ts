@@ -21,8 +21,7 @@ import { RoleName } from "src/enums/role-name";
 import { CreateUserConducteurDto } from "../createDto/user-conducteur.dto";
 import { CreateConducteurDto } from "../createDto/conducteur.dto";
 import { StatutConducteur } from "src/enums/statut-zem copy";
-import { UserConducteurDG_Dto } from './../createDto/user-conducteur-dg.dto';
-import { CreateUserConducteurCptDto } from './../createDto/user-conducteur-cpt.dto';
+import { CreateUserConducteurCptDto } from '../admin/dto/user-conducteur-cpt.dto';
 
 @ApiTags("Conducteurs")
 @ApiBearerAuth("token")
@@ -42,20 +41,6 @@ export class ConducteurController {
   @Post("for/user")
   createUserConducteur(@Body() createConducteurDto: CreateConducteurDto) : Promise<Conducteur>{
     return this.conducteurService.createForUser(createConducteurDto);
-  }
-
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleName.ADMIN, RoleName.MAIRIE)
-  @Post("with-vehicule")
-  createConducteurWithVehiculeByDG(@Body() body: UserConducteurDG_Dto) : Promise<Conducteur>{
-    return this.conducteurService.createByDG(body);
-  }
-
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleName.ADMIN, RoleName.MAIRIE)
-  @Post("without-vehicule")
-  createConducteurByDG(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur>{
-    return this.conducteurService.createConducteur(body);
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)
@@ -86,7 +71,7 @@ export class ConducteurController {
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleName.ZEM)
+  @Roles(RoleName.CONDUCTEUR)
   @Get("my/info")
   findOneMyInfo(@Req() request): Promise<Conducteur> {
     const user: User = request.user;

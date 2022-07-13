@@ -5,7 +5,7 @@ export enum RoleName {
     MANAGER = 'MANAGER',
     MAIRIE = 'MAIRIE',
     POLICE = 'POLICE',
-    ZEM = 'ZEM',
+    CONDUCTEUR = 'CONDUCTEUR',
     PROPRIETAIRE = 'PROPRIETAIRE',
     USER = 'USER',
     ECOBANCK = 'ECOBANCK'

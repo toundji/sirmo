@@ -7,6 +7,8 @@ import { BadRequestException } from '@nestjs/common';
 import { writeFileSync } from 'fs';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AppValidationError } from './principale/utilis/api-validation-error';
+import * as bodyParser from 'body-parser';
+
 
 
 async function bootstrap() {
@@ -56,7 +58,8 @@ async function bootstrap() {
                   },
                   'token', // This name here is important for matching up with @ApiBearerAuth() in your controller!
                 ).build();
-
+            app.use(bodyParser.json({limit: '50mb'}));
+            app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     const document = SwaggerModule.createDocument(app, config);
     const reflector = app.get(Reflector);
     app.useGlobalGuards(new JwtAuthGuard(reflector));

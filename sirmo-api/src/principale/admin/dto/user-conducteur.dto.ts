@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { IsDateString, IsNumber, IsNumberString, IsObject, IsOptional, IsPositive, IsString, MinLength, ValidateNested } from "class-validator";
+import { IsDateString, IsNumberString, IsObject, IsOptional, IsPositive, IsString, MinLength, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { CreateUserDto } from './create-user.dto';
 import { Type } from "class-transformer";
-import { VehiculeSubDto } from "./vehicule-sub.dto";
-import { UserDG_Dto } from './user-dg.dto';
+import { IsNumber } from 'class-validator';
+import { CreateUserDto } from "src/principale/createDto/create-user.dto";
 
-export class UserConducteurDG_Dto {
+export class CreateUserConducteurDto {
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
@@ -41,6 +40,10 @@ export class UserConducteurDG_Dto {
   idCarde: string;
 
   @ApiProperty({required:true})
+  @IsNumberString({},{message:"Seules les chiffres sont valides"})
+  ancienIdentifiant: string;
+
+  @ApiProperty({required:true})
   @IsString()
   @IsOptional()
   profile_image: string;
@@ -50,29 +53,16 @@ export class UserConducteurDG_Dto {
   @IsOptional()
   idCarde_image: string;
 
-
   @ApiProperty({required:true})
-  @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  ancienIdentifiant: string;
-
-  @ApiProperty({required:true})
-  @ValidateNested({ each: true })
-  @Type(() => UserDG_Dto)
-  user: UserDG_Dto;
+  @IsNumber({},{message : "Mairie non valide"})
+  @IsPositive()
+  mairie_id:number;
 
   @ApiProperty({required:true})
   @ValidateNested({ each: true })
-  @Type(() => VehiculeSubDto)
-  vehicule: VehiculeSubDto;
+  @Type(() => CreateUserDto)
+  user:CreateUserDto;
 
-  @ApiProperty({required:true})
-  @ValidateNested({ each: true })
-  @Type(() => UserDG_Dto )
-  @IsOptional()
-  proprietaire: UserDG_Dto ;
 
-  @ApiProperty({required:true})
-  @IsNumberString({},{message : "Mairie non valide"})
-  mairie_id?:number;
 
 }

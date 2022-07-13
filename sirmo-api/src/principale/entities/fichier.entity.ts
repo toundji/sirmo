@@ -10,16 +10,16 @@ export class Fichier extends Audit {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false})
+  @Column({ nullable: true})
   nom: string;
 
   @Column({ nullable: false, unique: true })
   path: string;
 
-  @Column({ nullable: false})
+  @Column({ nullable: true})
   mimetype: string;
 
-  @Column({ nullable: false})
+  @Column({ nullable: true})
   size: string;
 
   @Column({nullable:true})

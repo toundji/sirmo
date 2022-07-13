@@ -2,7 +2,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsPositive, IsString, Length } from "class-validator";
 import { Genre } from 'src/enums/genre';
-import { Departement } from './../entities/departement.entity';
+import { Departement } from '../../entities/departement.entity';
 
 export class UserDG_Dto {
     @ApiProperty({required:true})
