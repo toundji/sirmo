@@ -49,13 +49,13 @@ import { ArrondissementService } from "src/principale/services/arrondissement.se
     }
   
     findAll(): Promise<User[]> {
-      return this.userRepository.find({ relations: ["roles", "arrondissement"] });
+      return this.userRepository.find({ relations: [ "arrondissement"] });
     }
   
     findOne(id: number): Promise<User> {
       
         return this.userRepository.findOneOrFail(id, {
-          relations: ["roles", "arrondissement"],
+          relations: [ "arrondissement"],
         }).catch((error)=>{
           console.log(error);
   
