@@ -208,7 +208,7 @@ export class ConducteurService {
 
   findOneByCip(nic: number):Promise<Conducteur> {
     return this.conducteurRepository.find({where:{ nic: nic }, relations: ["vehicule"]})    .then((list)=>{
-      if(list.length>1)return list[0];
+      if(list.length>0)return list[0];
       console.log("Le conducteur spécifié n'existe pas");
       throw new NotFoundException("Le conducteur spécifié n'existe pas");
     })

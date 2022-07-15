@@ -38,6 +38,18 @@ class ConducteurService extends ChangeNotifier {
     return all;
   }
 
+  Future<Conducteur?> loadConducteurByCip(String nic,
+      {bool refresh = false}) async {
+    return await DioClient().get("conducteurs/nics/$nic").then((value) {
+      Conducteur driver = Conducteur.fromMap(value);
+      notifyListeners();
+      return driver;
+    }).onError((error, stackTrace) {
+      log("Error de conexion ", error: error, stackTrace: stackTrace);
+      throw "Les données que nous avons récues ne sont pas celle que nous espérons";
+    });
+  }
+
   Future<Conducteur?> becomeConducteur(
       Conducteur conducteur, Map<String, File?> files) async {
     if (this.conducteur != null) {

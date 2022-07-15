@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:sirmo/models/licence_vehicule.dart';
 
 import 'audit.dart';
 import 'conducteur.dart';
@@ -61,10 +62,12 @@ class Vehicule implements Audit {
   User? proprietaire;
 
   Conducteur? conducteur;
+  LicenceVehicule? licence;
 
   List<ConducteurVehicule>? conducteurvehicules;
 
   List<ProprietaireVehicule>? proprietairevehicules;
+  List<LicenceVehicule>? licences;
 
   Fichier? image;
 
@@ -106,16 +109,18 @@ class Vehicule implements Audit {
     this.ptac,
     this.pv,
     this.cv,
-    this.proprietaire,
-    this.conducteur,
-    this.conducteurvehicules,
-    this.proprietairevehicules,
-    this.image,
-    this.images,
     this.created_at,
     this.createur_id,
     this.editeur_id,
     this.updated_at,
+    this.proprietaire,
+    this.conducteur,
+    this.licence,
+    this.conducteurvehicules,
+    this.proprietairevehicules,
+    this.image,
+    this.images,
+    this.licences,
   });
 
   static String get NEUF => 'NEUF';
@@ -142,6 +147,7 @@ class Vehicule implements Audit {
     String? marque,
     String? modele,
     String? couleur,
+    LicenceVehicule? licence,
     String? pays_immatriculation,
     String? puissance_fiscale,
     String? carosserie,
@@ -160,6 +166,7 @@ class Vehicule implements Audit {
     int? createur_id,
     int? editeur_id,
     DateTime? updated_at,
+    List<LicenceVehicule>? licences,
   }) {
     return Vehicule(
       id: id ?? this.id,
@@ -171,6 +178,7 @@ class Vehicule implements Audit {
       provenance: provenance ?? this.provenance,
       puissance: puissance ?? this.puissance,
       energie: energie ?? this.energie,
+      licence: licence ?? this.licence,
       annee_mise_circulation:
           annee_mise_circulation ?? this.annee_mise_circulation,
       derniere_revision: derniere_revision ?? this.derniere_revision,
@@ -198,6 +206,7 @@ class Vehicule implements Audit {
       createur_id: createur_id ?? this.createur_id,
       editeur_id: editeur_id ?? this.editeur_id,
       updated_at: updated_at ?? this.updated_at,
+      licences: licences ?? this.licences,
     );
   }
 
@@ -227,6 +236,7 @@ class Vehicule implements Audit {
       'ptac': ptac,
       'pv': pv,
       'cv': cv,
+      'licence': licence?.toMap(),
       'proprietaire': proprietaire?.toMap(),
       'conducteur': conducteur?.toMap(),
       'conducteurvehicules':
@@ -239,10 +249,11 @@ class Vehicule implements Audit {
       'createur_id': createur_id,
       'editeur_id': editeur_id,
       'updated_at': updated_at?.toIso8601String(),
+      'licences': licences?.map((x) => x.toMap()).toList(),
     };
   }
 
-   Map<String, dynamic> toCreateMap() {
+  Map<String, dynamic> toCreateMap() {
     return {
       'immatriculation': immatriculation,
       'numero_carte_grise': numero_carte_grise,
@@ -308,6 +319,9 @@ class Vehicule implements Audit {
       conducteur: map['conducteur'] != null
           ? Conducteur.fromMap(map['conducteur'])
           : null,
+      licence: map['licence'] != null
+          ? LicenceVehicule.fromMap(map['licence'])
+          : null,
       conducteurvehicules: map['conducteurvehicules'] != null
           ? List<ConducteurVehicule>.from(map['conducteurvehicules']
               ?.map((x) => ConducteurVehicule.fromMap(x)))
@@ -327,6 +341,10 @@ class Vehicule implements Audit {
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
           ? DateTime.tryParse(map['updated_at'])
+          : null,
+      licences: map['licences'] != null
+          ? List<LicenceVehicule>.from(
+              map['licences']?.map((x) => LicenceVehicule.fromMap(x)))
           : null,
     );
   }

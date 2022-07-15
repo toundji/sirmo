@@ -333,7 +333,7 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
       PersonalAlert.showLoading(context);
       context.read<AuthService>().create(user!).then((value) {
         PersonalAlert.showSuccess(context,
-                message: "Vous êtes inscrit avec succès.")
+                message: "Vous êtes inscrits avec succès.")
             .then((value) {
           AppUtil.goToScreen(context, UpdateProfileImageScreen());
         });

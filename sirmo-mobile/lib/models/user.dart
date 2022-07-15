@@ -149,7 +149,7 @@ class User implements Audit {
       'email': email,
       'date_naiss': date_naiss?.toIso8601String(),
       'phone': phone,
-      'arrondissement': arrondissement?.id,
+      'arrondissement_id': arrondissement?.id,
     };
   }
 
@@ -166,7 +166,7 @@ class User implements Audit {
           : null,
       phone: map['phone'],
       code: map['code'],
-      roles: map['roles'],
+      roles: List<String>.from(map['roles']),
       arrondissement: map['arrondissement'] != null
           ? Arrondissement.fromMap(map['arrondissement'])
           : null,

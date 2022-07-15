@@ -70,7 +70,8 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                ActionCard(name: "Ammande", icon: Icons.motorcycle),
+                ActionCard(name: "Ammande", icon: Icons.motorcycle
+                ),
                 ActionCard(name: "Status Conducteur", icon: Icons.edit),
               ],
             ),

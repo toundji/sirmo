@@ -29,10 +29,10 @@ export class Conducteur extends Audit {
   @Column({nullable:true})
   date_delivrance_ifu: Date;
 
-  @Column({ nullable: false,})
+  @Column({ nullable: true,})
   cip: string;
 
-  @Column({ nullable: false,  })
+  @Column({ nullable: true,  })
   nip: string;
 
   @Column({ nullable: true, })
@@ -53,8 +53,6 @@ export class Conducteur extends Audit {
 
   @Column({ nullable: false })
   ancienIdentifiant: string;
-
-  
 
   //licence en cours
   @ManyToOne((type) => Licence,

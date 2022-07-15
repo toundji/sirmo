@@ -164,10 +164,10 @@ class Conducteur implements Audit {
           conducteurvehicules?.map((x) => x.toMap()).toList(),
       'appreciations': appreciations?.map((x) => x.toMap()).toList(),
       'amandes': amandes?.map((x) => x.toMap()).toList(),
-      'created_at': created_at?.millisecondsSinceEpoch,
+      'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
-      'updated_at': updated_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at?.toIso8601String(),
     };
   }
 
