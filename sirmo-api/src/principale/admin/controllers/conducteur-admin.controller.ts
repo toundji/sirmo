@@ -24,7 +24,7 @@ import {
 import { UserConducteurDG_Dto } from "../dto/user-conducteur-dg.dto";
 import { Public } from "src/auth/public-decore";
 import { ConducteurAdminService } from "../services/conducteur-admin.service";
-  
+
   @ApiTags("Admin Conducteurs")
   @ApiBearerAuth("token")
   @Controller("admin/conducteurs")
@@ -35,27 +35,27 @@ import { ConducteurAdminService } from "../services/conducteur-admin.service";
     // @Roles(RoleName.ADMIN, RoleName.MAIRIE)
     @Post()
     @Public()
-    createConducteurByDG(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur>{
+    createConducteurByDG(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
       return this.conducteurService.createConducteur(body);
     }
-  
+
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Roles(RoleName.ADMIN, RoleName.MAIRIE)
     @Post("with-vehicule")
     createConducteurWithVehiculeByDG(@Body() body: UserConducteurDG_Dto) : Promise<Conducteur>{
       return this.conducteurService.createByDG(body);
     }
-  
+
     @Get("/status/:status")
     findAllByStatus(@Param("status") status: StatutConducteur,): Promise<Conducteur[]> {
       return this.conducteurService.findByStatus(status);
     }
-  
+
     @Get('nics/:nic')
     findOneByNic(@Param('nic') nic: number):Promise<Conducteur> {
       return this.conducteurService.findOneByCip(+nic);
     }
-  
+
     @Get(":id")
     findOne(@Param("id") id: number) : Promise<Conducteur>{
       return this.conducteurService.findOne(+id);

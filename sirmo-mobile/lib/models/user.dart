@@ -29,7 +29,7 @@ class User implements Audit {
 
   String? code;
 
-  List<Role>? roles;
+  List<String>? roles;
 
   Arrondissement? arrondissement;
 
@@ -49,10 +49,8 @@ class User implements Audit {
   static const String MASCULIN = "MASCULIN";
   static const String FEMININ = "FEMININ";
 
-  List<String> get rolesName =>
-      roles == null ? [] : roles!.map((e) => e.nom!).toList();
   bool hasRole(String name) {
-    return rolesName.contains(name.trim().toUpperCase());
+    return roles?.contains(name.trim().toUpperCase()) ?? false;
   }
 
   @override
@@ -90,7 +88,7 @@ class User implements Audit {
     DateTime? date_naiss,
     String? tel,
     String? code,
-    List<Role>? roles,
+    List<String>? roles,
     Arrondissement? arrondissement,
     Fichier? profile,
     List<Fichier>? profiles,
@@ -131,7 +129,7 @@ class User implements Audit {
       'date_naiss': date_naiss?.toIso8601String(),
       'phone': phone,
       'code': code,
-      'roles': roles?.map((x) => x.toMap()).toList(),
+      'roles': roles,
       'arrondissement': arrondissement?.toMap(),
       'profile': profile?.toMap(),
       'profiles': profiles?.map((x) => x.toMap()).toList(),
@@ -168,9 +166,7 @@ class User implements Audit {
           : null,
       phone: map['phone'],
       code: map['code'],
-      roles: map['roles'] != null
-          ? List<Role>.from(map['roles']?.map((x) => Role.fromMap(x)))
-          : null,
+      roles: map['roles'],
       arrondissement: map['arrondissement'] != null
           ? Arrondissement.fromMap(map['arrondissement'])
           : null,

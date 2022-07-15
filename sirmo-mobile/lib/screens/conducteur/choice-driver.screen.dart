@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:sirmo/components/app-decore.dart';
 import 'package:sirmo/models/conducteur.dart';
-
-import '../../utils/app-util.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ChoiceDriverScreen extends StatefulWidget {
   ChoiceDriverScreen({Key? key, required this.onSubmit}) : super(key: key);
@@ -19,6 +16,11 @@ class ChoiceDriverScreen extends StatefulWidget {
 class _ChoiceDriverScreenState extends State<ChoiceDriverScreen> {
   TextEditingController controller = TextEditingController();
   File? file;
+  String error = "";
+  int errorNr = 0;
+  final qeKey = GlobalKey(debugLabel: "QR");
+  QRViewController? qrViewController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,31 +28,8 @@ class _ChoiceDriverScreenState extends State<ChoiceDriverScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(children: [
-          Card(
-            child: MaterialButton(
-                onPressed: () async {
-                  final pickerFile = await ImagePicker.platform
-                      .pickImage(source: ImageSource.camera);
-                  file = pickerFile != null ? File(pickerFile.path) : null;
-                  controller.text = AppUtil.getFileName(file);
-                  final FirebaseVisionImage visionImage =
-                      FirebaseVisionImage.fromFile(file!);
-                  final TextRecognizer textRecognizer =
-                      FirebaseVision.instance.textRecognizer();
-                  final VisionText visionText =
-                      await textRecognizer.processImage(visionImage);
-                  String? text = visionText.text;
-                  if (text != null) {
-                    controller.text = text;
-                    controller.selection =
-                        TextSelection(baseOffset: 0, extentOffset: text.length);
-                  }
-
-                  setState(() {});
-                },
-                child: Container(
-                    height: 70, width: 100, child: Icon(Icons.camera))),
-          ),
+          _buildControlButtons(),
+          _buildQrView(context),
           if (file != null) AppDecore.dispayImageRatio(file!),
           TextField(
             onChanged: (String? value) {},
@@ -62,6 +41,77 @@ class _ChoiceDriverScreenState extends State<ChoiceDriverScreen> {
               width: MediaQuery.of(context).size.width * 0.5,
               child: AppDecore.submitButton(context, "Valider", onSubmit))
         ]),
+      ),
+    );
+  }
+
+  Widget _buildQrView(context) {
+    return QRView(
+        key: qeKey,
+        overlay: QrScannerOverlayShape(
+          borderRadius: 10,
+          borderWidth: 10,
+          borderLength: 20,
+          borderColor: Theme.of(context).primaryColor,
+          overlayColor: Colors.green,
+          cutOutSize: MediaQuery.of(context).size.width * 0.5,
+        ),
+        onQRViewCreated: onQRViewCreated);
+  }
+
+  void onQRViewCreated(QRViewController qrViewController) {
+    setState(() {
+      this.qrViewController = qrViewController;
+    });
+    qrViewController.scannedDataStream.listen((barcode) async {
+      qrViewController.stopCamera();
+      // await onScan(barcode.code);
+    });
+  }
+
+  Widget _buildControlButtons() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(
+          vertical: 16, horizontal: MediaQuery.of(context).size.width * 0.2),
+      decoration: BoxDecoration(
+          color: Colors.green[200], borderRadius: BorderRadius.circular(8)),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+              onPressed: () async {
+                qrViewController!.toggleFlash();
+                setState(() {});
+              },
+              icon: FutureBuilder(
+                future: qrViewController == null
+                    ? null
+                    : qrViewController!.getFlashStatus(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Icon(snapshot.data == null
+                        ? Icons.flash_on
+                        : Icons.flash_off);
+                  }
+                  return Icon(Icons.flash_off);
+                },
+              )),
+          IconButton(
+              onPressed: () async {
+                qrViewController!.flipCamera();
+              },
+              icon: FutureBuilder(
+                  future: qrViewController == null
+                      ? null
+                      : qrViewController!.getCameraInfo(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) return Icon(Icons.switch_camera);
+                    return Icon(Icons.switch_camera);
+                  }))
+        ],
       ),
     );
   }

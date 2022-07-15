@@ -51,6 +51,10 @@ export class ConducteurAdminService {
   }
 
   async createConducteur(body: CreateUserConducteurCptDto) {
+   
+    
+ 
+
     const conducteur:Conducteur = new Conducteur();
 
     conducteur.ifu=body.ifu;
@@ -86,11 +90,15 @@ export class ConducteurAdminService {
 
     const id:number=  Date.now();
     if(body.profile_image){
-      fs.writeFileSync('./files/profiles/profile_zem_'+ id + '.png', body.profile_image);
+      const parties:string[] =  body.profile_image.split(";");
+      const mimetype:string = parties[0].split(":")[1];
+      const extension:string = mimetype.split("/")[1];
+      const base64 = parties[1];
+      fs.writeFileSync('./files/profiles/profile_zem_'+ id + '.'+ extension, base64);
       let profile:Fichier = Fichier.create({
         nom: "profile",
-        path: './files/profiles/profile_zem_'+ id + '.png',
-        mimetype: 'img/png',
+        path: './files/profiles/profile_zem_'+ id + '.'+ extension,
+        mimetype: mimetype,
         entity: Conducteur.entityName,
         entityId: conducteur.id
       });
@@ -100,17 +108,20 @@ export class ConducteurAdminService {
     }
     
     if(body.idCarde_image){
-      fs.writeFileSync('./files/carteIdentite/idCarte_'+ id + '.png', body.profile_image);
+      const parties:string[] =  body.idCarde_image.split(";");
+      const mimetype:string = parties[0].split(":")[1];
+      const extension:string = mimetype.split("/")[1];
+      const base64 = parties[1];
+      fs.writeFileSync('./files/carteIdentite/idCarte_'+ id + '.' + extension, base64);
 
       let id_carde_Image:Fichier = Fichier.create({
         nom:"cate d'identié",
-        path: './files/carteIdentite/idCarte_'+ id + '.png',
-        mimetype: 'img/png',
+        path: './files/carteIdentite/idCarte_' + id + '.' + extension,
+        mimetype: mimetype,
         entity: Conducteur.entityName,
         entityId: conducteur.id
       });
-      
-    
+
      id_carde_Image = await Fichier.save(id_carde_Image)
      conducteur.idCarde_image = ""+id_carde_Image.id;
      await conducteurSaved.save();
@@ -124,7 +135,7 @@ export class ConducteurAdminService {
       });
       conducteurSaved.profile_image = body.profile_image;
       conducteurSaved.idCarde_image = body.idCarde_image;
-      return conducteurSaved;
+      return body;
   }
 
   async createByDG(body: UserConducteurDG_Dto) {
