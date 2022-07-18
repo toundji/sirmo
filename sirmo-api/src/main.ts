@@ -65,6 +65,6 @@ async function bootstrap() {
     app.useGlobalGuards(new JwtAuthGuard(reflector));
     SwaggerModule.setup("/api/doc",app, document);
     writeFileSync('./swagger.json', JSON.stringify(document));
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 3000, '0.0.0.0');
 }
 bootstrap();

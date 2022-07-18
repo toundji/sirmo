@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { RoleName } from 'src/enums/role-name';
-import { ProprietaireDto } from 'src/principale/createDto/proprietaireDto';
+import { ProprietaireDto } from 'src/principale/admin/dto/proprietaireDto';
 import { User } from 'src/principale/entities/user.entity';
 import { Roles } from 'src/principale/role.decorator';
 import { RoleGuard } from 'src/principale/role.guard';

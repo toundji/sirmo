@@ -31,6 +31,12 @@ export class ProprietaireDto {
     @IsNotEmpty()
     arrondissement: string;
 
+    @ApiProperty({required:true})
+    @IsString()
+    @IsNotEmpty()
+    @IsOptional()
+    profile_image: string;
+
 
 //     @ApiProperty({required:true})
 //     @IsDateString({message:"La date de début est obligatoir pour le champs date debut", always:true})

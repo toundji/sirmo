@@ -26,9 +26,7 @@ export class Appreciation extends Audit {
   @ManyToOne((type) => Conducteur, {nullable:false, eager:true})
   conducteur: Conducteur;
 
-  @JoinColumn({ name: 'fichier_id' })
-  @ManyToOne((type) => Fichier, {eager:true})
-  fichier: Fichier;
-
+  @Column({nullable:true})
+  fichier: string;
 
 }

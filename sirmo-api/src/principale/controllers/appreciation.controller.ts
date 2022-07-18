@@ -19,6 +19,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { editFileName, imageFileFilter } from "../utilis/utils";
 import { User } from "../entities/user.entity";
 import { diskStorage } from 'multer';
+import { ApiConstante } from './../utilis/api-constantes';
 
   
   @ApiTags("Appreciations des Conducteurs")
@@ -59,7 +60,7 @@ import { diskStorage } from 'multer';
   @UseInterceptors(
     FileInterceptor('vehicule_image', {
       storage: diskStorage({
-        destination: './files/appreciation',
+        destination: ApiConstante.appreciation_path,
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -67,7 +68,7 @@ import { diskStorage } from 'multer';
   )
   updateProfile(@UploadedFile() vehicule_image, @Param('id') id: number, @Req() request,){
     const user: User = request.user;
-    return this.appreciationService.updateImage(+id, vehicule_image, user);
+    return this.appreciationService.updateImage(+id, vehicule_image, user, request.headers.origin);
   }
   
     @Patch(":id")

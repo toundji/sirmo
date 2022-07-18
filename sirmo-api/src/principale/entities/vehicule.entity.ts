@@ -114,9 +114,8 @@ export class Vehicule extends Audit {
   @JoinColumn({ name: 'licence_vehicule_id'})
   licence?:LicenceVehicule;
 
-  @JoinColumn({ name: 'fichier_id' , })
-  @ManyToOne(type => Fichier, {eager:true})
-  image: Fichier;
+  @Column({ nullable: true })
+  image_path: string;
 
 
 

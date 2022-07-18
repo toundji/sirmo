@@ -13,12 +13,10 @@ import {
   import { ConducteurService } from "../../services/conducteur.service";
   import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
   import { Conducteur } from "../../entities/conducteur.entity";
-  import { User } from "../../entities/user.entity";
   import { Roles } from "../../role.decorator";
   import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
   import { RoleGuard } from "../../role.guard";
   import { RoleName } from "src/enums/role-name";
-  import { CreateUserConducteurDto } from "../../createDto/user-conducteur.dto";
   import { StatutConducteur } from "src/enums/statut-zem copy";
   import { CreateUserConducteurCptDto } from '../dto/user-conducteur-cpt.dto';
 import { UserConducteurDG_Dto } from "../dto/user-conducteur-dg.dto";
@@ -51,9 +49,9 @@ import { ConducteurAdminService } from "../services/conducteur-admin.service";
       return this.conducteurService.findByStatus(status);
     }
 
-    @Get('nics/:nic')
-    findOneByNic(@Param('nic') nic: number):Promise<Conducteur> {
-      return this.conducteurService.findOneByCip(+nic);
+    @Get('nic_or_nip/:nic')
+    findOneByNic(@Param('nic') nic: string):Promise<CreateUserConducteurCptDto> {
+      return this.conducteurService.findOneByCipOrNip(nic);
     }
 
     @Get(":id")

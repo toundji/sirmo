@@ -19,6 +19,8 @@ import * as fs from 'fs';
 import { UserConducteurDG_Dto } from '../dto/user-conducteur-dg.dto';
 import { Express } from 'multer';
 import { Fichier } from './../../entities/fichier.entity';
+import { profile } from 'console';
+import { ApiConstante } from './../../utilis/api-constantes';
 
 
 
@@ -42,7 +44,7 @@ export class ConducteurAdminService {
     const conducteurSaved : Conducteur= await this.conducteurRepository.save(conducteur);
 
     // const compte: Compte = 
-   
+
       await this.compteService.create( Compte.create({user:user, montant:0})).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");  
@@ -51,18 +53,14 @@ export class ConducteurAdminService {
   }
 
   async createConducteur(body: CreateUserConducteurCptDto) {
-   
-    
- 
-
     const conducteur:Conducteur = new Conducteur();
 
     conducteur.ifu=body.ifu;
-    conducteur.nip=body.nip; 
+    conducteur.nip=body.nip;
     conducteur.cip=body.cip;
     conducteur. permis=body.permis;
     conducteur.date_optention_permis=body.date_optention_permis;
-    conducteur.date_delivrance_ifu=body.date_delivrance_ifu; 
+    conducteur.date_delivrance_ifu=body.date_delivrance_ifu;
     conducteur.idCarde=body.idCarde;
     conducteur. ancienIdentifiant=body.ancienIdentifiant;
     // conducteur.idCarde_image = body.profile_image;
@@ -74,9 +72,9 @@ export class ConducteurAdminService {
     const data:any = {
       nom: body.nom,
       prenom: body.prenom,
-      genre:body.genre, 
+      genre:body.genre,
       password: body.password,
-      date_naiss: body.date_naiss, 
+      date_naiss: body.date_naiss,
       phone:body.phone,
       arrondissement: body.arrondissement
     };
@@ -91,36 +89,39 @@ export class ConducteurAdminService {
     const id:number=  Date.now();
     if(body.profile_image){
       let bitmap: Buffer =  Buffer.from(body.profile_image, 'base64');
-      const extension = 'png';
-      fs.writeFileSync('./files/carteIdentite/idCarte_'+ id + '.' + extension, bitmap);
+      const filename:string = '/conducteur_profile'+ id + Date.now() + '.png';
+
+      fs.writeFileSync(ApiConstante.profile_path + filename,   bitmap);
 
       let profile:Fichier = Fichier.create({
         nom: "profile",
-        path: './files/profiles/profile_zem_'+ id + '.'+ extension,
+        path: ApiConstante.profile_path + filename,
         entity: Conducteur.entityName,
         entityId: conducteur.id
       });
       profile = await Fichier.save(profile);
-      user.profile = profile;
+      user.profile_image = profile.path;
       await user.save();
     }
     
     if(body.idCarde_image){
      
       let bitmap: Buffer =  Buffer.from(body.idCarde_image, 'base64');
-      const extension = 'png';
-      fs.writeFileSync('./files/carteIdentite/idCarte_'+ id + '.' + extension, bitmap);
+      const filename:string = '/carte_identite'+ id + Date.now() + '.png';
+
+      fs.writeFileSync(ApiConstante.id_carde_path + filename, bitmap);
 
       let id_carde_Image:Fichier = Fichier.create({
         nom:"cate d'identié",
-        path: './files/carteIdentite/idCarte_' + id + '.' + extension,
+        path: ApiConstante.id_carde_path + filename,
         entity: Conducteur.entityName,
         entityId: conducteur.id
       });
 
      id_carde_Image = await Fichier.save(id_carde_Image)
-     conducteur.idCarde_image = ""+id_carde_Image.id;
+     conducteur.idCarde_image =  id_carde_Image.path;
      await conducteurSaved.save();
+
     }
 
     // const compte: Compte = 
@@ -144,7 +145,8 @@ export class ConducteurAdminService {
     const user: User = await this.userService.createWithRole(body.user, [RoleName.CONDUCTEUR]);
     conducteur.user = user;
 
-    fs.writeFileSync('./files/profiles/profile_zem'+user.id + '.png', conducteur.profile_image);
+   
+    
 
     const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
     conducteur.mairie = mairie;
@@ -163,6 +165,25 @@ export class ConducteurAdminService {
          owner= await this.userService.createWithRole(body.user, [RoleName.CONDUCTEUR]);
       }
 
+      
+    if(body.profile_image){
+      let bitmap: Buffer =  Buffer.from(body.profile_image, 'base64');
+      const filename:string = '/conducteur_profile' + Date.now() + '.png';
+
+      fs.writeFileSync(ApiConstante.profile_path + filename,   bitmap);
+
+      let profile:Fichier = Fichier.create({
+        nom: "profile",
+        path: ApiConstante.profile_path + filename,
+        entity: Conducteur.entityName,
+        entityId: conducteur.id
+      });
+      profile = await Fichier.save(profile);
+      user.profile_image = profile.path;
+      await user.save();
+    }
+    
+
       const vehicule = await this.vehiculeService.createWith(body.vehicule, owner, conducteurSaved, mairie);
       vehicule.conducteur = null;
       conducteurSaved.vehicule = vehicule;
@@ -171,6 +192,23 @@ export class ConducteurAdminService {
       console.log(conducteurSaved);
         throw new BadRequestException("Nous ne parvenons pas à mettre à jour le véhicule");
       });
+      if(body.idCarde_image){
+     
+        let bitmap: Buffer =  Buffer.from(body.idCarde_image, 'base64');
+        const filename:string = '/carte_identite' + Date.now() + '.png';
+  
+        fs.writeFileSync(ApiConstante.id_carde_path + filename, bitmap);
+  
+        let id_carde_Image:Fichier = Fichier.create({
+          nom:"cate d'identié",
+          path: ApiConstante.id_carde_path + filename,
+          entity: Conducteur.entityName,
+          entityId: conducteur.id
+        });
+        id_carde_Image = await Fichier.save(id_carde_Image)
+       conducteur.idCarde_image = id_carde_Image.path;
+       await conducteurSaved.save();
+      }
       return conducteurSaved;
   }
 
@@ -192,16 +230,44 @@ export class ConducteurAdminService {
     });
   }
 
-  findOneByCip(nic: number):Promise<Conducteur> {
-    return this.conducteurRepository.find({where:{ nic: nic }, relations: ["vehicule"]})    .then((list)=>{
-      if(list.length>1)return list[0];
+  async findOneByCipOrNip(nic: string):Promise<CreateUserConducteurCptDto> {
+    const conducteur:Conducteur = await this.conducteurRepository.find({where:[{ nic: nic }, { nip: nic }], relations: ["vehicule"]})    .then((list)=>{
+      if(list.length>0)return list[0];
       console.log("Le conducteur spécifié n'existe pas");
       throw new NotFoundException("Le conducteur spécifié n'existe pas");
-    })
-    .catch((error)=>{
+    }).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le conducteur spécifié n'existe pas");
     });
+
+    let id_card:string='';
+
+    if(conducteur.idCarde_image){
+      const fichier:Fichier = await Fichier.findOne(+conducteur.idCarde_image);
+      id_card = fs.readFileSync(fichier.path).toString('base64');
+    }
+
+
+    const driver: CreateUserConducteurCptDto = {
+    ifu: conducteur.ifu ,
+    cip: conducteur.cip,
+    nip: conducteur.nip,
+    permis: conducteur.permis,
+    date_optention_permis: conducteur.date_optention_permis,
+    date_delivrance_ifu: conducteur.date_delivrance_ifu,
+    idCarde: conducteur.idCarde,
+    ancienIdentifiant:conducteur.ancienIdentifiant ,
+    mairie_id: conducteur.mairie?.id,
+    nom: conducteur.user?.nom ,
+    prenom: conducteur.user?.prenom,
+    genre: conducteur.user?.genre,
+    password: conducteur.user?.password,
+    date_naiss: conducteur.user?.date_naiss,
+    phone: conducteur.user?.phone,
+    profile_image:  fs.readFileSync(conducteur.user.profile_image).toString('base64'),
+    idCarde_image: id_card ,
+    }
+    return driver ;
   }
  
   update(id: number, updateConducteurDto: Conducteur): Promise<Conducteur> {

@@ -279,7 +279,7 @@ export class VehiculeService {
       id,
       user
     );
-    vehicule.image = image;
+    vehicule.image_path = image.path;
     vehicule.images ??= [];
     vehicule.images.push(image)
     

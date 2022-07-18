@@ -14,7 +14,6 @@ export class Mairie extends Audit{
     
     static  entityName  = "mairies";
 
-    
     @PrimaryGeneratedColumn()
     id: number;
   
@@ -52,9 +51,9 @@ export class Mairie extends Audit{
     @JoinColumn({ name: 'commune_id'})
     commune:Commune;
 
-    @JoinColumn({ name: 'fichier_id' })
-    @ManyToOne(type => Fichier)
-    image?: Fichier;
+    
+    @Column({ nullable: true})
+    image_path: string;
 
     @ManyToMany(type=>Fichier)
     @JoinTable({

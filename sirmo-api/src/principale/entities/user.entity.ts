@@ -7,7 +7,7 @@ import { hash } from 'bcrypt';
 import { Fichier } from 'src/principale/entities/fichier.entity';
 import { Audit } from "./audit";
 import { Genre } from 'src/enums/genre';
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 import { RoleName } from 'src/enums/role-name';
 
 
@@ -24,7 +24,7 @@ export class User extends Audit{
   @Column({ nullable: false })
   prenom: string;
 
-  @Column()
+  @Column({nullable:true})
   genre: Genre;
 
   @Exclude()
@@ -44,17 +44,15 @@ export class User extends Audit{
   @Column({ nullable: false, unique: true })
   code?: string = uuidv4();
 
- 
+  @Column({nullable:true})
+  profile_image: string;
+
   @Column("simple-array",{default: [RoleName.USER]})
   roles?: RoleName[];
 
   @JoinColumn({ name: 'arrondissement_id' , })
   @ManyToOne(type => Arrondissement, {nullable:false, eager:true})
   arrondissement: Arrondissement;
-
-  @JoinColumn({ name: 'fichier_id' , })
-  @ManyToOne(type => Fichier)
-  profile: Fichier;
 
 //   @ApiProperty()
 //   get departement():string{
@@ -78,5 +76,9 @@ export class User extends Audit{
     this.email = this.email?.toLowerCase()?.trim();
     this.phone = this.phone?.trim();
     this.password = await hash(this.password, 10);  
+  }
+
+  get image(){
+    if(this.profile_image)return "http://localhost:3000/api"+this.profile_image;
   }
 }

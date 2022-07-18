@@ -15,7 +15,6 @@ import {
 import { CreateMairieDto } from "../createDto/create-mairie.dto";
 import { MairieService } from "../services/mairie.service";
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
-import { UpdateMairieDto } from "../updateDto/update-mairie.dto";
 import { Mairie } from "../entities/mairie.entity";
 import { Roles } from "../role.decorator";
 import { RoleName } from "src/enums/role-name";
@@ -26,8 +25,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 
 import { diskStorage } from "multer";
 import { editFileName, imageFileFilter } from "../utilis/utils";
-import { Fichier } from "../entities/fichier.entity";
 import { CreateLocalisationDto } from "./../createDto/create-localisation.dto";
+import { ApiConstante } from './../utilis/api-constantes';
 
 @ApiTags("Mairie")
 @ApiBearerAuth("token")
@@ -74,7 +73,7 @@ export class MairieController {
   @UseInterceptors(
     FileInterceptor("image", {
       storage: diskStorage({
-        destination: "./files/profiles",
+        destination: ApiConstante.mairie_image_path,
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -99,8 +98,7 @@ export class MairieController {
   async loadImage(@Param("id") id: number, @Res() res) {
     const mairie: Mairie = await this.mairieService.findOneWithImage(id);
 
-    const file: Fichier = mairie.image;
-    return res.sendFile(file.path, { root: "./" });
+    return res.sendFile(mairie.image_path, { root: "./" });
   }
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleName.ADMIN, RoleName.MAIRIE)

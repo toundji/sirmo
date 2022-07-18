@@ -10,10 +10,12 @@ import { editFileName, imageFileFilter, imageOrPdfFileFilter } from '../utilis/u
 import { diskStorage } from 'multer';
 import { Express } from 'multer';
 import { response } from 'express';
+import { Public } from 'src/auth/public-decore';
+import { ApiConstante } from './../utilis/api-constantes';
 
 
-@ApiTags("Fichiers")
-@Controller('fichiers')
+@ApiTags("Files")
+@Controller('files')
 export class FichierController {
   constructor(private readonly fichierService: FichierService) {}
 
@@ -25,14 +27,6 @@ export class FichierController {
   @Get()
   findAll() {
     return this.fichierService.findAll();
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get("profiles/me")
-  myProfile(@Req() request, @Res() res) {
-    const user: User=request.user;
-    const file:Fichier = user.profile;
-    return res.sendFile(file.path, { root: './' })
   }
 
   @ApiBearerAuth("token")
@@ -74,7 +68,7 @@ export class FichierController {
       {name: 'certificatRoute', maxCount: 1}
     ],{
       storage: diskStorage({
-        destination: './files/conducteurs-files',
+        destination: 'files/conducteurs-files',
         filename: editFileName,
       }),
       fileFilter: imageOrPdfFileFilter,
@@ -87,19 +81,57 @@ export class FichierController {
 })
   updateProfile(
     @Param('id') id: number,
-      @UploadedFiles() files: Array<Express.Multer.File>,
-      @Req() request){
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Req() request){
     const user: User = request.user;
     console.log(files);
     return  this.fichierService.createConducteurFiles(id, files, user);
   }
+
+  @Public()
+  @Get('profiles/:name')
+  async getProfile(@Param('name') name: string, @Res() res) {
+    return res.sendFile("files/profiles/"+name, { root: './' })
+  }
+
+  @Public()
+  @Get('vehicules/:name')
+  async getVehicule(@Param('name') name: string, @Res() res) {
+    return res.sendFile("files/vehicules/"+name, { root: './' })
+  }
+
+  @Public()
+  @Get('cartes-identites/:name')
+  async getIdCardet(@Param('name') name: string, @Res() res) {
+    return res.sendFile("./files/cartes-identites/"+name, { root: './' })
+  }
+
+  @Public()
+  @Get('mairies-images/:name')
+  async getMairieImage(@Param('name') name: string, @Res() res) {
+    return res.sendFile(ApiConstante.mairie_image_path + "/" + name, { root: './' })
+  }
+
+  @Public()
+  @Get('conducteurs-files/:name')
+  async getMoto(@Param('name') name: string, @Res() res) {
+    return res.sendFile("files/conducteurs-files/"+name, { root: './' })
+  }
+
+
+  
+  @Public()
+  @Get('appreciation/:name')
+  async getAppreciation(@Param('name') name: string, @Res() res) {
+    return res.sendFile("files/appreciation/"+name, { root: './' })
+  }
+
 
 
   @Get(':id')
   async findOneMedia(@Param('id') id: number, @Res() res) {
     const file:Fichier = await this.fichierService.findOne(+id);
     return res.sendFile(file.path, { root: './' })
-
   }
 
   @Get('conducteurs/:id/dossiers')

@@ -21,7 +21,9 @@ import { Role } from '../entities/role.entity';
 import { ChangePasswordDto } from './../createDto/change-password.dto';
 import { ChangePhoneDto } from '../createDto/change-phone.dto';
 import { ChangeEmailDto } from '../createDto/change-emeail.dto';
-import { ProprietaireDto } from './../createDto/proprietaireDto';
+import { ProprietaireDto } from '../admin/dto/proprietaireDto';
+import { NotFoundException } from '@nestjs/common';
+import { ApiConstante } from '../utilis/api-constantes';
 
 
 
@@ -182,13 +184,13 @@ export class UserController {
   @UseInterceptors(
     FileInterceptor('profile', {
       storage: diskStorage({
-        destination: './files/profiles',
+        destination:  ApiConstante.profile_path,
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
     }),
   )
-  updateProfilePath(@UploadedFile() profile, @Req() request,):Promise<string> {
+  updateProfilePath(@UploadedFile() profile, @Req() request):Promise<string> {
     const user: User = request.user;
     return this.userService.editUserProfilePath(user.id, profile);
   }
@@ -204,12 +206,18 @@ export class UserController {
   @Get("profile/image")
   async myProfile(@Req() request, @Res() res){
     const user: User = request.user;
-    const file:Fichier = await  this.userService.getUserProfile(user.id);
-    return res.sendFile(file.path, { root: './' })
+    if(user.profile_image){
+      return res.sendFile(user.profile_image, { root: './' })
+    }
+    throw new NotFoundException("Vous définir votre photo de profile");
   }
 }
 
 
+
+function Host(arg0: string) {
+  throw new Error('Function not implemented.');
+}
 // @ApiOkResponse({type:User})
 // @Post("with/image")
 // @UseInterceptors(

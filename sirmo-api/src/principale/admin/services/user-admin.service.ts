@@ -7,7 +7,7 @@ import {
   } from "@nestjs/common";
   import { InjectRepository } from "@nestjs/typeorm";
 import { RoleName } from "src/enums/role-name";
-import { ProprietaireDto } from "src/principale/createDto/proprietaireDto";
+import { ProprietaireDto } from "src/principale/admin/dto/proprietaireDto";
 import { Arrondissement } from "src/principale/entities/arrondissement.entity";
 import { Compte } from "src/principale/entities/compte.entity";
 import { User } from "src/principale/entities/user.entity";

@@ -4,14 +4,13 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  Req,
   UploadedFile,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "../createDto/create-user.dto";
-import { Role } from "../entities/role.entity";
 import { User } from "../entities/user.entity";
-import { RoleService } from "./roles.service";
 import { ArrondissementService } from "./arrondissement.service";
 import { Arrondissement } from "./../entities/arrondissement.entity";
 import { Logger } from "@nestjs/common";
@@ -22,13 +21,14 @@ import { Fichier } from "../entities/fichier.entity";
 import { RoleName } from 'src/enums/role-name';
 import { Genre } from "src/enums/genre";
 import { CreateUserWithRoleDto } from "../createDto/create-user-with-role.dto";
-import { error, profile } from 'console';
 import { Compte } from "../entities/compte.entity";
 import { ChangePasswordDto } from './../createDto/change-password.dto';
 import { compare, hash } from "bcrypt";
 import { ChangeEmailDto } from "../createDto/change-emeail.dto";
 import { UserDG_Dto } from '../admin/dto/user-dg.dto';
-import { ProprietaireDto } from './../createDto/proprietaireDto';
+import { ProprietaireDto } from '../admin/dto/proprietaireDto';
+import  * as path from 'path';
+import { ApiConstante } from './../utilis/api-constantes';
 
 @Injectable()
 export class UserService {
@@ -77,7 +77,7 @@ export class UserService {
       user.arrondissement = arrondisement;
 
       user.password = user.nom +( user.updated_at ?? '');
-     
+
       const u: User = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
@@ -88,10 +88,6 @@ export class UserService {
       return u;
   
   }
-
-
-
- 
 
   async register(createUserDto: CreateUserDto): Promise<User> {
     const user: User = new User();
@@ -140,72 +136,62 @@ export class UserService {
         entity: User.entityName,
       });
       const profil: Fichier = await this.fichierService.create(file);
-      user.profile = profil;
-
+      user.profile_image =   profile.destination + "/" + profile.filename;
       const userSaved = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
       throw new BadRequestException("Les données que nous avons réçues ne sont celle que nous espérons");
-  
       });
       profil.entityId = userSaved.id;
       await this.fichierService.create(file);
-
       return userSaved;
     
   }
 
   async updateProfile(id: number, @UploadedFile() profile, createur: User) {
     const user: User = await this.findOne(id);
+    console.log(profile);
     const profil: Fichier = await this.fichierService.createOneWith(
       profile,
       User.entityName,
       id,
       createur,
     );
-    user.profile = profil;
+    // let lien = profil.path.replace("\\", '/');
+    
+    user.profile_image =  profile.destination + "/"+ profile.filename;
     user.profiles ??= [];
     user.profiles.push(profil);
-    
-      return this.userRepository.save(user).catch((error)=>{
+    return this.userRepository.save(user).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont pas celles que nous espérons")
-  
       });
   }
 
-  async getUserProfile(id:number){
-   const user:User= await  this.userRepository.findOneOrFail(id,{relations: ["profile"]}).catch((error)=>{
-      console.log(error);
-      throw new NotFoundException(
-        "L'utilisateur avec spécifié n'existe est introuvable",
-      );
-    });
-    console.log(user);
-    if(user && user.profile){
-      return user.profile;
-    }
-    throw new NotFoundException("Vous n'avez pas ajoutez une photo de profile")
-  }
+ 
 
-  async editUserProfilePath(id:number, @UploadedFile() profile,):Promise<string>{
+  async editUserProfilePath(id:number, @UploadedFile() profile):Promise<string>{
     
-    const user:User= await  this.userRepository.findOneOrFail(id,{relations: ["profile"]}).catch((error)=>{
+    const user:User= await  this.userRepository.findOneOrFail(id,{relations: ["profiles"]}).catch((error)=>{
        console.log(error);
        throw new NotFoundException(
          "L'utilisateur avec spécifié n'existe est introuvable",
        );
      });
-     if(user && user.profile){
-       const fichier:Fichier = user.profile;
+       const fichier:Fichier = new Fichier();
        const name = profile.originalname.split(".")[0];
+      //  const lien = profile.path.replaceAll("\\", '/');
+
        fichier.nom = name;
        fichier.path = profile.path;
        fichier.mimetype = profile.mimetype;
        fichier.size = profile.size;
-       await Fichier.save(fichier);
+       fichier.entity = User.entityName;
+       fichier.entityId = user.id;
+      const  file:Fichier = await Fichier.save(fichier);
+      user.profile_image =   profile.destination + "/"+ profile.filename;
+      user.profiles.push(file);
+      await User.save(user);
        return "Image de profile modifiée avec succès";
-     }
-     throw new NotFoundException("Vous n'avez pas ajoutez une photo de profile")
    }
 
   async createWithRole(
@@ -217,7 +203,7 @@ export class UserService {
       user[cle] = createUserDto[cle];
     });
     user.roles = roles;
-    
+
     if(createUserDto['arrondissement_id']){
         const arrondisement: Arrondissement =
         await this.arrondissementService.findOne(createUserDto['arrondissement_id']);

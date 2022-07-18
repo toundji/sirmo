@@ -104,21 +104,15 @@ export class MairieService {
     const name = profile.originalname.split(".")[0];
     const file: Fichier = Fichier.fromMap({
       nom: name,
-      path: profile.path,
+      path: profile.destination + profile.filename,
       mimetype: profile.mimetype,
       size: profile.size,
       entity: Mairie.entityName,
     });
     file.entityId = id;
-    const profil: Fichier = await this.fichierService.create(file);
-    mairie.image = profil;
-    const image: Fichier = await this.fichierService.createOneWith(
-      profile,
-      Mairie.entityName,
-      id,
-      user
-    );
-    mairie.image = image;
+    const image: Fichier = await this.fichierService.create(file);
+
+    mairie.image_path = image.path;
     mairie.images ??= [];
     mairie.images.push(image)
     return this.mairieRepository.save(mairie);

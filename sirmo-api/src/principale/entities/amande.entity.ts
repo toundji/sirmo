@@ -8,10 +8,7 @@ import {
   JoinColumn,
   ManyToOne,
   ManyToMany,
-  JoinTable,
-  OneToMany,
-  CreateDateColumn,
-  UpdateDateColumn,
+  JoinTable
 } from 'typeorm';
 import { Conducteur } from './conducteur.entity';
 import { TypeAmande } from './type-amande.entity';

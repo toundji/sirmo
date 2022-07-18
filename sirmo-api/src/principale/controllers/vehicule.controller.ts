@@ -21,6 +21,7 @@ import { editFileName, imageFileFilter } from '../utilis/utils';
 import { User } from '../entities/user.entity';
 import { CreateVehiculeByConducteurDto } from '../createDto/vehicule-by-conducteur.dto';
 import { CreateVehiculeDto } from '../createDto/vehicule.dto';
+import { ApiConstante } from '../utilis/api-constantes';
 
 
 @ApiTags('Vehicule')
@@ -83,7 +84,7 @@ export class VehiculeController {
   @UseInterceptors(
     FileInterceptor('vehicule_image', {
       storage: diskStorage({
-        destination: './files/vehicules',
+        destination:  ApiConstante.vehicule_path,
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,

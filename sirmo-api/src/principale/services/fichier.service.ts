@@ -34,7 +34,7 @@ export class FichierService {
       const name = fichier.originalname.split(".")[0];
       const file: Fichier = Fichier.fromMap({
         nom: name,
-        path: fichier.path,
+        path: fichier.destination + "/" + fichier.filename,
         mimetype: fichier.mimetype,
         size: fichier.size,
         entity: entityName
