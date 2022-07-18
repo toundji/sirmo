@@ -49,7 +49,7 @@ export class ArrondissementService {
       if(list.length>0){
 
         return list[0];}
-        throw "Arondissemant n'existepas"
+        throw "Arondissemant n'existe pas"
     })
     .catch((error)=>{
 console.log(error);
@@ -60,6 +60,27 @@ console.log(error);
       });
 
   }
+
+
+  findByName(name: string):Promise<Arrondissement[]> {
+    return this.arrondissementRepository.find({where:{nom: ILike(name)}})
+    .then((list:Arrondissement[]) =>{
+      console.log(list);
+      if(list.length>0){
+
+        return list;}
+        throw "Arondissemant n'existe pas"
+    })
+    .catch((error)=>{
+console.log(error);
+      throw new HttpException(
+        "Impossible de trouver l'arrondissement démandé",
+        HttpStatus.UNAUTHORIZED,
+      );
+      });
+
+  }
+
 
   update(id: number, updateArrondissementDto: UpdateArrondissementDto) {
     return this.arrondissementRepository.update(id,updateArrondissementDto).catch((error)=>{

@@ -22,6 +22,7 @@ import { CreateUserConducteurDto } from "../createDto/user-conducteur.dto";
 import { CreateConducteurDto } from "../createDto/conducteur.dto";
 import { StatutConducteur } from "src/enums/statut-zem copy";
 import { CreateUserConducteurCptDto } from '../admin/dto/user-conducteur-cpt.dto';
+import { Vehicule } from './../entities/vehicule.entity';
 
 @ApiTags("Conducteurs")
 @ApiBearerAuth("token")
@@ -68,6 +69,11 @@ export class ConducteurController {
   @Get(":id")
   findOne(@Param("id") id: number) : Promise<Conducteur>{
     return this.conducteurService.findOne(+id);
+  }
+
+  @Get(":id/vehicule")
+  getVehicule(@Param("id") id: number) : Promise<Vehicule>{
+    return this.conducteurService.getVehicule(+id);
   }
 
   @UseGuards(JwtAuthGuard, RoleGuard)

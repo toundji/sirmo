@@ -26,7 +26,7 @@ class AppreciationService extends ChangeNotifier {
           "Les données que nous avons récues ne sont pas celle que nous espérons";
     });
     if (file != null) {
-      return await updateAppreciationImage(appreciate.id!, file!);
+      return await updateAppreciationImage(appreciate.id!, file);
     }
     return appreciate;
   }

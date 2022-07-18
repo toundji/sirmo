@@ -6,10 +6,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-decore.dart';
+import 'package:sirmo/components/personal_alert.dart';
 import 'package:sirmo/models/appreciation.dart';
+import 'package:sirmo/services/appreciation.service.dart';
+import 'package:sirmo/services/user.service.dart';
 
 import '../../components/shake-transition.dart';
+import '../../models/user.dart';
 import '../../utils/app-util.dart';
 import '../../utils/color-const.dart';
 import '../../utils/size-const.dart';
@@ -24,18 +29,29 @@ class EvaluateConducteurScreen extends StatefulWidget {
 
 class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
   File? image;
-  TextEditingController controller = TextEditingController();
+  late TextEditingController controller;
 
   PhoneNumber? phone = PhoneNumber(isoCode: "BJ");
   bool phoneisValide = false;
 
   Appreciation appreciation = Appreciation();
+  int? current_index;
+
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = context.read<UserService>().user;
+    phone = PhoneNumber();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppDecore.appBar(context, "Appréciation"),
-      body: Container(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
             Row(
@@ -43,24 +59,21 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
               children: [
                 getCard(
                     value: "EXCELLENT",
-                    icon: CupertinoIcons.add,
+                    icon: CupertinoIcons.star,
                     color: Colors.blue),
                 getCard(
                     value: "TRES BON",
-                    icon: CupertinoIcons.add,
+                    icon: Icons.thumb_up,
                     color: Colors.green),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                getCard(
-                    value: "BON",
-                    icon: CupertinoIcons.add,
-                    color: Colors.yellow),
+                getCard(value: "BON", icon: Icons.check, color: Colors.yellow),
                 getCard(
                     value: "MAUVAISE",
-                    icon: CupertinoIcons.add,
+                    icon: Icons.thumb_down,
                     color: Colors.red),
               ],
             ),
@@ -85,14 +98,15 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
                       trailingSpace: false,
                       setSelectorButtonAsPrefixIcon: true),
                 )),
-            SizedBox(height: 25),
+            _formField,
             TextField(
+              maxLines: null,
+              maxLength: null,
               onChanged: (String? value) {
                 appreciation.message = value;
               },
               decoration: AppDecore.input("Message"),
             ),
-            _formField,
             const SizedBox(height: 20),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
@@ -114,7 +128,22 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
   }
 
   onSubmit() {
-    if (appreciation.typeAppreciation != null) {}
+    if (appreciation.typeAppreciation != null) {
+      PersonalAlert.showLoading(context);
+      context
+          .read<AppreciationService>()
+          .createAppreciation(appreciation, image)
+          .then((value) {
+        PersonalAlert.showSuccess(context,
+                message:
+                    "Votre appréciation est enrégistre avec succès.\n Merci à vous")
+            .then((value) {
+          Navigator.pop(context);
+        });
+      }).onError((error, stackTrace) {
+        PersonalAlert.showError(context, message: "$error");
+      });
+    }
   }
 
   Widget get _formField {
@@ -148,15 +177,12 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: AspectRatio(
         aspectRatio: 4 / 3,
-        child: Card(
-          margin: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16,
-              ),
-              child: Image.file(file)),
-        ),
+        child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 16,
+            ),
+            child: Image.file(file)),
       ),
     );
   }
@@ -179,7 +205,11 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
       child: Card(
         color: value == appreciation.typeAppreciation ? color : null,
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              appreciation.typeAppreciation = value;
+            });
+          },
           child: Container(
             width: size.width * 0.33,
             height: size.width * 0.4,

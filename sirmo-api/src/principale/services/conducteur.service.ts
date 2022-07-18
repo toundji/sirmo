@@ -20,6 +20,7 @@ import { Conducteur } from './../entities/conducteur.entity';
 import { CreateUserConducteurCptDto } from '../admin/dto/user-conducteur-cpt.dto';
 import { writeFileSync } from 'fs';
 import { UserConducteurDG_Dto } from '../admin/dto/user-conducteur-dg.dto';
+import { Vehicule } from '../entities/vehicule.entity';
 
 @Injectable()
 export class ConducteurService {
@@ -199,8 +200,18 @@ export class ConducteurService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: number):Promise<Conducteur> {
     return this.conducteurRepository.findOneOrFail(id, {relations:["mairie", "vehicule"]}).catch((error)=>{
+      console.log(error);
+      throw new NotFoundException("Le conducteur spécifié n'existe pas");
+    });
+  }
+
+  getVehicule(id: number) :Promise<Vehicule>{
+    return this.conducteurRepository.findOneOrFail(id, {relations:["vehicule"]}).then((driver)=>{
+      return driver.vehicule;
+    })
+    .catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le conducteur spécifié n'existe pas");
     });

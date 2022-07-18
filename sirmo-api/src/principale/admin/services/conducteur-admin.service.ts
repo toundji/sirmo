@@ -80,11 +80,11 @@ export class ConducteurAdminService {
       phone:body.phone,
       arrondissement: body.arrondissement
     };
-   
+    const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
+
     const user: User = await this.userService.createWithRole(data, [RoleName.CONDUCTEUR]);
     conducteur.user = user;
 
-    const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
     conducteur.mairie = mairie;
     const conducteurSaved : Conducteur= await this.conducteurRepository.save(conducteur);
 

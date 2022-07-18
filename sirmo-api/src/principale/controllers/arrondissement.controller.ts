@@ -23,17 +23,23 @@ export class ArrondissementController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.arrondissementService.findOne(+id);
   }
 
+  @Get('by-name/:name')
+  findByName(@Param('name') name: string) {
+    return this.arrondissementService.findByName(name);
+  }
+
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArrondissementDto: UpdateArrondissementDto) {
+  update(@Param('id') id: number, @Body() updateArrondissementDto: UpdateArrondissementDto) {
     return this.arrondissementService.update(+id, updateArrondissementDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.arrondissementService.remove(+id);
   }
 }
