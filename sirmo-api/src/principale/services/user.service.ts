@@ -231,7 +231,7 @@ export class UserService {
 
       const u: User = await this.userRepository.save(user).catch((error)=>{
         console.log(error);
-        throw new BadRequestException("Erreur pendant la réation de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
+        throw new BadRequestException("Erreur pendant la création de l'utilisation. Vérifier que vos donnée n'existe pas déjà");
       });
       const compte:Compte = Compte.create({user:u, montant:0});
       Compte.save(compte);

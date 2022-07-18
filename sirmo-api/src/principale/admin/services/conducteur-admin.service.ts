@@ -90,15 +90,13 @@ export class ConducteurAdminService {
 
     const id:number=  Date.now();
     if(body.profile_image){
-      const parties:string[] =  body.profile_image.split(";");
-      const mimetype:string = parties[0].split(":")[1];
-      const extension:string = mimetype.split("/")[1];
-      const base64 = parties[1];
-      fs.writeFileSync('./files/profiles/profile_zem_'+ id + '.'+ extension, base64);
+      let bitmap: Buffer =  Buffer.from(body.profile_image, 'base64');
+      const extension = 'png';
+      fs.writeFileSync('./files/carteIdentite/idCarte_'+ id + '.' + extension, bitmap);
+
       let profile:Fichier = Fichier.create({
         nom: "profile",
         path: './files/profiles/profile_zem_'+ id + '.'+ extension,
-        mimetype: mimetype,
         entity: Conducteur.entityName,
         entityId: conducteur.id
       });
@@ -108,16 +106,14 @@ export class ConducteurAdminService {
     }
     
     if(body.idCarde_image){
-      const parties:string[] =  body.idCarde_image.split(";");
-      const mimetype:string = parties[0].split(":")[1];
-      const extension:string = mimetype.split("/")[1];
-      const base64 = parties[1];
-      fs.writeFileSync('./files/carteIdentite/idCarte_'+ id + '.' + extension, base64);
+     
+      let bitmap: Buffer =  Buffer.from(body.idCarde_image, 'base64');
+      const extension = 'png';
+      fs.writeFileSync('./files/carteIdentite/idCarte_'+ id + '.' + extension, bitmap);
 
       let id_carde_Image:Fichier = Fichier.create({
         nom:"cate d'identié",
         path: './files/carteIdentite/idCarte_' + id + '.' + extension,
-        mimetype: mimetype,
         entity: Conducteur.entityName,
         entityId: conducteur.id
       });
