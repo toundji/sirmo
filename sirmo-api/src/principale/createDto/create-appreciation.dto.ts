@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { TypeAppreciation } from "src/enums/type-appreciation";
-import { IsNotEmpty, IsPhoneNumber, IsPositive, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsPhoneNumber, IsPositive, IsString } from 'class-validator';
 import { IsNumber } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -12,10 +12,12 @@ import { ApiProperty } from "@nestjs/swagger";
 
   @ApiProperty({required:true})
   @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   message: string;
 
   @ApiProperty({required:true})
-  @IsPhoneNumber("BJ")
+  @IsPhoneNumber()
   phone: string;
 
   @ApiProperty({required:true})

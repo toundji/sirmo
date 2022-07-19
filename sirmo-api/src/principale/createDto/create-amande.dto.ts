@@ -1,9 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsArray, IsDate, IsNotEmpty, IsNumber, IsObject, IsOptional, Min } from "class-validator";
-import { Police } from "../entities/police.entity";
-import { TypeAmande } from "../entities/type-amande.entity";
-import { Conducteur } from "../entities/conducteur.entity";
-import { IsString } from 'class-validator';
+import { IsNumber,  IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString } from 'class-validator';
 import { IsPositive } from 'class-validator';
