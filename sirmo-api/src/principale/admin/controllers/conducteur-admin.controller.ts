@@ -22,6 +22,7 @@ import {
 import { UserConducteurDG_Dto } from "../dto/user-conducteur-dg.dto";
 import { Public } from "src/auth/public-decore";
 import { ConducteurAdminService } from "../services/conducteur-admin.service";
+import { UpdateUserConducteurCompacteDto } from "../dto/update/conducteur-admin-update.dto";
 
   @ApiTags("Admin Conducteurs")
   @ApiBearerAuth("token")
@@ -39,7 +40,7 @@ import { ConducteurAdminService } from "../services/conducteur-admin.service";
 
     @Post("update")
     @Public()
-    updateConducteur(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
+    updateConducteur(@Body() body: UpdateUserConducteurCompacteDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
       return this.conducteurService.updateConducteur(body);
     }
 
