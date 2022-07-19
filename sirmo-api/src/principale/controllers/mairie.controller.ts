@@ -96,8 +96,7 @@ export class MairieController {
   @UseGuards(JwtAuthGuard)
   @Get(":id/image")
   async loadImage(@Param("id") id: number, @Res() res) {
-    const mairie: Mairie = await this.mairieService.findOneWithImage(id);
-
+    const mairie: Mairie = await this.mairieService.findOne(id);
     return res.sendFile(mairie.image_path, { root: "./" });
   }
   @UseGuards(JwtAuthGuard, RoleGuard)
