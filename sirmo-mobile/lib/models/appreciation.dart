@@ -17,7 +17,7 @@ class Appreciation implements Audit {
 
   Conducteur? conducteur;
 
-  Fichier? fichier;
+  String? fichier;
 
   int? createur_id;
 
@@ -53,7 +53,7 @@ class Appreciation implements Audit {
     String? message,
     String? phone,
     Conducteur? conducteur,
-    Fichier? fichier,
+    String? fichier,
     int? createur_id,
     int? editeur_id,
     DateTime? create_at,
@@ -84,7 +84,7 @@ class Appreciation implements Audit {
       'message': message,
       'phone': phone,
       'conducteur': conducteur?.toMap(),
-      'fichier': fichier?.toMap(),
+      'fichier': fichier,
       'createur_id': createur_id,
       'editeur_id': editeur_id,
       'create_at': create_at?.millisecondsSinceEpoch,
@@ -112,7 +112,7 @@ class Appreciation implements Audit {
       conducteur: map['conducteur'] != null
           ? Conducteur.fromMap(map['conducteur'])
           : null,
-      fichier: map['fichier'] != null ? Fichier.fromMap(map['fichier']) : null,
+      fichier: map['fichier'],
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       create_at:

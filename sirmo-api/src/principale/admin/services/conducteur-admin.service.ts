@@ -24,6 +24,7 @@ import { ApiConstante } from './../../utilis/api-constantes';
 import { ConducteurService } from './../../services/conducteur.service';
 import { Arrondissement } from 'src/principale/entities/arrondissement.entity';
 import { ArrondissementService } from 'src/principale/services/arrondissement.service';
+import { UpdateUserConducteurCompacteDto } from '../dto/update/conducteur-admin-update.dto';
 
 
 
@@ -151,7 +152,7 @@ export class ConducteurAdminService {
       return body;
   }
 
-  async updateConducteur(body: CreateUserConducteurCptDto):Promise<CreateUserConducteurCptDto> {
+  async updateConducteur(body: UpdateUserConducteurCompacteDto):Promise<CreateUserConducteurCptDto> {
     const conducteur:Conducteur = await this.conducteurService.findOne(body.id);
 
     conducteur.ifu=body.ifu ?? conducteur.ifu;
@@ -193,12 +194,11 @@ export class ConducteurAdminService {
 
     }
 
-      conducteur.user.nom= body.nom;
-      conducteur.user.prenom= body.prenom;
-      conducteur.user. genre=body.genre;
-      conducteur.user.password= body.password;
-      conducteur.user.date_naiss= body.date_naiss;
-      conducteur.user. phone=body.phone;
+      conducteur.user.nom = body.nom ?? conducteur.user.nom;
+      conducteur.user.prenom= body.prenom?? conducteur.user.prenom;
+      conducteur.user. genre=body.genre?? conducteur.user.genre;
+      conducteur.user.date_naiss= body.date_naiss?? conducteur.user.date_naiss;
+      conducteur.user. phone=body.phone?? conducteur.user.phone;
 
       if(body.arrondissement){
         const arrondisement: Arrondissement =

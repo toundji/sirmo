@@ -68,6 +68,8 @@ class Conducteur implements Audit {
   static String get DESATIVE => "DESACTIVE";
   static String get DEMANDE => "DEMANDE";
 
+  get isActif => statut == Conducteur.ACTIF;
+
   Conducteur({
     this.user,
     this.id,

@@ -46,10 +46,12 @@ class AppreciationService extends ChangeNotifier {
     return await DioClient(headers: {'Accept': 'application/json'})
         .post("appreciations/$id/images", body: body)
         .then((value) {
+      log("$value");
       Appreciation app = Appreciation.fromMap(value);
 
-      return value;
+      return app;
     }).onError((error, stackTrace) {
+      log("$error");
       throw error ?? "";
     });
   }
