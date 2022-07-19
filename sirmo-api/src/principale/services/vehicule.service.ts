@@ -295,8 +295,6 @@ export class VehiculeService {
         console.log(error);
         throw new NotFoundException("Le payement spécifié n'existe pas");
       });
-
-    
   }
 
   remove(id: number) {

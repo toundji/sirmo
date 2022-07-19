@@ -6,5 +6,4 @@ export class ApiConstante  {
   static  appreciation_path: string = "files/apprecations";
   static  mairie_image_path: string = "files/mairies-images";
 
-
 }

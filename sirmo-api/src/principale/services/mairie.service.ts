@@ -64,18 +64,11 @@ export class MairieService {
   }
 
   findOne(id: number) {
-      return this.mairieRepository.findOneOrFail(id, {relations: ["image"]}).catch((error)=>{
+      return this.mairieRepository.findOneOrFail(id).catch((error)=>{
         console.log(error);
         throw new NotFoundException("Mairie non trouvé")
       });
   
-  }
-
-  findOneWithImage(id: number) {
-   
-    return this.mairieRepository.findOne(id, {relations:["image"]}).catch((error)=>{
-      throw new NotFoundException("Mairie non trouvé")
-    });
   }
 
   findFirst(option:any) {
