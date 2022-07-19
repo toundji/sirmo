@@ -40,7 +40,7 @@ import { UpdateUserConducteurCompacteDto } from "../dto/update/conducteur-admin-
 
     @Post("update")
     @Public()
-    updateConducteur(@Body() body: UpdateUserConducteurCompacteDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
+    updateConducteur(@Body() body: UpdateUserConducteurCompacteDto) : Promise<Conducteur| UpdateUserConducteurCompacteDto>{
       return this.conducteurService.updateConducteur(body);
     }
 

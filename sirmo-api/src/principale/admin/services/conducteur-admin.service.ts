@@ -152,7 +152,7 @@ export class ConducteurAdminService {
       return body;
   }
 
-  async updateConducteur(body: UpdateUserConducteurCompacteDto):Promise<CreateUserConducteurCptDto> {
+  async updateConducteur(body: UpdateUserConducteurCompacteDto):Promise<UpdateUserConducteurCompacteDto> {
     const conducteur:Conducteur = await this.conducteurService.findOne(body.id);
 
     conducteur.ifu=body.ifu ?? conducteur.ifu;
