@@ -49,7 +49,7 @@ import { ApiConstante } from './../utilis/api-constantes';
     schema:{
       type: 'object',
       properties: {
-        vehicule_image:{
+        image:{
           type: 'string',
           format: 'binary'
         },

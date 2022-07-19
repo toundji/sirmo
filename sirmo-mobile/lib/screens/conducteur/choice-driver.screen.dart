@@ -98,7 +98,7 @@ class _ChoiceDriverScreenState extends State<ChoiceDriverScreen> {
         .then((value) {
       PersonalAlert.showSuccess(context, message: "Code scanner avec succès")
           .then((v) {
-        widget.onSubmit(value);
+        widget.onSubmit(value!);
       });
     }).onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "$error").then((value) {
@@ -116,7 +116,7 @@ class _ChoiceDriverScreenState extends State<ChoiceDriverScreen> {
           .then((value) {
         PersonalAlert.showSuccess(context, message: "Code scanner avec succès")
             .then((v) {
-          widget.onSubmit(value);
+          widget.onSubmit(value!);
         });
       }).onError((error, stackTrace) {
         PersonalAlert.showError(context, message: "$error").then((value) {

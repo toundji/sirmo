@@ -110,7 +110,7 @@ export class ConducteurAdminService {
         nom: "profile",
         path: ApiConstante.profile_path + filename,
         entity: Conducteur.entityName,
-        entityId: conducteur.id
+        entityId: conducteurSaved.id
       });
       profile = await Fichier.save(profile);
       user.profile_image = profile.path;
@@ -131,11 +131,11 @@ export class ConducteurAdminService {
         nom:"cate d'identié",
         path: ApiConstante.id_carde_path + filename,
         entity: Conducteur.entityName,
-        entityId: conducteur.id
+        entityId: conducteurSaved.id
       });
 
      id_carde_Image = await Fichier.save(id_carde_Image)
-     conducteur.idCarde_image =  id_carde_Image.path;
+     conducteurSaved.idCarde_image =  id_carde_Image.path;
      await conducteurSaved.save();
 
     }
@@ -146,13 +146,13 @@ export class ConducteurAdminService {
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");  
       });
-      conducteurSaved.profile_image = body.profile_image;
-      conducteurSaved.idCarde_image = body.idCarde_image;
+     
+      body.id = conducteurSaved.id;
       return body;
   }
 
   async updateConducteur(body: CreateUserConducteurCptDto):Promise<CreateUserConducteurCptDto> {
-    const conducteur:Conducteur = await this.conducteurService.findOneByCipOrNip(body.nip);
+    const conducteur:Conducteur = await this.conducteurService.findOne(body.id);
 
     conducteur.ifu=body.ifu ?? conducteur.ifu;
     conducteur.nip=body.nip ?? conducteur.nip;

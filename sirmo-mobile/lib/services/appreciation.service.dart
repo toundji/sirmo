@@ -39,7 +39,7 @@ class AppreciationService extends ChangeNotifier {
   Future<Appreciation> updateAppreciationImage(int id, File file) async {
     FormData body = FormData.fromMap(
       {
-        'appreciaition_image': await MultipartFile.fromFile(file.path),
+        'image': await MultipartFile.fromFile(file.path),
       },
     );
 

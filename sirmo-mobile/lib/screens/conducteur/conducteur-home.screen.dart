@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sirmo/models/conducteur.dart';
 import 'package:sirmo/screens/statistique-conducteur/evaluate-conduteur.screen.dart';
 import 'package:sirmo/screens/statistique-conducteur/statistique-conducteur.screen.dart';
 import 'package:sirmo/screens/vehicule/create-vehicule.dart';
@@ -31,6 +32,7 @@ class ConducteurHomeScreen extends StatefulWidget {
 class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
   dynamic header;
   Compte? compte;
+  Conducteur? conducteur;
   @override
   void initState() {
     super.initState();
@@ -73,7 +75,9 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
               ActionCard(
                 name: "Status",
                 icon: Icons.info,
-                screen: StatistiqueConducteurScreen(),
+                screen: StatistiqueConducteurScreen(
+                  conducteur: null,
+                ),
               ),
               ActionCard(
                 name: "Satistique",

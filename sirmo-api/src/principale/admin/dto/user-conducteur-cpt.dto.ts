@@ -6,6 +6,11 @@ import { IsNumber } from 'class-validator';
 
 export class CreateUserConducteurCptDto {
 
+  
+  @ApiProperty({required:true})
+  @IsOptional()
+  id?: number;
+
   @ApiProperty({required:true})
   @IsString()
   @IsOptional()

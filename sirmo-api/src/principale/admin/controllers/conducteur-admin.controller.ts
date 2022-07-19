@@ -37,7 +37,7 @@ import { ConducteurAdminService } from "../services/conducteur-admin.service";
       return this.conducteurService.createConducteur(body);
     }
 
-    @Put()
+    @Post("update")
     @Public()
     updateConducteur(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
       return this.conducteurService.updateConducteur(body);

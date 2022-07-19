@@ -83,26 +83,6 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
               ],
             ),
             SizedBox(height: 25),
-            Padding(
-                padding: EdgeInsets.only(top: SizeConst.padding + 10),
-                child: InternationalPhoneNumberInput(
-                  onInputValidated: (value) {
-                    log("$value");
-                    phoneisValide = value;
-                  },
-                  initialValue: phone,
-                  countries: ["BJ", "CI"],
-                  errorMessage: "Numméro de téléphone est invalide",
-                  spaceBetweenSelectorAndTextField: 0.0,
-                  validator: phoneValidator,
-                  onInputChanged: onPhoneChanged,
-                  inputDecoration: AppDecore.input("Téléphone * ",
-                      helper: "Saisissez votre numéro de téléphone"),
-                  selectorConfig: SelectorConfig(
-                      leadingPadding: SizeConst.padding,
-                      trailingSpace: false,
-                      setSelectorButtonAsPrefixIcon: true),
-                )),
             _formField,
             TextField(
               maxLines: null,
@@ -120,17 +100,6 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
         ),
       ),
     );
-  }
-
-  String? phoneValidator(String? value) {
-    if (value == null) return "Le numéro de téléphone est obligatoire";
-    if (!phoneisValide) return "Le numéro de téléphone est invalide";
-    return null;
-  }
-
-  onPhoneChanged(PhoneNumber? value) {
-    phone = value;
-    appreciation.phone = "${phone?.dialCode}${phone?.phoneNumber}";
   }
 
   onSubmit() {

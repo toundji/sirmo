@@ -4,8 +4,13 @@ import { ApiProperty } from "@nestjs/swagger";
 import { CreateUserDto } from './create-user.dto';
 import { Type } from "class-transformer";
 import { IsNumber } from 'class-validator';
+import { Optional } from "@nestjs/common";
 
 export class CreateUserConducteurDto {
+
+  @ApiProperty({required:true})
+  @Optional()
+  id: number;
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
