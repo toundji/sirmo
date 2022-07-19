@@ -33,8 +33,14 @@ import { ConducteurAdminService } from "../services/conducteur-admin.service";
     // @Roles(RoleName.ADMIN, RoleName.MAIRIE)
     @Post()
     @Public()
-    createConducteurByDG(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
+    createConducteur(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
       return this.conducteurService.createConducteur(body);
+    }
+
+    @Put()
+    @Public()
+    updateConducteur(@Body() body: CreateUserConducteurCptDto) : Promise<Conducteur| CreateUserConducteurCptDto>{
+      return this.conducteurService.updateConducteur(body);
     }
 
     @UseGuards(JwtAuthGuard, RoleGuard)

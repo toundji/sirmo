@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,8 +9,10 @@ import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-decore.dart';
 import 'package:sirmo/components/personal_alert.dart';
 import 'package:sirmo/models/appreciation.dart';
+import 'package:sirmo/models/conducteur.dart';
 import 'package:sirmo/services/appreciation.service.dart';
 import 'package:sirmo/services/user.service.dart';
+import 'package:sirmo/utils/request-exception.dart';
 
 import '../../components/shake-transition.dart';
 import '../../models/user.dart';
@@ -20,7 +21,9 @@ import '../../utils/color-const.dart';
 import '../../utils/size-const.dart';
 
 class EvaluateConducteurScreen extends StatefulWidget {
-  EvaluateConducteurScreen({Key? key}) : super(key: key);
+  EvaluateConducteurScreen({Key? key, required this.conducteur})
+      : super(key: key);
+  final Conducteur conducteur;
 
   @override
   State<EvaluateConducteurScreen> createState() =>
@@ -29,7 +32,7 @@ class EvaluateConducteurScreen extends StatefulWidget {
 
 class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
   File? image;
-  late TextEditingController controller;
+  late TextEditingController controller = new TextEditingController();
 
   PhoneNumber? phone = PhoneNumber(isoCode: "BJ");
   bool phoneisValide = false;
@@ -43,7 +46,9 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
   void initState() {
     super.initState();
     user = context.read<UserService>().user;
-    phone = PhoneNumber();
+    log("${user?.phone}");
+    phone = PhoneNumber(phoneNumber: user?.phone);
+    appreciation.conducteur = widget.conducteur;
   }
 
   @override
@@ -125,6 +130,7 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
 
   onPhoneChanged(PhoneNumber? value) {
     phone = value;
+    appreciation.phone = "${phone?.dialCode}${phone?.phoneNumber}";
   }
 
   onSubmit() {
@@ -136,12 +142,16 @@ class _EvaluateConducteurScreenState extends State<EvaluateConducteurScreen> {
           .then((value) {
         PersonalAlert.showSuccess(context,
                 message:
-                    "Votre appréciation est enrégistre avec succès.\n Merci à vous")
+                    "Votre appréciation est enrégistrée avec succès.\n Merci à vous")
             .then((value) {
           Navigator.pop(context);
         });
       }).onError((error, stackTrace) {
-        PersonalAlert.showError(context, message: "$error");
+        if (error is RequestExcept) {
+          PersonalAlert.showError(context, message: "${error.message}");
+        } else {
+          PersonalAlert.showError(context, message: "$error");
+        }
       });
     }
   }

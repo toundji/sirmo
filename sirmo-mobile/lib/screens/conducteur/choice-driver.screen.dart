@@ -12,7 +12,7 @@ import 'package:sirmo/utils/color-const.dart';
 
 class ChoiceDriverScreen extends StatefulWidget {
   ChoiceDriverScreen({Key? key, required this.onSubmit}) : super(key: key);
-  final void Function(Conducteur? conducteur) onSubmit;
+  final void Function(Conducteur conducteur) onSubmit;
 
   @override
   State<ChoiceDriverScreen> createState() => _ChoiceDriverScreenState();

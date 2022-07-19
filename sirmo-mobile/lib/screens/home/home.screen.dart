@@ -87,8 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.payment,
                   screen: ChoiceDriverScreen(
                     onSubmit: (conducteur) {
-                      AppUtil.goToScreen(
-                          context, StatistiqueConducteurScreen());
+                      AppUtil.changeToScreen(
+                          context,
+                          StatistiqueConducteurScreen(
+                            conducteur: conducteur,
+                          ));
                     },
                   ),
                 ),
@@ -97,7 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.edit,
                   screen: ChoiceDriverScreen(
                     onSubmit: (conducteur) {
-                      AppUtil.goToScreen(context, EvaluateConducteurScreen());
+                      AppUtil.changeToScreen(
+                          context,
+                          EvaluateConducteurScreen(
+                            conducteur: conducteur,
+                          ));
                     },
                   ),
                 ),
@@ -113,7 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: CupertinoIcons.eye,
                 screen: ChoiceDriverScreen(
                   onSubmit: (conducteur) {
-                    AppUtil.goToScreen(context, StatistiqueConducteurScreen());
+                    AppUtil.changeToScreen(
+                        context,
+                        StatistiqueConducteurScreen(
+                          conducteur: conducteur,
+                        ));
                   },
                 ),
               ),

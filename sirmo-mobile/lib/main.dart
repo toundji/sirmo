@@ -18,6 +18,7 @@ import 'package:sirmo/utils/color-const.dart';
 
 import 'screens/auth/login.screen.dart';
 import 'screens/home/home.screen.dart';
+import 'services/appreciation.service.dart';
 import 'services/auth.service.dart';
 import 'utils/app-routes.dart';
 import 'utils/network-info.dart';
@@ -44,9 +45,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CompteService()),
         ChangeNotifierProvider(create: (context) => ConducteurService()),
         ChangeNotifierProvider(create: (context) => VehiculeService()),
+        ChangeNotifierProvider(create: (context) => AppreciationService()),
       ],
       child: MaterialApp(
-        title: 'Sirmo',
+        title: 'Zem+',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.green,

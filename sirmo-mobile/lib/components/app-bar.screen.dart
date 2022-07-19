@@ -2,14 +2,18 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/user.dart';
 import '../screens/profile/profile.screen.dart';
+import '../services/user.service.dart';
 import '../utils/app-util.dart';
 import '../utils/color-const.dart';
 import '../utils/network-info.dart';
 import 'curve_path_clipper.dart';
 
 PreferredSize AppAppBar(BuildContext context) {
+  User? user = context.read<UserService>().user;
   return PreferredSize(
     preferredSize: Size(MediaQuery.of(context).size.width, 150),
     child: ClipPath(
@@ -33,14 +37,12 @@ PreferredSize AppAppBar(BuildContext context) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CircleAvatar(
-                    foregroundImage: NetworkImage(
-                      NetworkInfo.imageProfile,
-                      headers: NetworkInfo.headers,
-                    ),
-                    onForegroundImageError: (error, stackTrace) {
-                      log("Profile image getting ... ",
-                          error: error, stackTrace: stackTrace);
-                    },
+                    foregroundImage: user?.profile_image == null
+                        ? null
+                        : NetworkImage(
+                            "${NetworkInfo.baseUrl}${user?.profile_image}",
+                            headers: NetworkInfo.headers,
+                          ),
                     backgroundImage:
                         const AssetImage("assets/images/profile.jpg"),
                   ),

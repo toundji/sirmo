@@ -33,7 +33,7 @@ class User implements Audit {
 
   Arrondissement? arrondissement;
 
-  Fichier? profile;
+  String? profile_image;
 
   List<Fichier>? profiles;
 
@@ -67,7 +67,7 @@ class User implements Audit {
     this.code,
     this.roles,
     this.arrondissement,
-    this.profile,
+    this.profile_image,
     this.profiles,
     this.created_at,
     this.createur_id,
@@ -90,7 +90,7 @@ class User implements Audit {
     String? code,
     List<String>? roles,
     Arrondissement? arrondissement,
-    Fichier? profile,
+    String? profile_image,
     List<Fichier>? profiles,
     DateTime? created_at,
     int? createur_id,
@@ -109,7 +109,7 @@ class User implements Audit {
       code: code ?? this.code,
       roles: roles ?? this.roles,
       arrondissement: arrondissement ?? this.arrondissement,
-      profile: profile ?? this.profile,
+      profile_image: profile_image ?? this.profile_image,
       profiles: profiles ?? this.profiles,
       created_at: created_at ?? this.created_at,
       createur_id: createur_id ?? this.createur_id,
@@ -131,7 +131,7 @@ class User implements Audit {
       'code': code,
       'roles': roles,
       'arrondissement': arrondissement?.toMap(),
-      'profile': profile?.toMap(),
+      'profile_image': profile_image,
       'profiles': profiles?.map((x) => x.toMap()).toList(),
       'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
@@ -170,7 +170,7 @@ class User implements Audit {
       arrondissement: map['arrondissement'] != null
           ? Arrondissement.fromMap(map['arrondissement'])
           : null,
-      profile: map['profile'] != null ? Fichier.fromMap(map['profile']) : null,
+      profile_image: map['profile_image'],
       profiles: map['profiles'] != null
           ? List<Fichier>.from(map['profiles']?.map((x) => Fichier.fromMap(x)))
           : null,
@@ -191,7 +191,7 @@ class User implements Audit {
 
   @override
   String toString() {
-    return 'User(id: $id, nom: $nom, prenom: $prenom, genre: $genre, password: $password, email: $email, date_naiss: $date_naiss, tel: $phone, code: $code, roles: $roles, arrondissement: $arrondissement, profile: $profile, profiles: $profiles, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
+    return 'User(id: $id, nom: $nom, prenom: $prenom, genre: $genre, password: $password, email: $email, date_naiss: $date_naiss, tel: $phone, code: $code, roles: $roles, arrondissement: $arrondissement, profile_image: $profile_image, profiles: $profiles, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 
   @override
@@ -210,7 +210,7 @@ class User implements Audit {
         other.code == code &&
         listEquals(other.roles, roles) &&
         other.arrondissement == arrondissement &&
-        other.profile == profile &&
+        other.profile_image == profile_image &&
         listEquals(other.profiles, profiles) &&
         other.created_at == created_at &&
         other.createur_id == createur_id &&
@@ -231,7 +231,7 @@ class User implements Audit {
         code.hashCode ^
         roles.hashCode ^
         arrondissement.hashCode ^
-        profile.hashCode ^
+        profile_image.hashCode ^
         profiles.hashCode ^
         created_at.hashCode ^
         createur_id.hashCode ^

@@ -69,7 +69,7 @@ class Vehicule implements Audit {
   List<ProprietaireVehicule>? proprietairevehicules;
   List<LicenceVehicule>? licences;
 
-  Fichier? image;
+  String? image_path;
 
   List<Fichier>? images;
 
@@ -118,7 +118,7 @@ class Vehicule implements Audit {
     this.licence,
     this.conducteurvehicules,
     this.proprietairevehicules,
-    this.image,
+    this.image_path,
     this.images,
     this.licences,
   });
@@ -160,7 +160,7 @@ class Vehicule implements Audit {
     Conducteur? conducteur,
     List<ConducteurVehicule>? conducteurvehicules,
     List<ProprietaireVehicule>? proprietairevehicules,
-    Fichier? image,
+    String? image_path,
     List<Fichier>? images,
     DateTime? created_at,
     int? createur_id,
@@ -200,7 +200,7 @@ class Vehicule implements Audit {
       conducteurvehicules: conducteurvehicules ?? this.conducteurvehicules,
       proprietairevehicules:
           proprietairevehicules ?? this.proprietairevehicules,
-      image: image ?? this.image,
+      image_path: image_path ?? this.image_path,
       images: images ?? this.images,
       created_at: created_at ?? this.created_at,
       createur_id: createur_id ?? this.createur_id,
@@ -243,7 +243,7 @@ class Vehicule implements Audit {
           conducteurvehicules?.map((x) => x.toMap()).toList(),
       'proprietairevehicules':
           proprietairevehicules?.map((x) => x.toMap()).toList(),
-      'image': image?.toMap(),
+      'image_path': image_path,
       'images': images?.map((x) => x.toMap()).toList(),
       'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
@@ -330,7 +330,7 @@ class Vehicule implements Audit {
           ? List<ProprietaireVehicule>.from(map['proprietairevehicules']
               ?.map((x) => ProprietaireVehicule.fromMap(x)))
           : null,
-      image: map['image'] != null ? Fichier.fromMap(map['image']) : null,
+      image_path: map['image_path'],
       images: map['images'] != null
           ? List<Fichier>.from(map['images']?.map((x) => Fichier.fromMap(x)))
           : null,
@@ -356,7 +356,7 @@ class Vehicule implements Audit {
 
   @override
   String toString() {
-    return 'Vehicule(id: $id, immatriculation: $immatriculation, numero_carte_grise: $numero_carte_grise, numero_chassis: $numero_chassis, numero_serie: $numero_serie, numero_serie_moteur: $numero_serie_moteur, provenance: $provenance, puissance: $puissance, energie: $energie, annee_mise_circulation: $annee_mise_circulation, derniere_revision: $derniere_revision, etat: $etat, type: $type, marque: $marque, modele: $modele, couleur: $couleur, pays_immatriculation: $pays_immatriculation, puissance_fiscale: $puissance_fiscale, carosserie: $carosserie, categorie: $categorie, place_assise: $place_assise, ptac: $ptac, pv: $pv, cv: $cv, proprietaire: $proprietaire, conducteur: $conducteur, conducteurvehicules: $conducteurvehicules, proprietairevehicules: $proprietairevehicules, image: $image, images: $images, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
+    return 'Vehicule(id: $id, immatriculation: $immatriculation, numero_carte_grise: $numero_carte_grise, numero_chassis: $numero_chassis, numero_serie: $numero_serie, numero_serie_moteur: $numero_serie_moteur, provenance: $provenance, puissance: $puissance, energie: $energie, annee_mise_circulation: $annee_mise_circulation, derniere_revision: $derniere_revision, etat: $etat, type: $type, marque: $marque, modele: $modele, couleur: $couleur, pays_immatriculation: $pays_immatriculation, puissance_fiscale: $puissance_fiscale, carosserie: $carosserie, categorie: $categorie, place_assise: $place_assise, ptac: $ptac, pv: $pv, cv: $cv, proprietaire: $proprietaire, conducteur: $conducteur, conducteurvehicules: $conducteurvehicules, proprietairevehicules: $proprietairevehicules, image_path: $image_path, images: $images, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 
   @override
@@ -392,7 +392,7 @@ class Vehicule implements Audit {
         other.conducteur == conducteur &&
         listEquals(other.conducteurvehicules, conducteurvehicules) &&
         listEquals(other.proprietairevehicules, proprietairevehicules) &&
-        other.image == image &&
+        other.image_path == image_path &&
         listEquals(other.images, images) &&
         other.created_at == created_at &&
         other.createur_id == createur_id &&
@@ -430,7 +430,7 @@ class Vehicule implements Audit {
         conducteur.hashCode ^
         conducteurvehicules.hashCode ^
         proprietairevehicules.hashCode ^
-        image.hashCode ^
+        image_path.hashCode ^
         images.hashCode ^
         created_at.hashCode ^
         createur_id.hashCode ^

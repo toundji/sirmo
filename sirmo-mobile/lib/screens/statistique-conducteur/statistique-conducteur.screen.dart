@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sirmo/components/app-decore.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../models/conducteur.dart';
+
 class StatistiqueConducteurScreen extends StatefulWidget {
-  StatistiqueConducteurScreen({Key? key}) : super(key: key);
+  StatistiqueConducteurScreen({Key? key, required this.conducteur})
+      : super(key: key);
+  final Conducteur conducteur;
 
   @override
   State<StatistiqueConducteurScreen> createState() =>

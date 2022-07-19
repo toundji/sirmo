@@ -12,8 +12,13 @@ class AppreciationService extends ChangeNotifier {
 
   Future<Appreciation?> createAppreciation(
       Appreciation appreciation, File? file) async {
+    dynamic body = appreciation.toCreateMap();
+    log("$body");
     Appreciation appreciate = await DioClient()
-        .post("appreciations", body: appreciation.toCreateMap())
+        .post(
+      "appreciations",
+      body: body,
+    )
         .then((value) {
       Appreciation app = Appreciation.fromMap(value);
       all ??= [];

@@ -97,8 +97,8 @@ class Appreciation implements Audit {
   Map<String, dynamic> toCreateMap() {
     return {
       'typeAppreciation': typeAppreciation,
-      'message': message,
-      'phone': phone,
+      if (message != null) 'message': message,
+      if (phone != null) 'phone': phone,
       'conducteur_id': conducteur?.id,
     };
   }
@@ -115,9 +115,8 @@ class Appreciation implements Audit {
       fichier: map['fichier'] != null ? Fichier.fromMap(map['fichier']) : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
-      create_at: map['create_at'] != null
-          ? DateTime.tryParse(map['create_at'])
-          : null,
+      create_at:
+          map['create_at'] != null ? DateTime.tryParse(map['create_at']) : null,
       upDateTime_at: map['upDateTime_at'] != null
           ? DateTime.tryParse(map['upDateTime_at'])
           : null,

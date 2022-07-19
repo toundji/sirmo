@@ -63,7 +63,7 @@ export class ConducteurController {
 
   @Get('nics/:nic')
   findOneByNic(@Param('nic') nic: number):Promise<Conducteur> {
-    return this.conducteurService.findOneByCip(+nic);
+    return this.conducteurService.findOneByCipOrNip(+nic);
   }
 
   @Get(":id")

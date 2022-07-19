@@ -21,6 +21,9 @@ import { Express } from 'multer';
 import { Fichier } from './../../entities/fichier.entity';
 import { profile } from 'console';
 import { ApiConstante } from './../../utilis/api-constantes';
+import { ConducteurService } from './../../services/conducteur.service';
+import { Arrondissement } from 'src/principale/entities/arrondissement.entity';
+import { ArrondissementService } from 'src/principale/services/arrondissement.service';
 
 
 
@@ -32,6 +35,9 @@ export class ConducteurAdminService {
     private readonly compteService:CompteService,
     @Inject(forwardRef(() => VehiculeService))
     private readonly vehiculeService:VehiculeService,
+    private readonly conducteurService:ConducteurService,
+    private readonly arrondissementService: ArrondissementService,
+
     ) {}
   async create(body: CreateUserConducteurDto) {
     const conducteur:Conducteur = new Conducteur();
@@ -51,6 +57,10 @@ export class ConducteurAdminService {
       });
       return conducteurSaved;
   }
+
+
+  
+
 
   async createConducteur(body: CreateUserConducteurCptDto) {
     const conducteur:Conducteur = new Conducteur();
@@ -139,6 +149,84 @@ export class ConducteurAdminService {
       conducteurSaved.profile_image = body.profile_image;
       conducteurSaved.idCarde_image = body.idCarde_image;
       return body;
+  }
+
+  async updateConducteur(body: CreateUserConducteurCptDto):Promise<CreateUserConducteurCptDto> {
+    const conducteur:Conducteur = await this.conducteurService.findOneByCipOrNip(body.nip);
+
+    conducteur.ifu=body.ifu ?? conducteur.ifu;
+    conducteur.nip=body.nip ?? conducteur.nip;
+    conducteur.cip=body.cip ?? conducteur.cip;
+    conducteur.permis=body.permis ?? conducteur.permis;
+    conducteur.date_optention_permis=body.date_optention_permis ?? conducteur.date_optention_permis;
+    conducteur.date_delivrance_ifu=body.date_delivrance_ifu ?? conducteur.date_delivrance_ifu;
+    conducteur.idCarde=body.idCarde ?? conducteur.idCarde;
+    conducteur. ancienIdentifiant=body.ancienIdentifiant??conducteur. ancienIdentifiant;
+    // conducteur.idCarde_image = body.profile_image;
+    // conducteur.idCarde_image = body.idCarde_image;
+
+    if(body.mairie_id){
+      const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
+      conducteur.mairie = mairie;
+    }
+
+    if(body.idCarde_image){
+     
+      let bitmap: Buffer =  Buffer.from(body.idCarde_image, 'base64');
+      const filename:string = '/carte_identite'+ conducteur.id + Date.now() + '.png';
+
+      if(!fs.existsSync(ApiConstante.id_carde_path)){
+        fs.promises.mkdir(ApiConstante.id_carde_path, { recursive: true }).catch(console.error);
+      }
+      fs.writeFileSync(ApiConstante.id_carde_path + filename, bitmap);
+
+      let id_carde_Image:Fichier = Fichier.create({
+        nom:"cate d'identié",
+        path: ApiConstante.id_carde_path + filename,
+        entity: Conducteur.entityName,
+        entityId: conducteur.id
+      });
+
+     id_carde_Image = await Fichier.save(id_carde_Image)
+     conducteur.idCarde_image =  id_carde_Image.path;
+     await conducteur.save();
+
+    }
+
+      conducteur.user.nom= body.nom;
+      conducteur.user.prenom= body.prenom;
+      conducteur.user. genre=body.genre;
+      conducteur.user.password= body.password;
+      conducteur.user.date_naiss= body.date_naiss;
+      conducteur.user. phone=body.phone;
+
+      if(body.arrondissement){
+        const arrondisement: Arrondissement =
+        await this.arrondissementService.findFirstByName(body.arrondissement);
+        conducteur.user.arrondissement = arrondisement;
+      }
+
+    if(body.profile_image){
+      let bitmap: Buffer =  Buffer.from(body.profile_image, 'base64');
+      if(!fs.existsSync(ApiConstante.profile_path)){
+        fs.promises.mkdir(ApiConstante.profile_path, { recursive: true }).catch(console.error);
+      }
+      const filename:string = '/conducteur_profile'+ Date.now() + '.png';
+
+      fs.writeFileSync(ApiConstante.profile_path + filename,   bitmap);
+
+      let profile:Fichier = Fichier.create({
+        nom: "profile",
+        path: ApiConstante.profile_path + filename,
+        entity: Conducteur.entityName,
+        entityId: conducteur.id
+      });
+      profile = await Fichier.save(profile);
+      conducteur.user.profile_image = profile.path;
+    }
+    await User.save(conducteur.user);
+    await Conducteur.save(conducteur);
+    return body;
   }
 
   async createByDG(body: UserConducteurDG_Dto) {
@@ -281,14 +369,12 @@ export class ConducteurAdminService {
     return driver ;
   }
  
-  update(id: number, updateConducteurDto: Conducteur): Promise<Conducteur> {
-      return this.conducteurRepository.update(id, updateConducteurDto). then((conducteur: UpdateResult) => conducteur.raw).catch((error)=>{
-        console.log(error);
-       throw new NotFoundException("Le conducteur spécifié n'existe pas");
-      });
-  }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const  conducteur:Conducteur = await this.findOne(id);
+    const index:number = conducteur.user.roles.indexOf(RoleName.CONDUCTEUR);
+    conducteur.user.roles.splice(index, 1);
+    await User.save(conducteur.user);
       return this.conducteurRepository.delete(id).catch((error)=>{
         console.log(error);
         throw new NotFoundException("Le conducteur spécifié n'existe pas ou dépend d'autre données");
