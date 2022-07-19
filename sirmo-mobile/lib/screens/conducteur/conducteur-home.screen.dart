@@ -8,6 +8,7 @@ import 'package:sirmo/screens/vehicule/create-vehicule.dart';
 import 'package:sirmo/screens/potefeuille/portefeuille.component.dart';
 import 'package:sirmo/screens/conducteur/conducteur.drawer.dart';
 import 'package:sirmo/services/compte.service.dart';
+import 'package:sirmo/services/conducteur.sevice.dart';
 import 'package:sirmo/utils/app-util.dart';
 import 'package:sirmo/utils/network-info.dart';
 
@@ -48,6 +49,8 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    conducteur = context.read<ConducteurService>().conducteur;
+
     return Scaffold(
       appBar: AppAppBar(context),
       body: Column(
@@ -76,13 +79,15 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
                 name: "Status",
                 icon: Icons.info,
                 screen: StatistiqueConducteurScreen(
-                  conducteur: null,
+                  conducteur: conducteur!,
                 ),
               ),
               ActionCard(
                 name: "Satistique",
                 icon: CupertinoIcons.star,
-                screen: StatistiqueConducteurScreen(),
+                screen: StatistiqueConducteurScreen(
+                  conducteur: conducteur!,
+                ),
               ),
             ],
           ),

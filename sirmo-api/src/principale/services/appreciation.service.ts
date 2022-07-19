@@ -32,6 +32,7 @@ export class AppreciationService {
     appreciation.conducteur= conducteur;
 
     appreciation.createur_id = user?.id;
+    appreciation.phone = user.phone;
 
   
       return this.appreciationRepository.save(appreciation).catch((error)=>{

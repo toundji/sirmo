@@ -40,7 +40,7 @@ class ConducteurService extends ChangeNotifier {
 
   Future<Conducteur?> loadConducteurByCip(String nic,
       {bool refresh = false}) async {
-    return await DioClient().get("conducteurs/nics/$nic").then((value) {
+    return await DioClient().get("conducteurs/nic-or-nip/$nic").then((value) {
       Conducteur driver = Conducteur.fromMap(value);
       notifyListeners();
       return driver;
