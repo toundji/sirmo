@@ -12,9 +12,8 @@ import { Arrondissement } from "src/principale/entities/arrondissement.entity";
 import { Compte } from "src/principale/entities/compte.entity";
 import { User } from "src/principale/entities/user.entity";
 import { ArrondissementService } from "src/principale/services/arrondissement.service";
-  import { Repository } from "typeorm";
- 
-  
+import { Repository } from "typeorm";
+
   @Injectable()
   export class UserAdminService {
     constructor(
