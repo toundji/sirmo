@@ -71,12 +71,12 @@ export class AppreciationService {
   }
 
   findAll() {
-    return this.appreciationRepository.find({relations:["typeAppreciation"]});
+    return this.appreciationRepository.find();
   }
 
   findOne(id: number):Promise<Appreciation> {
   
-      return this.appreciationRepository.findOne(id, {relations:["typeAppreciation"]}).catch((error)=>{
+      return this.appreciationRepository.findOneOrFail(id, ).catch((error)=>{
         console.log(error);
         throw new NotFoundException("L'appréciation spécifiée n'existe pas");
   
@@ -85,7 +85,7 @@ export class AppreciationService {
   
   }
 
-  async 
+   
   async updateImage(id: number, @UploadedFile() profile, user:User){
     const appreciation: Appreciation = await this.findOne(id);
     const image: Fichier = await this.fichierService.createOneWith(
