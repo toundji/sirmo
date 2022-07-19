@@ -52,7 +52,7 @@ export class AppreciationService {
         const conducteur: Conducteur = new Conducteur();
         conducteur.id = body.conducteur_id;
         appreciation.createur_id = user?.id;
-        appreciation.phone =  body.phone;
+        appreciation.phone =  user.phone;
         appreciation.message = body.message;
         appreciation.typeAppreciation = body.typeAppreciation;
         appreciations.push(appreciation);
@@ -85,7 +85,7 @@ export class AppreciationService {
   }
 
   async 
-  async updateImage(id: number, @UploadedFile() profile, user:User, host:string){
+  async updateImage(id: number, @UploadedFile() profile, user:User){
     const appreciation: Appreciation = await this.findOne(id);
     const image: Fichier = await this.fichierService.createOneWith(
       profile,
@@ -93,7 +93,7 @@ export class AppreciationService {
       id,
       user
     );
-    appreciation.fichier = host+ '/api/' + image.path;
+    appreciation.fichier =  image.path;
     
     return await this.appreciationRepository.save(appreciation).catch((error)=>{
         console.log(error);

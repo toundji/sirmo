@@ -10,19 +10,17 @@ import { ApiProperty } from "@nestjs/swagger";
   @IsNotEmpty()
   typeAppreciation: TypeAppreciation;
 
-  @ApiProperty({required:true})
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  message: string;
-
-  @ApiProperty({required:true})
-  @IsPhoneNumber()
-  phone: string;
 
   @ApiProperty({required:true})
   @IsNumber({allowNaN:false}, {message:"Le conducteur spécifié est inalide"})
   @IsPositive({message: "Le conducteur spécifié est inalide"})
   conducteur_id: number;
+
+  
+  @ApiProperty({required:true})
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  message: string;
 
 }

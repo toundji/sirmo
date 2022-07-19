@@ -58,7 +58,7 @@ import { ApiConstante } from './../utilis/api-constantes';
   })
   @Post(":id/images")
   @UseInterceptors(
-    FileInterceptor('vehicule_image', {
+    FileInterceptor('image', {
       storage: diskStorage({
         destination: ApiConstante.appreciation_path,
         filename: editFileName,
@@ -66,9 +66,9 @@ import { ApiConstante } from './../utilis/api-constantes';
       fileFilter: imageFileFilter,
     }),
   )
-  updateProfile(@UploadedFile() vehicule_image, @Param('id') id: number, @Req() request,){
+  updateProfile(@UploadedFile() image, @Param('id') id: number, @Req() request,){
     const user: User = request.user;
-    return this.appreciationService.updateImage(+id, vehicule_image, user, request.headers.origin);
+    return this.appreciationService.updateImage(+id, image, user);
   }
   
     @Patch(":id")
