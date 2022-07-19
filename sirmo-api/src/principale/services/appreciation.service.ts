@@ -21,7 +21,7 @@ export class AppreciationService {
 
   ) {}
 
-  async create(createAppreciationDto: CreateAppreciationDto, user? : User) {
+  async create(createAppreciationDto: CreateAppreciationDto, user : User) {
     const appreciation : Appreciation = new Appreciation();
     
     Object.keys(createAppreciationDto).forEach((cle) => {

@@ -29,8 +29,10 @@ import { ApiConstante } from './../utilis/api-constantes';
     constructor(private readonly appreciationService: AppreciationService) {}
 
     @Post()
-    create(@Body() createAppreciationDto: CreateAppreciationDto):Promise<Appreciation>  {
-      return this.appreciationService.create(createAppreciationDto);
+    create(@Body() createAppreciationDto: CreateAppreciationDto, @Req() request):Promise<Appreciation>  {
+      const user: User = request.user;
+
+      return this.appreciationService.create(createAppreciationDto, user);
     }
 
     @Get()

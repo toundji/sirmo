@@ -18,7 +18,6 @@ import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { RoleGuard } from "../role.guard";
 import { User } from "../entities/user.entity";
 
-@UseGuards(JwtAuthGuard, RoleGuard)
 @ApiTags("Amandes")
 @Controller("amandes")
 export class AmandeController {
