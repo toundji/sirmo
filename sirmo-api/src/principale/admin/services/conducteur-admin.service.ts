@@ -89,6 +89,9 @@ export class ConducteurAdminService {
     const id:number=  Date.now();
     if(body.profile_image){
       let bitmap: Buffer =  Buffer.from(body.profile_image, 'base64');
+      if(!fs.existsSync(ApiConstante.profile_path)){
+        fs.promises.mkdir(ApiConstante.profile_path, { recursive: true }).catch(console.error);
+      }
       const filename:string = '/conducteur_profile'+ id + Date.now() + '.png';
 
       fs.writeFileSync(ApiConstante.profile_path + filename,   bitmap);
@@ -109,6 +112,9 @@ export class ConducteurAdminService {
       let bitmap: Buffer =  Buffer.from(body.idCarde_image, 'base64');
       const filename:string = '/carte_identite'+ id + Date.now() + '.png';
 
+      if(!fs.existsSync(ApiConstante.id_carde_path)){
+        fs.promises.mkdir(ApiConstante.id_carde_path, { recursive: true }).catch(console.error);
+      }
       fs.writeFileSync(ApiConstante.id_carde_path + filename, bitmap);
 
       let id_carde_Image:Fichier = Fichier.create({
@@ -169,7 +175,9 @@ export class ConducteurAdminService {
     if(body.profile_image){
       let bitmap: Buffer =  Buffer.from(body.profile_image, 'base64');
       const filename:string = '/conducteur_profile' + Date.now() + '.png';
-
+      if(!fs.existsSync(ApiConstante.profile_path)){
+        fs.promises.mkdir(ApiConstante.profile_path, { recursive: true }).catch(console.error);
+      }
       fs.writeFileSync(ApiConstante.profile_path + filename,   bitmap);
 
       let profile:Fichier = Fichier.create({
@@ -196,7 +204,10 @@ export class ConducteurAdminService {
      
         let bitmap: Buffer =  Buffer.from(body.idCarde_image, 'base64');
         const filename:string = '/carte_identite' + Date.now() + '.png';
-  
+        
+        if(!fs.existsSync(ApiConstante.id_carde_path)){
+          fs.promises.mkdir(ApiConstante.id_carde_path, { recursive: true }).catch(console.error);
+        }
         fs.writeFileSync(ApiConstante.id_carde_path + filename, bitmap);
   
         let id_carde_Image:Fichier = Fichier.create({
