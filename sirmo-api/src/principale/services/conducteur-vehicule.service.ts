@@ -75,14 +75,14 @@ export class ConducteurVehiculeService {
 
   findAll(): Promise<ConducteurVehicule[]> {
     return this.conducteurVehiculeRepository.find({
-      relations: ['vehicule', 'propprietaire'],
+      relations: ['vehicule', 'conducteur'],
     });
   }
 
   findOne(id: number): Promise<ConducteurVehicule> {
    
       return this.conducteurVehiculeRepository.findOne(id, {
-        relations:['vehicule', 'propprietaire'],
+        relations:['vehicule', 'conducteur'],
       }).catch((error)=>{
         console.log(error);
   
