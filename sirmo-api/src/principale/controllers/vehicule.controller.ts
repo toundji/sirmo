@@ -42,7 +42,7 @@ export class VehiculeController {
   }
 
   
-  @Post("by-conducteur")
+  @Put("by-conducteur")
   updateByConducteur(@Body() createVehiculeDto: UpdateVehiculeByConducteurDto):Promise<Vehicule> {
     return this.vehiculesService.updateByConducteur(createVehiculeDto);
   }
