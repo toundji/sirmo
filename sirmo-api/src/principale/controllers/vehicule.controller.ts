@@ -19,9 +19,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../utilis/utils';
 import { User } from '../entities/user.entity';
-import { CreateVehiculeByConducteurDto } from '../createDto/vehicule-by-conducteur.dto';
+import { UpdateVehiculeByConducteurDto } from '../createDto/update-by-conducteur.dto';
 import { CreateVehiculeDto } from '../createDto/vehicule.dto';
 import { ApiConstante } from '../utilis/api-constantes';
+import { CreateVehiculeByConducteurDto } from '../createDto/vehicule-by-conducteur.dto';
 
 
 @ApiTags('Vehicule')
@@ -39,6 +40,14 @@ export class VehiculeController {
   createByConducteur(@Body() createVehiculeDto: CreateVehiculeByConducteurDto):Promise<Vehicule> {
     return this.vehiculesService.createByConducteur(createVehiculeDto);
   }
+
+  
+  @Post("by-conducteur")
+  updateByConducteur(@Body() createVehiculeDto: UpdateVehiculeByConducteurDto):Promise<Vehicule> {
+    return this.vehiculesService.updateByConducteur(createVehiculeDto);
+  }
+
+  
 
   @Get()
   findAll():Promise<Vehicule[]> {

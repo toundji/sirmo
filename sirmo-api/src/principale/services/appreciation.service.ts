@@ -9,6 +9,8 @@ import { Conducteur } from '../entities/conducteur.entity';
 import { ConducteurService } from './conducteur.service';
 import { Fichier } from '../entities/fichier.entity';
 import { FichierService } from './fichier.service';
+import { ConducteurStat } from '../createDto/conducteur-statistque';
+import { TypeAppreciation } from 'src/enums/type-appreciation';
 
 
 
@@ -21,7 +23,7 @@ export class AppreciationService {
 
   ) {}
 
-  async create(createAppreciationDto: CreateAppreciationDto, user : User) {
+  async create(createAppreciationDto: CreateAppreciationDto, user : User):Promise<Appreciation> {
     const appreciation : Appreciation = new Appreciation();
     
     Object.keys(createAppreciationDto).forEach((cle) => {
@@ -45,7 +47,7 @@ export class AppreciationService {
 
   }
 
-  createAll(createAppreciationDtos: CreateAppreciationDto[], user?:User) {
+  createAll(createAppreciationDtos: CreateAppreciationDto[], user?:User):Promise<Appreciation[]>  {
     const appreciations: Appreciation[] = [];
 
       createAppreciationDtos.forEach(body=>{
@@ -72,6 +74,40 @@ export class AppreciationService {
 
   findAll() {
     return this.appreciationRepository.find();
+  }
+
+  async statistic(conducteur_id:number):Promise<ConducteurStat> {
+    const conducteur:Conducteur = await Conducteur.findOneOrFail(conducteur_id).catch((error)=>{
+      console.log(error);
+      throw new BadRequestException("Impossible de trouver le conducteur");
+    });
+    const appreciateStat = await  this.appreciationRepository.createQueryBuilder("appreciate")
+    .select("appreciate.typeAppreciation", "typeAppreciation")
+    .addSelect("Count(appreciate.id)", "somme")
+    .where("appreciate.conducteur_id =:id", {id: conducteur_id})
+    .groupBy("appreciate.typeAppreciation")
+    .getRawMany().catch((error)=>{
+        throw error;
+    });
+    const statistique: ConducteurStat = {
+      excellence :0,
+    tres_bon : 0,
+    bon :0,
+    mauvais: 0,
+    conducteur:conducteur
+    }
+    appreciateStat.forEach((element)=>{
+      if(element.typeAppreciation == TypeAppreciation.EXCELLENT){
+        statistique.excellence = element.somme;
+      }else  if(element.typeAppreciation == TypeAppreciation.BON){
+        statistique.bon = element.somme;
+      }else if(element.typeAppreciation == TypeAppreciation.TRES_BON){
+        statistique.tres_bon = element.somme;
+      }else if(element.typeAppreciation == TypeAppreciation.MAUVAIS){
+        statistique.mauvais = element.somme;
+      }
+    });
+    return statistique;
   }
 
   findOne(id: number):Promise<Appreciation> {

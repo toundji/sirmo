@@ -1,16 +1,13 @@
 /* eslint-disable prettier/prettier */
 import {
     Controller,
-    Get,
+  
     Post,
     Body,
-    Patch,
+    
     Param,
     Delete,
-    Put,
-    UseInterceptors,
-    UploadedFile,
-    Req,
+   
   } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { CreateVehiculeByConducteurDto } from 'src/principale/createDto/vehicule-by-conducteur.dto';

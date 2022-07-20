@@ -15,11 +15,12 @@ import { ConducteurService } from './conducteur.service';
 import { ProprietaireVehiculesService } from './proprietaire-vehicule.service';
 import { ConducteurVehiculeService } from './conducteur-vehicule.service';
 import { CreateVehiculeDto } from '../createDto/vehicule.dto';
-import { CreateVehiculeByConducteurDto } from '../createDto/vehicule-by-conducteur.dto';
 import { VehiculeSubDto } from '../createDto/vehicule-sub.dto';
 import { LicenceVehicule } from '../entities/licence-vehicule.entity';
 import {  TypePayementLicence } from 'src/enums/type-payement';
 import { Mairie } from './../entities/mairie.entity';
+import { CreateVehiculeByConducteurDto } from '../createDto/vehicule-by-conducteur.dto';
+import { UpdateVehiculeByConducteurDto } from './../createDto/update-by-conducteur.dto';
 
 @Injectable()
 export class VehiculeService {
@@ -84,9 +85,7 @@ export class VehiculeService {
 
   async createByConducteur(motDto: CreateVehiculeByConducteurDto): Promise<Vehicule> {
     let vehicule: Vehicule = new Vehicule();
-    Object.keys(motDto).forEach((cle) => {
-      vehicule[cle] = motDto[cle];
-    });
+    Object.keys(motDto).forEach((cle) => { vehicule[cle] = motDto[cle]; });
    
 
     const conducteur: Conducteur = await this.conducteurService.findOne(+motDto.conducteur_id)
@@ -159,6 +158,53 @@ export class VehiculeService {
     licence.conducteur =null;
     
     vehicule.licence = licence;
+    vehicule = await Vehicule.save(vehicule);
+   
+
+    return vehicule;
+
+  }
+
+    
+
+  async updateByConducteur(motDto: UpdateVehiculeByConducteurDto): Promise<Vehicule> {
+    let vehicule: Vehicule = await this.findOne(motDto.id)
+    Object.keys(motDto).forEach((cle) => { vehicule[cle] = motDto[cle]; });
+
+    if(motDto.conducteur_id && motDto.conducteur_id!=  vehicule.conducteur?.id ){
+      const conducteur: Conducteur = await this.conducteurService.findOne(+motDto.conducteur_id);
+      vehicule.conducteur = conducteur;
+      conducteur.vehicule = vehicule;
+      await this.conducteurService.update(conducteur.id,conducteur);
+      let conducteurVehicule: ConducteurVehicule = ConducteurVehicule.create({
+        conducteur: {id:conducteur.id},
+        vehicule:{id:vehicule.id},
+        date_debut: new Date(),
+      });
+      conducteurVehicule =   await ConducteurVehicule.save(conducteurVehicule).catch((error)=>{
+          throw new InternalServerErrorException("Erreur pendant la sauvegarde de l'association (conducteur et vehicule)");
+  
+      })
+    }
+
+     //update ConducteurVehicule if conducteur.vehicule is not null
+
+
+    if(motDto.proprietaire_id)
+    {
+     const owner = await this.userService.findOne(motDto.proprietaire_id)
+      vehicule.proprietaire = owner;
+      let proprietaireVehicule:ProprietaireVehicule =  ProprietaireVehicule.create({
+        proprietaire: {id:owner.id},
+        vehicule:{id:vehicule.id},
+        date_debut: new Date(),
+      });
+       proprietaireVehicule = await ProprietaireVehicule.save(proprietaireVehicule).catch((error)=>{
+        console.log(error);
+        throw new InternalServerErrorException("Erreur pendant la sauvegarde du propriétaire de la vehicule");
+       });
+    } 
+
     vehicule = await Vehicule.save(vehicule);
    
 
@@ -247,7 +293,7 @@ export class VehiculeService {
   }
 
   findOne(id: number): Promise<Vehicule> {
-    return this.vehiculeRepository.findOneOrFail(id).catch((error)=>{
+    return this.vehiculeRepository.findOneOrFail(id, {relations: ["vehicule", "licence", "proprietaire"], loadEagerRelations:false}).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le payement spécifié n'existe pas");
         });

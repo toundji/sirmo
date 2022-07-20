@@ -20,6 +20,7 @@ import { editFileName, imageFileFilter } from "../utilis/utils";
 import { User } from "../entities/user.entity";
 import { diskStorage } from 'multer';
 import { ApiConstante } from './../utilis/api-constantes';
+import { ConducteurStat } from "../createDto/conducteur-statistque";
 
   
   @ApiTags("Appreciations des Conducteurs")
@@ -44,6 +45,12 @@ import { ApiConstante } from './../utilis/api-constantes';
     findOne(@Param("id") id: string): Promise<Appreciation> {
       return this.appreciationService.findOne(+id);
     }
+
+    @Get("conducteurs/:id/statistiques")
+    getStatistics(@Param("id") id: string): Promise<ConducteurStat> {
+      return this.appreciationService.statistic(+id);
+    }
+
 
   @ApiOkResponse()
   @ApiConsumes('multipart/form-data')
