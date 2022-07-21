@@ -13,6 +13,7 @@ import { TypeAmandeService } from './type-amande.service';
 import { PayementService } from './payement.service';
 import { Payement } from './../entities/payement.entity';
 import { ConducteurService } from './conducteur.service';
+import { UpdateAmandeDto } from './../updateDto/update-amande.dto';
 
 
 
@@ -70,7 +71,7 @@ export class AmandeService {
     amande.conducteur= conducteur;
 
    const typeAmandes: TypeAmande[] =  await this.typeAmandeService.findBysIds(createAmandeDto.typeAmndeIds);
-   let montant =0
+   let montant =0;
     typeAmandes.forEach(ele=>{
         montant += ele.montant;
     });
@@ -96,6 +97,38 @@ export class AmandeService {
    return await this.amandeRepository.save(amande);
   }
 
+  async update(id:number, createAmandeDto: UpdateAmandeDto, user: User):Promise<Amande>  {
+    const amande : Amande = await this.findOne(id);
+
+    Object.keys(createAmandeDto).forEach((cle) => {
+      amande[cle] = createAmandeDto[cle];
+    });
+
+    amande.editeur_id = user.id;
+
+    if(createAmandeDto.conducteur_id){
+      const conducteur: Conducteur = await this.conducteurService.findOne(createAmandeDto.conducteur_id);
+      amande.conducteur= conducteur;
+    }
+
+    if(createAmandeDto.typeAmndeIds){
+      const typeAmandes: TypeAmande[] =  await this.typeAmandeService.findBysIds(createAmandeDto.typeAmndeIds);
+      let montant =0;
+        typeAmandes.forEach(ele=>{
+            montant += ele.montant;
+        });
+        amande.montant = montant;
+        amande.restant = montant;
+        amande.typeAmndes = typeAmandes;
+    }
+      return this.amandeRepository.save(amande).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+  
+      });
+
+  }
+
   findAll() {
     return this.amandeRepository.find({});
   }
@@ -117,16 +150,6 @@ export class AmandeService {
       });
 
  
-  }
-
-  async update(id: number, amande: Amande) {
-   
-      return this.amandeRepository.update(id,amande).catch((error)=>{
-        console.log(error);
-      throw new NotFoundException("L'amande spécifiée n'existe pas");
-      });
-
-   
   }
 
   patch(id: number, amande: Amande) {

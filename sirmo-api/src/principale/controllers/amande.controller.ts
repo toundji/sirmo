@@ -9,6 +9,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Put,
 } from "@nestjs/common";
 import { AmandeService } from "../services/amande.service";
 import { CreateAmandeDto } from "../createDto/create-amande.dto";
@@ -18,6 +19,7 @@ import { RoleGuard } from "../role.guard";
 import { User } from "../entities/user.entity";
 import { Roles } from "../role.decorator";
 import { RoleName } from "src/enums/role-name";
+import { UpdateAmandeDto } from './../updateDto/update-amande.dto';
 
 @ApiTags("Amandes")
 @Controller("amandes")
@@ -52,17 +54,23 @@ export class AmandeController {
   
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  findOne(@Param("id") id: number) {
     return this.amandeService.findOne(+id);
   }
 
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() amande: Amande) {
-    return this.amandeService.update(+id, amande);
+  @Put(":id")
+  updat(@Param("id") id: number, @Body() amande: UpdateAmandeDto,  @Req() request) {
+    const user: User = request.user;
+
+    return this.amandeService.update(+id, amande, user);
   }
 
+  @Patch(":id")
+  update(@Param("id") id: number, @Body() amande: Amande) {
+    return this.amandeService.patch(+id, amande);
+  }
   @Delete(":id")
-  remove(@Param("id") id: string) {
+  remove(@Param("id") id: number) {
     return this.amandeService.remove(+id);
   }
 }
