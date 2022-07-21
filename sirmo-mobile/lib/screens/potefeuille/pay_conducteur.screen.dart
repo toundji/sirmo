@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sirmo/components/personal_alert.dart';
 
 import 'package:sirmo/models/conducteur.dart';
+import 'package:sirmo/services/compte.service.dart';
 
 import '../../components/app-decore.dart';
 import '../../models/user.dart';
@@ -23,6 +26,8 @@ class _PayConducteurScreenState extends State<PayConducteurScreen> {
   User? user;
   int? amount;
   GlobalKey<FormFieldState> fieldKey = GlobalKey<FormFieldState>();
+
+  String? errorMessage, successMessage;
 
   @override
   void initState() {
@@ -66,7 +71,27 @@ class _PayConducteurScreenState extends State<PayConducteurScreen> {
     );
   }
 
-  onSubmit() {}
+  onSubmit() async {
+    if (fieldKey.currentState == null || fieldKey.currentState!.validate()) {
+      PersonalAlert.showLoading(context);
+      successMessage = null;
+      await context
+          .read<CompteService>()
+          .payDriver(conducteur, amount!)
+          .then((value) {
+        PersonalAlert.showSuccess(context,
+            message: "Conducteur payé avec succès");
+        setState(() {
+          successMessage = "Conducteur payé avec succès\n Montant : $amount";
+        });
+      }).onError((error, stackTrace) {
+        setState(() {
+          errorMessage = "$error";
+        });
+        PersonalAlert.showError(context, message: "$error");
+      });
+    }
+  }
 
   Widget get profile {
     Size size = MediaQuery.of(context).size;

@@ -68,12 +68,17 @@ export class AmandeService {
   }
 
   findAll() {
-    return this.amandeRepository.find({relations:["commune"]});
+    return this.amandeRepository.find({});
+  }
+
+  findAllForConducteur(conducteur_id:number) {
+    return this.amandeRepository.find(
+      {where:{conducteur:  Conducteur.create({id: conducteur_id})}, relations: ["typeAmndes", "payements", "police"], loadEagerRelations:false});
   }
 
   findOne(id: number):Promise<Amande> {
    
-      return this.amandeRepository.findOne(id, {relations:["commune"]}).catch((error)=>{
+      return this.amandeRepository.findOne(id, {}).catch((error)=>{
         console.log(error);
         throw new NotFoundException("L'amande spécifiée n'existe pas");
       });

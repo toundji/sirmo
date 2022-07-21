@@ -32,7 +32,6 @@ import { ConducteurStat } from "../createDto/conducteur-statistque";
     @Post()
     create(@Body() createAppreciationDto: CreateAppreciationDto, @Req() request):Promise<Appreciation>  {
       const user: User = request.user;
-
       return this.appreciationService.create(createAppreciationDto, user);
     }
 
@@ -41,11 +40,16 @@ import { ConducteurStat } from "../createDto/conducteur-statistque";
       return this.appreciationService.findAll();
     }
 
+    @Get("conducteurs/:id")
+    findAllForConducteur(@Param("id") id:number):Promise<Appreciation[]>{
+      return this.appreciationService.findAllForConducteur(id);
+    }
+
     @Get(":id")
     findOne(@Param("id") id: string): Promise<Appreciation> {
       return this.appreciationService.findOne(+id);
     }
-
+    
     @Get("conducteurs/:id/statistiques")
     getStatistics(@Param("id") id: string): Promise<ConducteurStat> {
       return this.appreciationService.statistic(+id);

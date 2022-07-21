@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:html';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -6,10 +7,26 @@ import 'package:flutter/cupertino.dart';
 
 import '../models/appreciation.dart';
 import '../models/conducteur-stat.dart';
+import '../models/conducteur.dart';
 import 'dio-client.service.dart';
 
 class AppreciationService extends ChangeNotifier {
   List<Appreciation>? all;
+
+  Future<List<Appreciation>?> loadAll(Conducteur conducteur,
+      {bool refresh = false}) async {
+    if (all == null || all!.isEmpty || refresh) {
+      await DioClient().get("appreciations").then((value) {
+        List list = value;
+        all = list.map((e) => Appreciation.fromMap(e)).toList();
+        notifyListeners();
+        return all;
+      }).onError((error, stackTrace) {
+        log("$error");
+        throw error ?? "Une erreur s'est produit";
+      });
+    }
+  }
 
   Future<Appreciation?> createAppreciation(
       Appreciation appreciation, File? file) async {

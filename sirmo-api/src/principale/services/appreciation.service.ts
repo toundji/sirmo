@@ -76,6 +76,12 @@ export class AppreciationService {
     return this.appreciationRepository.find();
   }
 
+  findAllForConducteur(conducteur_id:number):Promise<Appreciation[]> {
+    return this.appreciationRepository.find(
+      {where:{conducteur:  Conducteur.create({id: conducteur_id})}, loadEagerRelations:false}
+    );
+  }
+
   async statistic(conducteur_id:number):Promise<ConducteurStat> {
     const conducteur:Conducteur = await Conducteur.findOneOrFail(conducteur_id).catch((error)=>{
       console.log(error);

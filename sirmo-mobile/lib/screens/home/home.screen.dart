@@ -4,13 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-bar.screen.dart';
-import 'package:sirmo/components/drawer_screen.dart';
-import 'package:sirmo/components/top_curve_path.dart';
 import 'package:sirmo/components/user-drawer.dart';
-import 'package:sirmo/screens/potefeuille/compte.history.screen.dart';
-import 'package:sirmo/screens/potefeuille/credite-porte.screen.dart';
+import 'package:sirmo/screens/potefeuille/pay_conducteur.screen.dart';
 import 'package:sirmo/screens/potefeuille/portefeuille.component.dart';
-import 'package:sirmo/screens/profile/profile.screen.dart';
 import 'package:sirmo/screens/statistique-conducteur/evaluate-conduteur.screen.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/services/conducteur.sevice.dart';
@@ -71,12 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           InkWell(
               onTap: () {
                 log("${NetworkInfo.headers}");
               },
-              child: Text("Cliquer pour débuger")),
+              child: const Text("Cliquer pour débuger")),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -89,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onSubmit: (conducteur) {
                       AppUtil.changeToScreen(
                           context,
-                          StatistiqueConducteurScreen(
+                          PayConducteurScreen(
                             conducteur: conducteur,
                           ));
                     },
