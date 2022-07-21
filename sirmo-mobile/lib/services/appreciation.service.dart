@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/appreciation.dart';
+import '../models/conducteur-stat.dart';
 import 'dio-client.service.dart';
 
 class AppreciationService extends ChangeNotifier {
@@ -53,6 +54,18 @@ class AppreciationService extends ChangeNotifier {
     }).onError((error, stackTrace) {
       log("$error");
       throw error ?? "";
+    });
+  }
+
+  Future<ConducteurStat?> loadStatistique(int conducteur_id) async {
+    return await DioClient()
+        .get("appreciations/conducteurs/$conducteur_id/statistiques")
+        .then((value) {
+      return ConducteurStat.fromMap(value);
+    }).onError((error, stackTrace) {
+      log("Téléchargement de ConducteurStat ",
+          error: error, stackTrace: stackTrace);
+      throw error ?? "Téléchargement de conducteurStat";
     });
   }
 }

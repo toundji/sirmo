@@ -13,6 +13,9 @@ import { TypeOperation } from 'src/enums/type-operation';
 import { TypePayement } from 'src/enums/type-payement';
 import { Conducteur } from './../entities/conducteur.entity';
 import { error } from 'console';
+import { ConducteurService } from './conducteur.service';
+import { InternalServerErrorException } from '@nestjs/common';
+import { PayConducteurDto } from './../createDto/pay-conducteur.dto';
 
 @Injectable()
 export class PayementService {
@@ -20,6 +23,8 @@ export class PayementService {
     @InjectRepository(Payement) private payementRepository: Repository<Payement>,
     private readonly compteService:CompteService,
     private readonly userService:UserService,
+    private readonly conducteurService:ConducteurService,
+
   ) {}
 
   async create(createPayementDto: CreatePayementDto): Promise<Payement> {
@@ -57,7 +62,7 @@ export class PayementService {
     payement.operation = TypeOperation.PAYEMENT_LICENCE;
     payement.createur_id = user?.id;
     payement.montant = montant;
-    const compte: Compte = await this.compteService.debit(conducteur.id, montant);
+    const compte: Compte = await this.compteService.debit(conducteur.user.id, montant);
     payement.compte = compte;
     payement.solde = compte.montant;
     try {
@@ -75,7 +80,7 @@ export class PayementService {
     payement.operation = TypeOperation.PAYEMENT_AMANDE;
     payement.createur_id = user?.id;
     payement.montant = montant;
-    const compte: Compte = await this.compteService.debit(conducteur.id, montant);
+    const compte: Compte = await this.compteService.debit(conducteur.user.id, montant);
     payement.compte = compte;
     payement.solde = compte.montant;
     try {
@@ -85,6 +90,40 @@ export class PayementService {
       throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
     
     }
+  }
+
+  async payConducteur( user: User, body:PayConducteurDto){
+    const conducteur:Conducteur = await this.conducteurService.findOne(body.conducteur_id);
+    const payement: Payement = new Payement();
+    
+    payement.type = TypePayement.DEBIT;
+    payement.operation = TypeOperation.PAYEMENT_CONDUCTEUR;
+    payement.createur_id = user?.id;
+    payement.montant = body.montant;
+    const compte: Compte = await this.compteService.debit(user.id, body.montant);
+    payement.compte = compte;
+    payement.solde = compte.montant;
+
+
+    const driverPay:Payement = new Payement();
+    driverPay.type = TypePayement.CREDIT;
+    driverPay.operation = TypeOperation.PAYEMENT_CONDUCTEUR;
+    driverPay.createur_id = user?.id;
+    driverPay.montant = body.montant;
+    const driverCompte: Compte = await this.compteService.credit(conducteur.user.id, body.montant);
+    driverPay.compte = driverCompte;
+    driverPay.solde = driverCompte.montant;
+
+      await this.payementRepository.save(driverPay).catch(error=>{
+        console.log(error);
+        throw new InternalServerErrorException("Nous ne parvenon pas à enrégistrer le payement pour le conducteur")
+      });
+
+      return this.payementRepository.save(payement).catch(error=>{
+        console.log(error);
+        throw new InternalServerErrorException("Nous ne parvenon pas à enrégistrer le payement")
+      });
+
   }
 
   findAll(): Promise<Payement[]> {
@@ -127,7 +166,5 @@ export class PayementService {
         console.log(error);
         throw new NotFoundException("Le payement spécifié n'existe pas");
       });
-
- 
   }
 }

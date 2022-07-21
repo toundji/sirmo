@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-decore.dart';
+import 'package:sirmo/components/personal_alert.dart';
+import 'package:sirmo/models/conducteur-stat.dart';
+import 'package:sirmo/services/appreciation.service.dart';
 import 'package:sirmo/utils/color-const.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -20,12 +24,24 @@ class StatistiqueConducteurScreen extends StatefulWidget {
 class _StatistiqueConducteurScreenState
     extends State<StatistiqueConducteurScreen> {
   late Conducteur conducteur;
+  ConducteurStat? statistique;
   User? user;
   @override
   void initState() {
     super.initState();
     conducteur = widget.conducteur;
     user = conducteur.user;
+  }
+
+  loadStat() async {
+    await context
+        .read<AppreciationService>()
+        .loadStatistique(conducteur.id!)
+        .then((value) {
+      setState(() {
+        statistique = value;
+      });
+    });
   }
 
   @override
@@ -101,51 +117,77 @@ class _StatistiqueConducteurScreenState
                   ),
                 )),
             Container(
-                child: SfCartesianChart(
-                    // Initialize category axis
-                    primaryXAxis: CategoryAxis(),
-                    series: <LineSeries<SalesData, String>>[
-                  LineSeries<SalesData, String>(
-                      color: Colors.blue,
-                      width: 50,
-                      // Bind data source
-                      dataSource: <SalesData>[
-                        SalesData('EXCELLENTE', 0),
-                        SalesData('EXCELLENTE', 5),
-                      ],
-                      xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales),
-                  LineSeries<SalesData, String>(
-                      color: Colors.green,
-                      width: 50,
-                      // Bind data source
-                      dataSource: <SalesData>[
-                        SalesData('TRES BON ', 0),
-                        SalesData('TRES BON ', 28),
-                      ],
-                      xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales),
-                  LineSeries<SalesData, String>(
-                      color: Colors.amber,
-                      width: 50,
-                      // Bind data source
-                      dataSource: <SalesData>[
-                        SalesData('BON', 0),
-                        SalesData('BON', 34),
-                      ],
-                      xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales),
-                  LineSeries<SalesData, String>(
-                      color: Colors.red,
-                      width: 50,
-                      // Bind data source
-                      dataSource: <SalesData>[
-                        SalesData('MAUVAIS', 0),
-                        SalesData('MAUVAIS', 10),
-                      ],
-                      xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales)
-                ])),
+                child: FutureBuilder<ConducteurStat?>(
+                    future: context
+                        .read<AppreciationService>()
+                        .loadStatistique(conducteur.id!),
+                    builder: (context, data) {
+                      if (data.hasData) {
+                        statistique = data.data;
+                        return SfCartesianChart(
+                            // Initialize category axis
+                            primaryXAxis: CategoryAxis(),
+                            series: <LineSeries<SalesData, String>>[
+                              LineSeries<SalesData, String>(
+                                  color: Colors.blue,
+                                  width: 50,
+                                  // Bind data source
+                                  dataSource: <SalesData>[
+                                    SalesData('EXCELLENTE', 0),
+                                    SalesData('EXCELLENTE',
+                                        statistique?.excellence ?? 0.0),
+                                  ],
+                                  xValueMapper: (SalesData sales, _) =>
+                                      sales.year,
+                                  yValueMapper: (SalesData sales, _) =>
+                                      sales.sales),
+                              LineSeries<SalesData, String>(
+                                  color: Colors.green,
+                                  width: 50,
+                                  // Bind data source
+                                  dataSource: <SalesData>[
+                                    SalesData('TRES BON ', 0),
+                                    SalesData('TRES BON ',
+                                        statistique?.tres_bon ?? 0.0),
+                                  ],
+                                  xValueMapper: (SalesData sales, _) =>
+                                      sales.year,
+                                  yValueMapper: (SalesData sales, _) =>
+                                      sales.sales),
+                              LineSeries<SalesData, String>(
+                                  color: Colors.amber,
+                                  width: 50,
+                                  // Bind data source
+                                  dataSource: <SalesData>[
+                                    SalesData('BON', 0),
+                                    SalesData('BON', statistique?.bon ?? 0.0),
+                                  ],
+                                  xValueMapper: (SalesData sales, _) =>
+                                      sales.year,
+                                  yValueMapper: (SalesData sales, _) =>
+                                      sales.sales),
+                              LineSeries<SalesData, String>(
+                                  color: Colors.red,
+                                  width: 50,
+                                  // Bind data source
+                                  dataSource: <SalesData>[
+                                    SalesData('MAUVAIS', 0),
+                                    SalesData(
+                                        'MAUVAIS', statistique?.mauvais ?? 0.0),
+                                  ],
+                                  xValueMapper: (SalesData sales, _) =>
+                                      sales.year,
+                                  yValueMapper: (SalesData sales, _) =>
+                                      sales.sales)
+                            ]);
+                      }
+                      if (data.hasError) {
+                        return Text("${data.error ?? ""}");
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    })),
           ],
         ),
       ),
