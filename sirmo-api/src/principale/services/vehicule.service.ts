@@ -293,9 +293,9 @@ export class VehiculeService {
   }
 
   findOne(id: number): Promise<Vehicule> {
-    return this.vehiculeRepository.findOneOrFail(id, {relations: ["vehicule", "licence", "proprietaire"], loadEagerRelations:false}).catch((error)=>{
+    return this.vehiculeRepository.findOneOrFail(id, {relations: ["conducteur", "licence", "proprietaire"], loadEagerRelations:false}).catch((error)=>{
       console.log(error);
-      throw new NotFoundException("Le payement spécifié n'existe pas");
+      throw new NotFoundException("Le véhicule spécifié n'existe pas");
         });
       }
 

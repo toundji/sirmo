@@ -54,68 +54,67 @@ class _StatistiqueConducteurScreenState
         child: Column(
           children: [
             Center(
-                widthFactor: 0.8,
-                child: Card(
-                  margin:
+              widthFactor: 0.8,
+              child: Card(
+                margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                child: Container(
+                  width: size.width * 0.7,
+                  padding:
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                  child: Container(
-                    width: size.width * 0.7,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        child: Container(
+                          padding: EdgeInsets.all(2),
                           height: MediaQuery.of(context).size.height * 0.2,
-                          child: Container(
-                            padding: EdgeInsets.all(2),
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            width: MediaQuery.of(context).size.height * 0.2,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
+                          width: MediaQuery.of(context).size.height * 0.2,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: CircleAvatar(
+                            foregroundImage: NetworkImage(
+                              "${NetworkInfo.baseUrl}${widget.conducteur.user?.profile_image}",
+                              headers: {
+                                "Authorization": "Bearer ${NetworkInfo.token}",
+                              },
                             ),
-                            child: CircleAvatar(
-                              foregroundImage: NetworkImage(
-                                "${NetworkInfo.baseUrl}${widget.conducteur.user?.profile_image}",
-                                headers: {
-                                  "Authorization":
-                                      "Bearer ${NetworkInfo.token}",
-                                },
-                              ),
-                              backgroundImage:
-                                  AssetImage("assets/images/profile.jpg"),
-                            ),
+                            backgroundImage:
+                                AssetImage("assets/images/profile.jpg"),
                           ),
                         ),
-                        SizedBox(height: 16),
-                        Text(
-                          "${user?.nom ?? ''} ${user?.prenom ?? ''}",
-                          style: const TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text("Status : "),
-                            Text(
-                              "${conducteur.statut}",
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 18,
-                                  color: conducteur.isActif
-                                      ? ColorConst.primary
-                                      : ColorConst.error,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        "${user?.nom ?? ''} ${user?.prenom ?? ''}",
+                        style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Status : "),
+                          Text(
+                            "${conducteur.statut}",
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontSize: 18,
+                                color: conducteur.isActif
+                                    ? ColorConst.primary
+                                    : ColorConst.error,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
-                )),
+                ),
+              ),
+            ),
             Container(
                 child: FutureBuilder<ConducteurStat?>(
                     future: context

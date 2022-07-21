@@ -48,6 +48,9 @@ export class Vehicule extends Audit {
   numero_chassis: string;
 
   @Column({ nullable: true })
+  numero_serie: string;
+
+  @Column({ nullable: true })
   numero_serie_moteur: string;
 
   @Column({ nullable: true })

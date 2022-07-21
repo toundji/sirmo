@@ -136,7 +136,9 @@ class _CreditPortefeuilleScreenState extends State<CreditPortefeuilleScreen> {
         .then((Compte? value) {
       context.read<UserService>().notifyListeners();
       PersonalAlert.showSuccess(context, message: "Compte rechargé avec succès")
-          .then((r) {});
+          .then((r) {
+        Navigator.pop(context);
+      });
     }).onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "$error");
     });
