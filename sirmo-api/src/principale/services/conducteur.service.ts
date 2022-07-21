@@ -230,7 +230,7 @@ export class ConducteurService {
   }
 
   findForUser(user_id: number):Promise<Conducteur[]> {
-    return this.conducteurRepository.find({where:{ user: User.create({id: user_id}) }}).catch((error)=>{
+    return this.conducteurRepository.find({where:{ user: User.create({id: user_id}) ,relations: ["vehicule"]}}).catch((error)=>{
       console.log(error);
 
       throw new NotFoundException("Le conducteur spécifié n'existe pas");
@@ -253,7 +253,7 @@ export class ConducteurService {
 
   findOfUser(user_id: number): Promise<Conducteur[]> {
     const user:User = User.create({id: user_id});
-    return this.conducteurRepository.find({where:{ user: user}})
+    return this.conducteurRepository.find({where:{ user: user},relations: ["vehicule"]})
     .catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le conducteur spécifié n'existe pas");

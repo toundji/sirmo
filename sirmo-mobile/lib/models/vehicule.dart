@@ -59,6 +59,8 @@ class Vehicule implements Audit {
 
   String? cv;
 
+  String? ci_er;
+
   User? proprietaire;
 
   Conducteur? conducteur;
@@ -100,6 +102,7 @@ class Vehicule implements Audit {
     this.type,
     this.marque,
     this.modele,
+    this.ci_er,
     this.couleur,
     this.pays_immatriculation,
     this.puissance_fiscale,
@@ -156,6 +159,7 @@ class Vehicule implements Audit {
     String? ptac,
     String? pv,
     String? cv,
+    String? ci_er,
     User? proprietaire,
     Conducteur? conducteur,
     List<ConducteurVehicule>? conducteurvehicules,
@@ -195,6 +199,7 @@ class Vehicule implements Audit {
       ptac: ptac ?? this.ptac,
       pv: pv ?? this.pv,
       cv: cv ?? this.cv,
+      ci_er: ci_er ?? this.ci_er,
       proprietaire: proprietaire ?? this.proprietaire,
       conducteur: conducteur ?? this.conducteur,
       conducteurvehicules: conducteurvehicules ?? this.conducteurvehicules,
@@ -236,6 +241,7 @@ class Vehicule implements Audit {
       'ptac': ptac,
       'pv': pv,
       'cv': cv,
+      'ci_er': ci_er,
       'licence': licence?.toMap(),
       'proprietaire': proprietaire?.toMap(),
       'conducteur': conducteur?.toMap(),
@@ -274,10 +280,11 @@ class Vehicule implements Audit {
       'puissance_fiscale': puissance_fiscale,
       'carosserie': carosserie,
       'categorie': categorie,
-      'place_assise': place_assise,
+      'place_assise': place_assise ?? 1,
       'ptac': ptac,
       'pv': pv,
       'cv': cv,
+      "ci_er": ci_er,
       'proprietaire_id': proprietaire?.id,
       'conducteur_id': conducteur?.id,
     };
@@ -313,6 +320,7 @@ class Vehicule implements Audit {
       ptac: map['ptac'],
       pv: map['pv'],
       cv: map['cv'],
+      ci_er: map['ci_er'],
       proprietaire: map['proprietaire'] != null
           ? User.fromMap(map['proprietaire'])
           : null,

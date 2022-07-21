@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ import '../../components/app-bar.screen.dart';
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
 import '../../services/user.service.dart';
+import '../vehicule/vehicule_info.screen.dart';
 import 'choice-driver.screen.dart';
 
 class ConducteurHomeScreen extends StatefulWidget {
@@ -51,6 +54,7 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
   @override
   Widget build(BuildContext context) {
     conducteur = context.read<ConducteurService>().conducteur;
+    log("$conducteur");
 
     return Scaffold(
       appBar: AppAppBar(context),
@@ -66,7 +70,9 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
                 ActionCard(
                   name: "vehicule",
                   icon: Icons.motorcycle,
-                  screen: vehiculeCreateScreen(),
+                  screen: conducteur?.vehicule == null
+                      ? vehiculeCreateScreen()
+                      : VehiculeInfoScreen(vehicule: conducteur!.vehicule!),
                 ),
                 const ActionCard(name: "Licence", icon: Icons.edit),
               ],

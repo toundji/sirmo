@@ -157,6 +157,28 @@ class _vehiculeCreateScreenState extends State<vehiculeCreateScreen> {
                     ...displayError("modele"),
                     const SizedBox(height: 16),
                     TextFormField(
+                      initialValue: vehicule.categorie,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.categorie = value?.trim();
+                        resetError('categorie');
+                      },
+                      decoration: AppDecore.input("categorie"),
+                    ),
+                    ...displayError("categorie"),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: vehicule.puissance_fiscale,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.puissance_fiscale = value?.trim();
+                        resetError('puissance_fiscale');
+                      },
+                      decoration: AppDecore.input("puissance_fiscale"),
+                    ),
+                    ...displayError("puissance_fiscale"),
+                    const SizedBox(height: 16),
+                    TextFormField(
                       initialValue: vehicule.type,
                       validator: validator,
                       onChanged: (String? value) {
@@ -166,6 +188,72 @@ class _vehiculeCreateScreenState extends State<vehiculeCreateScreen> {
                       decoration: AppDecore.input("Type"),
                     ),
                     ...displayError("type"),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: vehicule.ci_er,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.ci_er = value?.trim();
+                        resetError('ci_er');
+                      },
+                      decoration: AppDecore.input("ci_er"),
+                    ),
+                    ...displayError("ci_er"),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: vehicule.ptac,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.ptac = value?.trim();
+                        resetError('ptac');
+                      },
+                      decoration: AppDecore.input("ptac"),
+                    ),
+                    ...displayError("ptac"),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: vehicule.pv,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.pv = value?.trim();
+                        resetError('pv');
+                      },
+                      decoration: AppDecore.input("pv"),
+                    ),
+                    ...displayError("pv"),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: vehicule.cv,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.cv = value?.trim();
+                        resetError('cv');
+                      },
+                      decoration: AppDecore.input("cv"),
+                    ),
+                    ...displayError("cv"),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: vehicule.carosserie,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.carosserie = value?.trim();
+                        resetError('carosserie');
+                      },
+                      decoration: AppDecore.input("carosserie"),
+                    ),
+                    ...displayError("carosserie"),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: vehicule.pays_immatriculation,
+                      validator: validator,
+                      onChanged: (String? value) {
+                        vehicule.pays_immatriculation = value?.trim();
+                        resetError('pays_immatriculation');
+                      },
+                      decoration: AppDecore.input("pays_immatriculation"),
+                    ),
+                    ...displayError("pays_immatriculation"),
                     const SizedBox(height: 16),
                     DateTimeField(
                         format: AppDate.dateFormat,
