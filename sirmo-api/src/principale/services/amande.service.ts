@@ -26,7 +26,7 @@ export class AmandeService {
     private readonly payementService: PayementService,
   ) {}
 
-  async create(createAmandeDto: CreateAmandeDto, user: User) {
+  async create(createAmandeDto: CreateAmandeDto, user: User):Promise<Amande>  {
     const amande : Amande = new Amande();
 
     Object.keys(createAmandeDto).forEach((cle) => {
@@ -36,6 +36,35 @@ export class AmandeService {
 
     const police:Police = await this.policeService.findOne(user.id);
     amande.police = police;
+
+    const conducteur: Conducteur = await this.conducteurService.findOne(createAmandeDto.conducteur_id);
+    amande.conducteur= conducteur;
+
+   const typeAmandes: TypeAmande[] =  await this.typeAmandeService.findBysIds(createAmandeDto.typeAmndeIds);
+   let montant =0
+    typeAmandes.forEach(ele=>{
+        montant += ele.montant;
+    });
+    amande.montant = montant;
+    amande.restant = montant;
+
+    
+      return this.amandeRepository.save(amande).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+  
+      });
+
+  }
+
+  async createByAdmin(createAmandeDto: CreateAmandeDto, user: User):Promise<Amande>  {
+    const amande : Amande = new Amande();
+
+    Object.keys(createAmandeDto).forEach((cle) => {
+      amande[cle] = createAmandeDto[cle];
+    });
+
+    amande.createur_id = user.id;
 
     const conducteur: Conducteur = await this.conducteurService.findOne(createAmandeDto.conducteur_id);
     amande.conducteur= conducteur;
@@ -73,7 +102,11 @@ export class AmandeService {
 
   findAllForConducteur(conducteur_id:number) {
     return this.amandeRepository.find(
-      {where:{conducteur:  Conducteur.create({id: conducteur_id})}, relations: ["typeAmndes", "payements", "police"], loadEagerRelations:false});
+      {where:{conducteur:  Conducteur.create({id: conducteur_id})}, relations: ["typeAmndes", "payements", "police"], loadEagerRelations:false}).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Une erreur s'est produit. Vuilez contacter un administrateur");
+        
+      });
   }
 
   findOne(id: number):Promise<Amande> {

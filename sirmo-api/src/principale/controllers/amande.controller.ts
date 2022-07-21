@@ -17,6 +17,8 @@ import { Amande } from "../entities/amande.entity";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { RoleGuard } from "../role.guard";
 import { User } from "../entities/user.entity";
+import { Roles } from "../role.decorator";
+import { RoleName } from "src/enums/role-name";
 
 @ApiTags("Amandes")
 @Controller("amandes")
@@ -28,6 +30,14 @@ export class AmandeController {
     const user: User = request.user;
 
     return this.amandeService.create(createAmandeDto, user);
+  }
+
+  @Post("admin")
+  @UseGuards(RoleGuard)
+  @Roles(RoleName.ADMIN)
+  createByAdmin(@Body() createAmandeDto: CreateAmandeDto,  @Req() request) {
+    const user: User = request.user;
+    return this.amandeService.createByAdmin(createAmandeDto, user);
   }
 
   @Get()

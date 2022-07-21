@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:html';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -16,9 +15,15 @@ class AppreciationService extends ChangeNotifier {
   Future<List<Appreciation>?> loadAll(Conducteur conducteur,
       {bool refresh = false}) async {
     if (all == null || all!.isEmpty || refresh) {
-      await DioClient().get("appreciations").then((value) {
+      await DioClient()
+          .get("appreciations/conducteurs/${conducteur.id}")
+          .then((value) {
         List list = value;
-        all = list.map((e) => Appreciation.fromMap(e)).toList();
+        all = list.map((e) {
+          Appreciation appreciation = Appreciation.fromMap(e);
+          appreciation.conducteur = conducteur;
+          return appreciation;
+        }).toList();
         notifyListeners();
         return all;
       }).onError((error, stackTrace) {
