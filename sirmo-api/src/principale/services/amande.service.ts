@@ -76,8 +76,8 @@ export class AmandeService {
     });
     amande.montant = montant;
     amande.restant = montant;
+    amande.typeAmndes = typeAmandes;
 
-    
       return this.amandeRepository.save(amande).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");

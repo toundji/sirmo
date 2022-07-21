@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:sirmo/models/audit.dart';
 
 import 'conducteur.dart';
@@ -29,6 +30,26 @@ class Appreciation implements Audit {
 
   @override
   DateTime? created_at;
+
+  static String get EXCELLENT => "EXCELLENT";
+  static String get TRES_BON => "TRES BON";
+  static String get BON => "BON";
+  static String get MAUVAISE => "MAUVAISE";
+  static List<String> get STATUS_LIST =>
+      ["EXCELLENT", "TRES BON", "BON", "MAUVAISE"];
+  static Map<String, IconData> STATUS_ICONS = {
+    Appreciation.EXCELLENT: Icons.start,
+    Appreciation.TRES_BON: Icons.thumb_up,
+    Appreciation.BON: Icons.check,
+    Appreciation.MAUVAISE: Icons.thumb_down,
+  };
+
+  static Map<String, Color> STATUS_Colors = {
+    Appreciation.EXCELLENT: Colors.blue,
+    Appreciation.TRES_BON: Colors.green,
+    Appreciation.BON: Colors.yellow,
+    Appreciation.MAUVAISE: Colors.red,
+  };
 
   @override
   DateTime? updated_at;

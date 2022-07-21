@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../models/appreciation.dart';
 import '../models/conducteur-stat.dart';
@@ -12,7 +13,7 @@ import 'dio-client.service.dart';
 class AppreciationService extends ChangeNotifier {
   List<Appreciation>? all;
 
-  Future<List<Appreciation>?> loadAll(Conducteur conducteur,
+  Future<List<Appreciation>> loadAll(Conducteur conducteur,
       {bool refresh = false}) async {
     if (all == null || all!.isEmpty || refresh) {
       await DioClient()
@@ -25,12 +26,13 @@ class AppreciationService extends ChangeNotifier {
           return appreciation;
         }).toList();
         notifyListeners();
-        return all;
+        return all!;
       }).onError((error, stackTrace) {
         log("$error");
         throw error ?? "Une erreur s'est produit";
       });
     }
+    return all!;
   }
 
   Future<Appreciation?> createAppreciation(

@@ -3,12 +3,22 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sirmo/models/conducteur.dart';
 
 import '../models/vehicule.dart';
 import 'dio-client.service.dart';
 
 class VehiculeService extends ChangeNotifier {
   Vehicule? vehicule;
+  Map<int, List<Vehicule>> allByDriver = {};
+
+  loadVehiculeOfConducteur(Conducteur conducteur,
+      {bool refresh = false}) async {
+    int id = conducteur.id!;
+    if (allByDriver[id] == null || allByDriver[id]!.isEmpty || refresh) {
+      await DioClient().get("vehicules/conducteurs/id").then((value) {});
+    }
+  }
 
   Future<Vehicule?> createvehicule(Vehicule vehicule) async {
     return await DioClient()

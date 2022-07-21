@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/models/conducteur.dart';
+import 'package:sirmo/screens/appreciation/appreciation.screen.dart';
 import 'package:sirmo/screens/statistique-conducteur/evaluate-conduteur.screen.dart';
 import 'package:sirmo/screens/statistique-conducteur/statistique-conducteur.screen.dart';
 import 'package:sirmo/screens/vehicule/create-vehicule.dart';
@@ -76,9 +77,9 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ActionCard(
-                name: "Status",
+                name: "Appreciation",
                 icon: Icons.info,
-                screen: StatistiqueConducteurScreen(
+                screen: AppreciationScreen(
                   conducteur: conducteur!,
                 ),
               ),
