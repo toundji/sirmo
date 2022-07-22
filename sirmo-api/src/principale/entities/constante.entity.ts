@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ConstanteVisibility } from 'src/enums/constante-visibility';
-import { Column,  Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column,  Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Audit } from './audit';
 
 @Entity("constantes")
@@ -11,6 +11,7 @@ export class Constante extends Audit {
   id: number;
 
   @Column({ nullable: false})
+  @Index({ unique: true, where: "status IS TRUE" })
   nom: string;
 
   @Column({ nullable: false})

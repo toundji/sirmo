@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../../entities/user.entity';
 import { UserService } from './../../services/user.service';
-import { Role } from '../../entities/role.entity';
 import { Compte } from '../../entities/compte.entity';
 import { CompteService } from './../../services/compte.service';
 import { RoleName } from 'src/enums/role-name';
@@ -17,9 +16,7 @@ import { Conducteur } from './../../entities/conducteur.entity';
 import { CreateUserConducteurCptDto } from '../dto/user-conducteur-cpt.dto';
 import * as fs from 'fs';
 import { UserConducteurDG_Dto } from '../dto/user-conducteur-dg.dto';
-import { Express } from 'multer';
 import { Fichier } from './../../entities/fichier.entity';
-import { profile } from 'console';
 import { ApiConstante } from './../../utilis/api-constantes';
 import { ConducteurService } from './../../services/conducteur.service';
 import { Arrondissement } from 'src/principale/entities/arrondissement.entity';
@@ -78,8 +75,6 @@ export class ConducteurAdminService {
     // conducteur.idCarde_image = body.idCarde_image;
 
 
-
-   
     const data:any = {
       nom: body.nom,
       prenom: body.prenom,

@@ -54,7 +54,6 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
   @override
   Widget build(BuildContext context) {
     conducteur = context.read<ConducteurService>().conducteur;
-    log("$conducteur");
 
     return Scaffold(
       appBar: AppAppBar(context),

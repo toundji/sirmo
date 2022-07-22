@@ -2,36 +2,42 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateLicenceDto } from '../createDto/create-licence.dto';
-import { Licence } from '../entities/licence.entity';
 import { Mairie } from '../entities/mairie.entity';
 import { User } from '../entities/user.entity';
 import { Conducteur } from '../entities/conducteur.entity';
-import { UpdateLicenceDto } from '../updateDto/update-licence.dto';
 import { ConducteurService } from './conducteur.service';
 import { MairieService } from './mairie.service';
 import { PayementService } from './payement.service';
-import { Payement } from './../entities/payement.entity';
-import { error } from 'console';
+import { Payement } from '../entities/payement.entity';
 import { InternalServerErrorException } from '@nestjs/common';
+import { LicenceVehicule } from '../entities/licence-vehicule.entity';
+import { CreateLicenceDto } from './../createDto/create-licence.dto';
+import { UpdateLicenceDto } from '../updateDto/update-licence.dto';
+import { VehiculeService } from './vehicule.service';
+import { Vehicule } from './../entities/vehicule.entity';
 
 @Injectable()
-export class LicenceService {
+export class LicenceVehiculeService {
   constructor(
-    @InjectRepository(Licence) private licenceRepository: Repository<Licence>,
+    @InjectRepository(LicenceVehicule) private licenceRepository: Repository<LicenceVehicule>,
     private readonly conducteurService: ConducteurService,
     private readonly mairieService: MairieService,
     private readonly payementService: PayementService,
+    private readonly vehiculeService: VehiculeService,
+
   ) {}
   async create(body: CreateLicenceDto,  createur:User) {
-   const licence:Licence = new Licence();
+   const licence:LicenceVehicule = new LicenceVehicule();
 
     Object.keys(body).forEach((cle) => {
       licence[cle] = body[cle];
     });
 
-    const conducteur: Conducteur = await this.conducteurService.findOne(body.vehicule_id);
+    const vehicule: Vehicule = await this.vehiculeService.findOne(body.vehicule_id);
+
+    const conducteur: Conducteur = await this.conducteurService.findOne(vehicule.conducteur.id);
     licence.conducteur = conducteur;
+    licence.vehicule = vehicule;
 
     if(body.mairie_id){
       const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
@@ -43,11 +49,9 @@ export class LicenceService {
       licence.mairie.solde += licence.montant;
       await this.mairieService.update(licence.mairie.id, licence.mairie);
     }
-
     licence.createur_id = createur?.id;
 
-    const payement: Payement = await this.payementService.payLicence(licence.montant, conducteur, createur);
-    licence.payement = payement;
+    ///creer un payement
 
     return this.licenceRepository.save(licence).catch((error)=>{
       console.log(error);
@@ -56,15 +60,18 @@ export class LicenceService {
   }
 
   async createByAdmin(body: CreateLicenceDto,  createur:User) {
-    const licence:Licence = new Licence();
- 
+    const licence:LicenceVehicule = new LicenceVehicule();
+
      Object.keys(body).forEach((cle) => {
        licence[cle] = body[cle];
      });
- 
-     const conducteur: Conducteur = await this.conducteurService.findOne(body.vehicule_id);
-     licence.conducteur = conducteur;
- 
+
+     const vehicule: Vehicule = await this.vehiculeService.findOne(body.vehicule_id);
+
+    const conducteur: Conducteur = await this.conducteurService.findOne(vehicule.conducteur.id);
+    licence.conducteur = conducteur;
+    licence.vehicule = vehicule;
+
      if(body.mairie_id){
        const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
        licence.mairie = mairie;
@@ -75,53 +82,51 @@ export class LicenceService {
        licence.mairie.solde += licence.montant;
        await this.mairieService.update(licence.mairie.id, licence.mairie);
      }
- 
+
      licence.createur_id = createur?.id;
- 
-     const payement: Payement = await this.payementService.payLicence(licence.montant, conducteur, createur);
-     licence.payement = payement;
- 
+
      return this.licenceRepository.save(licence).catch((error)=>{
        console.log(error);
        throw new InternalServerErrorException("Erreur pendant la sauvergarde de la licence. Veillez reprendre ou contacter un administrateur si cela persiste");
      });
-   }
-  
+  }
 
-  createAll(createLicenceDto: CreateLicenceDto[],  createur: User) {
-    const licences: Licence[] = [];
+  async createByFedapay(body: CreateLicenceDto,  createur:User) {
 
-    createLicenceDto.forEach(async body=>{
-      const licence:Licence = new Licence();
+    if(!body.transaction_id){
+      throw new BadRequestException("L'id de la transaction est obligatoire");
+    }
 
-      Object.keys(createLicenceDto).forEach((cle) => {
-        licence[cle] = body[cle];
-      });
+    const licence:LicenceVehicule = new LicenceVehicule();
+     Object.keys(body).forEach((cle) => {
+       licence[cle] = body[cle];
+     });
 
-      const conducteur: Conducteur = await this.conducteurService.findOne(body.vehicule_id);
-      licence.conducteur = conducteur;
+    const vehicule: Vehicule = await this.vehiculeService.findOne(body.vehicule_id);
 
-      const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
-      licence.mairie = mairie;
+    const conducteur: Conducteur = await this.conducteurService.findOne(vehicule.conducteur.id);
+    licence.conducteur = conducteur;
+    licence.vehicule = vehicule;
 
-      mairie.solde += licence.montant;
-      await this.mairieService.update(mairie.id, mairie);
+    licence.transaction_id = body.transaction_id;
 
-      licence.createur_id = createur?.id;
+     if(body.mairie_id){
+       const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
+       licence.mairie = mairie;
+       mairie.solde += licence.montant;
+       await this.mairieService.update(mairie.id, mairie);
+     }else{
+       licence.mairie = conducteur.mairie;
+       licence.mairie.solde += licence.montant;
+       await this.mairieService.update(licence.mairie.id, licence.mairie);
+     }
 
-      const payement: Payement = await this.payementService.payLicence(licence.montant, conducteur, createur);
-      licence.payement = payement;
-      
-      licences.push(licence);
+     licence.createur_id = createur?.id;
 
-      return licence;
-
-    });
-      return this.licenceRepository.save(licences).catch((error)=>{
-        console.log(error);
-        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-      });
-
+     return this.licenceRepository.save(licence).catch((error)=>{
+       console.log(error);
+       throw new InternalServerErrorException("Erreur pendant la sauvergarde de la licence. Veillez reprendre ou contacter un administrateur si cela persiste");
+     });
   }
 
   findAll() {
@@ -133,12 +138,11 @@ export class LicenceService {
       return this.licenceRepository.findOne(id).catch((error)=>{
         console.log(error);
         throw new NotFoundException("Le licence spécifiée n'existe pas");
-      
       });
   }
 
-  update(id: number, updateLicenceDto: UpdateLicenceDto) {
-      return this.licenceRepository.update(id, updateLicenceDto).catch((error)=>{
+  update(id: number, updateLicenceVehiculeDto: UpdateLicenceDto) {
+      return this.licenceRepository.update(id, updateLicenceVehiculeDto).catch((error)=>{
         console.log(error);
         throw new NotFoundException("Le licence spécifiée n'existe pas");
      

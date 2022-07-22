@@ -73,6 +73,9 @@ import { UserAdminController } from './admin/controllers/user-admin-controller.d
 import { ConducteurAdminController } from './admin/controllers/conducteur-admin.controller';
 import { VehiculeAdminController } from './admin/controllers/vehicule-admin.controller.dto';
 import { ConducteurAdminService } from './admin/services/conducteur-admin.service';
+import { LicenceVehiculeService } from './services/licence-vehicule.service';
+import { LicenceVehiculeController } from './controllers/licence-vehicule.controller';
+import { LicenceVehicule } from './entities/licence-vehicule.entity';
 
 
 
@@ -96,6 +99,7 @@ import { ConducteurAdminService } from './admin/services/conducteur-admin.servic
       Compte,
       Fichier,
       Localisation,
+      LicenceVehicule,
       Payement,
       Police,
       ConducteurVehicule,
@@ -123,13 +127,13 @@ import { ConducteurAdminService } from './admin/services/conducteur-admin.servic
     CompteService,
     AppreciationService,
     ConstanteService,
+    LicenceVehiculeService,
   ],
   controllers: [
     PrincipaleController,
     UserController,
-      LicenceController,
+      // LicenceController,
       MairieController,
-     
       VehiculeController,
       ProprietaireVehiculesController,
       TypeAmandeController,
@@ -145,7 +149,7 @@ import { ConducteurAdminService } from './admin/services/conducteur-admin.servic
       UserAdminController,
       ConducteurAdminController,
       VehiculeAdminController,
-
+      LicenceVehiculeController,
       ArrondissementController,
       CommuneController,
       DepartementController,
@@ -162,6 +166,7 @@ import { ConducteurAdminService } from './admin/services/conducteur-admin.servic
     ArrondissementService,
     CommuneService,
     LicenceService,
+    LicenceVehiculeService,
     MairieService,
     DepartementService,
     VehiculeService,
@@ -179,8 +184,7 @@ import { ConducteurAdminService } from './admin/services/conducteur-admin.servic
     AppreciationService,
     CompteService,
     ConstanteService,
-    ConducteurAdminService,
-
+    ConducteurAdminService
   ],
 })
 export class PrincipaleModule {}

@@ -5,6 +5,9 @@ import { Constante } from '../entities/constante.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { CreateConstanteDto } from '../createDto/constante.dto';
+import { Licence } from './../entities/licence.entity';
+import { ConstanteDto } from './../createDto/constante-search.dto';
+import { LicenceProperty } from 'src/enums/licence-property';
 
 @Injectable()
 export class ConstanteService {
@@ -35,6 +38,22 @@ export class ConstanteService {
     });
   }
 
+  searchFirst(search:ConstanteDto):Promise<Constante>{
+    return this.constanteRepository.find({where:search}).then((list)=>{
+      if(list && list.length >0){
+        return list[0];
+      }
+      throw new NotFoundException("Aucun enrégistrement ne correspond à votre recherche")
+    }).catch((error)=>{
+      throw new BadRequestException("Une erreur s'est produit pendant la recherche")
+    });
+  }
+  search(search:ConstanteDto):Promise<Constante[]>{
+    return this.constanteRepository.find({where:search}).catch((error)=>{
+      throw new BadRequestException("Une erreur s'est produit pendant la recherche")
+    });
+  }
+
 //   update(id: number, updateConstanteDto: UpdateConstanteDto) {
 //     return this.constanteRepository.update(id, updateConstanteDto).catch((error)=>{
 //       console.log(error);
@@ -52,13 +71,21 @@ export class ConstanteService {
     });
   }
 
-  async init(){
-    // const constantes: Constante[] = await this.findAll();
-    // if(!constantes || constantes.length === 0){
-    //   Object.values(ConstanteName).forEach(value=>{
-    //     constantes.push({"nom" : value} as Constante);
-    //   })
-    //   return this.constanteRepository.save(constantes);
-    // }
+  async init():Promise<Constante[]>{
+    let constantes: Constante[] = await this.findAll();
+    if(!constantes || constantes.length == 0){
+      const list=[
+        {
+          nom: LicenceProperty.PRIX_LICENCE,
+          valeur:"24000"
+        },{
+          nom:LicenceProperty.DUREE_DUREE,
+          valeur:"12"
+        }
+      ];
+      constantes = Constante.create(list);
+      return await this.constanteRepository.save(constantes);
+    }
+    return constantes;
   }
 }

@@ -17,6 +17,9 @@ import { CreateVehiculeDto } from '../../createDto/vehicule.dto';
 import { TypePayementLicence } from 'src/enums/type-payement';
 import { LicenceVehicule } from 'src/principale/entities/licence-vehicule.entity';
 import { CreateVehiculeByConducteurDto } from 'src/principale/createDto/vehicule-by-conducteur.dto';
+import { ConstanteService } from 'src/principale/services/constante.service';
+import { Constante } from 'src/principale/entities/constante.entity';
+import { LicenceProperty } from 'src/enums/licence-property';
 
 @Injectable()
 export class VehiculeAdminService {
@@ -30,6 +33,8 @@ export class VehiculeAdminService {
     @Inject(forwardRef(() => ConducteurVehiculeService))
     private readonly conducteurVehiculeService:ConducteurVehiculeService,
     private readonly fichierService: FichierService,
+    private readonly constanteService: ConstanteService,
+
 
   ) {}
 
@@ -76,8 +81,13 @@ export class VehiculeAdminService {
     Object.keys(motDto).forEach((cle) => {
       vehicule[cle] = motDto[cle];
     });
-   
 
+    const licencePrice:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.PRIX_LICENCE}).catch((error)=>{
+      throw new InternalServerErrorException("Une errerur au prix de la licence s'est produit");
+    })
+    const licenceDuration:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.DUREE_DUREE}).catch((error)=>{
+      throw new InternalServerErrorException("Une errerur liée à la durée de la licence s'est produit");
+    })
     const conducteur: Conducteur = await this.conducteurService.findOne(+motDto.conducteur_id)
     vehicule.conducteur = conducteur;
       vehicule =await  this.vehiculeRepository.save(vehicule).catch((error)=>{
@@ -127,12 +137,10 @@ export class VehiculeAdminService {
 
     const now = new Date();
 
-
-
     const licenceTmp:LicenceVehicule = LicenceVehicule.create({
-      montant: 20200,
+      montant: +licencePrice.valeur,
       solde_mairie: conducteur.mairie.solde,
-      date_fin: new Date(now.getFullYear()+1, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()),
+      date_fin: new Date(now.getFullYear(), +licenceDuration.valeur+now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()),
       conducteur: conducteur,
       vehicule: vehicule,
       mairie: conducteur.mairie,

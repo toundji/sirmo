@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:sirmo/models/licence_vehicule.dart';
+import 'package:sirmo/utils/app-date.dart';
 
 import 'audit.dart';
 import 'conducteur.dart';
@@ -256,6 +257,44 @@ class Vehicule implements Audit {
       'editeur_id': editeur_id,
       'updated_at': updated_at?.toIso8601String(),
       'licences': licences?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  Map<String, dynamic> toDisplayMap() {
+    return {
+      'Immatriculation': immatriculation,
+      'Numero de la carte grise': numero_carte_grise,
+      'Numero chassis': numero_chassis,
+      'Numero serie': numero_serie,
+      'Numero serie moteur': numero_serie_moteur,
+      'Provenance': provenance,
+      'Puissance': puissance,
+      'Energie': energie,
+      'Annee de mise circulation': annee_mise_circulation?.toIso8601String(),
+      'Date de la derniere revision': derniere_revision?.toIso8601String(),
+      'Etat': etat,
+      'Type': type,
+      'Marque': marque,
+      'Modele': modele,
+      'Couleur': couleur,
+      'Pays immatriculation': pays_immatriculation,
+      'Puissance fiscale': puissance_fiscale,
+      'Carosserie': carosserie,
+      'Categorie': categorie,
+      'Place assise': place_assise,
+      'Ptac': ptac,
+      'Pv': pv,
+      'Cv': cv,
+      if (proprietaire != null)
+        'proprietaire': "${proprietaire?.nom} ${proprietaire?.prenom}",
+      if (conducteur?.user != null)
+        'conducteur': "${conducteur?.user?.nom} ${conducteur?.user?.prenom}",
+      'Image': image_path == null
+          ? "Le véhicule n'admet pas d'image"
+          : "Le véhicule admet d'image",
+      'Date Création': AppDate.dayDateFormat.format(created_at!),
+      'Date de la dernière mise à jour':
+          AppDate.dayDateFormat.format(created_at!),
     };
   }
 
