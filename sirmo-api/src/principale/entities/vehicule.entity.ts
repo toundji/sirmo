@@ -26,7 +26,7 @@ export class Vehicule extends Audit {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   immatriculation: string;
 
   @Column({ nullable: true })
@@ -70,7 +70,7 @@ export class Vehicule extends Audit {
   @Column({ nullable: true })
   energie:string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   date_circulation:Date;
 
   @Column({ nullable: true })
