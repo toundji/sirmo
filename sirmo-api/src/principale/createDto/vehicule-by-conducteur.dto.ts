@@ -30,8 +30,8 @@ export class CreateVehiculeByConducteurDto {
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le numéro serie moteur est obligatoire"})
-  numero_serie_moteur:  string;
+  @IsNotEmpty({message:"La couleur est obligatoire"})
+  couleur:  string;
 
   
   @ApiProperty({required:true})
