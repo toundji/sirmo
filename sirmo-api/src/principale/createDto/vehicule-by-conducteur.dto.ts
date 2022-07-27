@@ -102,7 +102,7 @@ export class CreateVehiculeByConducteurDto {
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
   @IsNotEmpty({message:"Le  est obligatoire"})
-  cv: string;
+  cu: string;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})

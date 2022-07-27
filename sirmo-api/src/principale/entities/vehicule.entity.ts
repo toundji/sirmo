@@ -59,9 +59,6 @@ export class Vehicule extends Audit {
   puissance:string;
 
   @Column({ nullable: true })
-  puissance_fiscale:string;
-
-  @Column({ nullable: true })
   carosserie:string;
 
   @Column({ nullable: true })
@@ -76,7 +73,7 @@ export class Vehicule extends Audit {
   @Column({ nullable: true })
   derniere_revision:Date;
 
-  @Column({ default: EtatVehicule.OCASION, nullable: false })
+  @Column({ default: EtatVehicule.OCASION, nullable: true })
   etat: EtatVehicule;
 
   @Column({ nullable: true })
@@ -101,7 +98,7 @@ export class Vehicule extends Audit {
   pv: string;
 
   @Column({ nullable: true })
-  cv: string;
+  cu: string;
 
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'proprietaire_id'})

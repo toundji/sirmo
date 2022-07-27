@@ -101,12 +101,7 @@ export class VehiculeSubDto {
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
   @IsNotEmpty({message:"Le  est obligatoire"})
-  cv: string;
-
-  @ApiProperty({required:true})
-  @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le  est obligatoire"})
-  puissance_fiscale:string;
+  cu: string;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
