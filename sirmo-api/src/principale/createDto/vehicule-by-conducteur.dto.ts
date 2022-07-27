@@ -37,7 +37,7 @@ export class CreateVehiculeByConducteurDto {
   @ApiProperty({required:true})
   @IsDateString({message:"Format invalide"})
   @IsNotEmpty({message:"L'annee de mise en circulation est requise."})
-  annee_mise_circulation:Date;
+  date_circulation:Date;
 
   @ApiProperty({required:true})
   @IsDateString({message:"Format invalide"})
@@ -117,7 +117,7 @@ export class CreateVehiculeByConducteurDto {
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
   @IsNotEmpty({message:"Le  est obligatoire"})
-  pays_immatriculation: string;
+  commune_enregistrement: string;
 
   @ApiProperty({required:true})
   @IsNumber()

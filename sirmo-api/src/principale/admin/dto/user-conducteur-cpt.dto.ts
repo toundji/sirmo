@@ -23,15 +23,12 @@ export class CreateUserConducteurCptDto {
 
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
-  @MinLength(13, {message: "Ifu invalide, Ifu trop court"})
   ifu?: string;
 
-  @MinLength(14, {message: "cip invalide, cip trop court"})
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
   cip?: string;
 
-  @MinLength(10, {message: "nip invalide, nip trop court"})
   @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
   nip?: string;

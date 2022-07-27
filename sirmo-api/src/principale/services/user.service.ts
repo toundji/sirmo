@@ -246,7 +246,7 @@ export class UserService {
   findOneByPseudo(pseudo: string): Promise<any> {
     Logger.debug(pseudo);
     return this.userRepository.findOneOrFail({
-      where: { phone: pseudo },
+      where: [{ phone: pseudo }, { email: pseudo } ],
     }).catch(
       (error)=>{
         console.log(error);

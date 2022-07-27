@@ -83,7 +83,7 @@ import { LicenceVehicule } from './entities/licence-vehicule.entity';
   imports: [
     MulterModule.register({dest: './files'}),
     forwardRef(() =>AuthModule),
-  TypeOrmModule.forFeature([
+    TypeOrmModule.forFeature([
       User,
       Arrondissement,
       Commune,

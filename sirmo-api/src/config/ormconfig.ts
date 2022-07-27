@@ -3,7 +3,7 @@ import { TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import 'dotenv/config'
 
 
-const ormConfig: TypeOrmOptionsFactory|any = {
+const ormConfig: TypeOrmOptionsFactory | any = {
     type: "postgres" ?? process.env.DATABASE_SG,
     url: process.env.DB_URL,
     ssl: { rejectUnauthorized: false },

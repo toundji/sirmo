@@ -27,7 +27,6 @@ export class Vehicule extends Audit {
   id: number;
 
   @Column({ nullable: false })
-
   immatriculation: string;
 
   @Column({ nullable: true })
@@ -39,7 +38,7 @@ export class Vehicule extends Audit {
   ci_er: string;
 
   @Column({ nullable: true })
-  pays_immatriculation: string;
+  commune_enregistrement: string;
 
   @Column({ nullable: true })
   numero_carte_grise: string;
@@ -72,7 +71,7 @@ export class Vehicule extends Audit {
   energie:string;
 
   @Column({ nullable: false })
-  annee_mise_circulation:Date;
+  date_circulation:Date;
 
   @Column({ nullable: true })
   derniere_revision:Date;
@@ -139,9 +138,6 @@ export class Vehicule extends Audit {
     inverseJoinColumn: { name: 'fichier_id', referencedColumnName: 'id'},
   })
   images?: Fichier[];
-
-
-  
 
 
 }
