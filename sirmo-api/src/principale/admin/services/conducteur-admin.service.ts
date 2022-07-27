@@ -69,7 +69,6 @@ export class ConducteurAdminService {
     conducteur. permis=body.permis;
     conducteur.date_optention_permis=body.date_optention_permis;
     conducteur.date_delivrance_ifu=body.date_delivrance_ifu;
-    conducteur.idCarde=body.idCarde;
     conducteur. ancienIdentifiant=body.ancienIdentifiant;
     // conducteur.idCarde_image = body.profile_image;
     // conducteur.idCarde_image = body.idCarde_image;
@@ -78,10 +77,11 @@ export class ConducteurAdminService {
     const data:any = {
       nom: body.nom,
       prenom: body.prenom,
-      genre:body.genre,
+      genre: body.genre,
       password: body.password,
       date_naiss: body.date_naiss,
-      phone:body.phone,
+      phone: body.phone,
+      idCarde: body.idCarde,
       arrondissement: body.arrondissement
     };
     const mairie:Mairie = await this.mairieService.findOne(body.mairie_id);
@@ -110,11 +110,8 @@ export class ConducteurAdminService {
       });
       profile = await Fichier.save(profile);
       user.profile_image = profile.path;
-      await user.save();
     }
-    
     if(body.idCarde_image){
-     
       let bitmap: Buffer =  Buffer.from(body.idCarde_image, 'base64');
       const filename:string = '/carte_identite'+ id + Date.now() + '.png';
 
@@ -126,14 +123,16 @@ export class ConducteurAdminService {
       let id_carde_Image:Fichier = Fichier.create({
         nom:"cate d'identié",
         path: ApiConstante.id_carde_path + filename,
-        entity: Conducteur.entityName,
-        entityId: conducteurSaved.id
+        entity: User.entityName,
+        entityId: user.id
       });
 
      id_carde_Image = await Fichier.save(id_carde_Image)
-     conducteurSaved.idCarde_image =  id_carde_Image.path;
-     await conducteurSaved.save();
+     user.idCarde_image =  id_carde_Image.path;
+    }
 
+    if(body.idCarde_image || body.profile_image){
+      await user.save();
     }
 
     // const compte: Compte = 
@@ -156,7 +155,6 @@ export class ConducteurAdminService {
     conducteur.permis=body.permis ?? conducteur.permis;
     conducteur.date_optention_permis=body.date_optention_permis ?? conducteur.date_optention_permis;
     conducteur.date_delivrance_ifu=body.date_delivrance_ifu ?? conducteur.date_delivrance_ifu;
-    conducteur.idCarde=body.idCarde ?? conducteur.idCarde;
     conducteur. ancienIdentifiant=body.ancienIdentifiant??conducteur. ancienIdentifiant;
     // conducteur.idCarde_image = body.profile_image;
     // conducteur.idCarde_image = body.idCarde_image;
@@ -179,14 +177,13 @@ export class ConducteurAdminService {
       let id_carde_Image:Fichier = Fichier.create({
         nom:"cate d'identié",
         path: ApiConstante.id_carde_path + filename,
-        entity: Conducteur.entityName,
-        entityId: conducteur.id
+        entity: User.entityName,
+        entityId: conducteur.user.id
       });
 
      id_carde_Image = await Fichier.save(id_carde_Image)
-     conducteur.idCarde_image =  id_carde_Image.path;
-     await conducteur.save();
-
+     conducteur.user.idCarde_image =  id_carde_Image.path;
+     await conducteur.user.save();
     }
 
       conducteur.user.nom = body.nom ?? conducteur.user.nom;
@@ -297,11 +294,11 @@ export class ConducteurAdminService {
           nom:"cate d'identié",
           path: ApiConstante.id_carde_path + filename,
           entity: Conducteur.entityName,
-          entityId: conducteur.id
+          entityId: conducteur.user.id
         });
         id_carde_Image = await Fichier.save(id_carde_Image)
-       conducteur.idCarde_image = id_carde_Image.path;
-       await conducteurSaved.save();
+       conducteur.user.idCarde_image = id_carde_Image.path;
+       await conducteurSaved.user.save();
       }
       return conducteurSaved;
   }
@@ -336,8 +333,8 @@ export class ConducteurAdminService {
 
     let id_card:string='';
 
-    if(conducteur.idCarde_image){
-      const fichier:Fichier = await Fichier.findOne(+conducteur.idCarde_image);
+    if(conducteur.user.idCarde_image){
+      const fichier:Fichier = await Fichier.findOne(+conducteur.user.idCarde_image);
       id_card = fs.readFileSync(fichier.path).toString('base64');
     }
 
@@ -349,7 +346,7 @@ export class ConducteurAdminService {
     permis: conducteur.permis,
     date_optention_permis: conducteur.date_optention_permis,
     date_delivrance_ifu: conducteur.date_delivrance_ifu,
-    idCarde: conducteur.idCarde,
+    idCarde: conducteur.user.idCarde,
     ancienIdentifiant:conducteur.ancienIdentifiant ,
     mairie_id: conducteur.mairie?.id,
     nom: conducteur.user?.nom ,

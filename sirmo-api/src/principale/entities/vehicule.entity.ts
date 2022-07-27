@@ -70,9 +70,6 @@ export class Vehicule extends Audit {
   @Column({ nullable: true })
   date_circulation:Date;
 
-  @Column({ nullable: true })
-  derniere_revision:Date;
-
   @Column({ default: EtatVehicule.OCASION, nullable: true })
   etat: EtatVehicule;
 

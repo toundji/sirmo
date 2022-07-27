@@ -7,7 +7,7 @@ import { hash } from 'bcrypt';
 import { Fichier } from 'src/principale/entities/fichier.entity';
 import { Audit } from "./audit";
 import { Genre } from 'src/enums/genre';
-import { Exclude, Transform } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { RoleName } from 'src/enums/role-name';
 
 
@@ -41,11 +41,17 @@ export class User extends Audit{
   @Column({unique:true, nullable:false})
   phone: string;
 
+  @Column({nullable:true})
+  idCarde: string;
+
   @Column({ nullable: false, unique: true })
-  code?: string = uuidv4();
+  code?: string;
 
   @Column({nullable:true})
   profile_image: string;
+
+  @Column({ nullable: true,  unique:false  })
+  idCarde_image: string;
 
   @Column("simple-array",{default: [RoleName.USER]})
   roles?: RoleName[];
@@ -75,10 +81,9 @@ export class User extends Audit{
   @BeforeInsert()  async hashPassword() {
     this.email = this.email?.toLowerCase()?.trim();
     this.phone = this.phone?.trim();
-    this.password = await hash(this.password, 10);  
+    this.password = await hash(this.password, 10);
+    this.code = Date.now() + "";
   }
 
-  get image(){
-    if(this.profile_image)return "http://localhost:3000/api"+this.profile_image;
-  }
+  
 }

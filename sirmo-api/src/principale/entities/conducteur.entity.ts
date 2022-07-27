@@ -39,19 +39,16 @@ export class Conducteur extends Audit {
   @Index({ unique: true, where: "nic IS NOT NULL" })
   nic: string;
 
-  @Column({nullable:true})
-  idCarde: string;
-
   @Column({ unique: true })
   permis: string;
 
   @Column({nullable:true})
   date_optention_permis: Date;
 
-  @Column({ default: StatutConducteur.ACTIF, nullable: false })
+  @Column({ default: StatutConducteur.ACTIF, nullable: true })
   statut: StatutConducteur;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   ancienIdentifiant: string;
 
   //licence en cours
@@ -85,20 +82,9 @@ export class Conducteur extends Audit {
   @Column({ nullable: true, unique:false })
   profile_image: string;
 
-  @Column({ nullable: true,  unique:false  })
-  idCarde_image: string;
-
-  
   @BeforeInsert()  async generateNiz() {
-    const t = new Date();
-    const date = ('0' + t.getDate()).slice(-2);
-    const month = ('0' + (t.getMonth() + 1)).slice(-2);
-    const year = (''+t.getFullYear()).slice(-2);
-    const hours = ('0' + t.getHours()).slice(-2);
-    const minutes = ('0' + t.getMinutes()).slice(-2);
-    const seconds = ('0' + t.getSeconds()).slice(-2);
     const dif = ("0"+Math.floor(Math.random() * (99 + 1))).slice(-2);
-    const time = `${dif}${seconds}${minutes}${hours}${date}${month}${year}`;
+    const time = `${dif}${Date.now()}`;
     this.nic = time;
   }
 }

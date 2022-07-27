@@ -33,16 +33,10 @@ export class CreateVehiculeByConducteurDto {
   @IsNotEmpty({message:"La couleur est obligatoire"})
   couleur:  string;
 
-  
   @ApiProperty({required:true})
   @IsDateString({message:"Format invalide"})
   @IsNotEmpty({message:"L'annee de mise en circulation est requise."})
   date_circulation:Date;
-
-  @ApiProperty({required:true})
-  @IsDateString({message:"Format invalide"})
-  @IsNotEmpty({message:"La date de revision est requise."})
-  derniere_revision:Date;
 
   @ApiProperty({required:true})
   @IsString({message:"Format invalide"})
@@ -53,11 +47,6 @@ export class CreateVehiculeByConducteurDto {
   @IsString({message:"Format invalide"})
   @IsNotEmpty({message:"Le puissance est obligatoire"})
   puissance:string;
-
-  @ApiProperty({required:true})
-  @IsString({message:"Format invalide"})
-  @IsNotEmpty({message:"Le puissance est obligatoire"})
-  puissance_fiscale:string;
 
 
   @ApiProperty({required:true})
