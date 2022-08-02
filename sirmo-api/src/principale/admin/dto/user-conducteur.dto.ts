@@ -41,15 +41,6 @@ export class CreateUserConducteurDto {
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
   ancienIdentifiant: string;
 
-  @ApiProperty({required:true})
-  @IsString()
-  @IsOptional()
-  profile_image: string;
-
-  @ApiProperty({required:true})
-  @IsString()
-  @IsOptional()
-  idCarde_image: string;
 
   @ApiProperty({required:true})
   @IsNumber({},{message : "Mairie non valide"})
@@ -60,5 +51,15 @@ export class CreateUserConducteurDto {
   @ValidateNested({ each: true })
   @Type(() => CreateUserDto)
   user:CreateUserDto;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  profile_image: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  idCarde_image: string;
 
 }

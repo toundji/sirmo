@@ -12,16 +12,6 @@ export class CreateUserConducteurCptDto {
   id?: number;
 
   @ApiProperty({required:true})
-  @IsString()
-  @IsOptional()
-  profile_image?: string;
-
-  @ApiProperty({required:true})
-  @IsString()
-  @IsOptional()
-  idCarde_image?: string;
-
-  @ApiProperty({required:true})
   @IsNumberString({},{message:"Seules les chiffres sont valides"})
   ifu?: string;
 
@@ -89,5 +79,15 @@ export class CreateUserConducteurCptDto {
   @ApiProperty({required:true})
   @IsString()
   arrondissement?: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  profile_image?: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsOptional()
+  idCarde_image?: string;
 
 }

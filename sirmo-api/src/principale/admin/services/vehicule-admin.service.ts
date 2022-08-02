@@ -9,7 +9,6 @@ import { ProprietaireVehicule } from '../../entities/proprietaire-vehicule.entit
 import { ConducteurVehicule } from '../../entities/conducteur-vehicule.entity';
 import { NotFoundException } from '@nestjs/common';
 import { FichierService } from '../../services/fichier.service';
-import { Fichier } from '../../entities/fichier.entity';
 import { ConducteurService } from '../../services/conducteur.service';
 import { ProprietaireVehiculesService } from '../../services/proprietaire-vehicule.service';
 import { ConducteurVehiculeService } from '../../services/conducteur-vehicule.service';
@@ -32,10 +31,7 @@ export class VehiculeAdminService {
     private readonly proprietaireVehiculesService: ProprietaireVehiculesService,
     @Inject(forwardRef(() => ConducteurVehiculeService))
     private readonly conducteurVehiculeService:ConducteurVehiculeService,
-    private readonly fichierService: FichierService,
-    private readonly constanteService: ConstanteService,
-
-
+    private readonly constanteService: ConstanteService
   ) {}
 
   async create(createVehiculeDto: CreateVehiculeDto): Promise<Vehicule> {
@@ -75,6 +71,36 @@ export class VehiculeAdminService {
     return vehicule;
 
   }
+  async createVehicule(body: CreateVehiculeByConducteurDto): Promise<Vehicule> {
+    let vehicule: Vehicule = new Vehicule();
+    Object.keys(body).forEach((cle) => {
+      vehicule[cle] = body[cle];
+    })
+
+     //update ConducteurVehicule if conducteur.vehicule is not null
+
+     const owner = await this.userService.findOne(body.proprietaire_id)
+      vehicule.proprietaire = owner;
+   
+
+    let proprietaireVehicule:ProprietaireVehicule =  ProprietaireVehicule.create({
+      proprietaire: {id:owner.id},
+      vehicule:{id:vehicule.id},
+      date_debut: new Date(),
+    });
+     proprietaireVehicule = await ProprietaireVehicule.save(proprietaireVehicule).catch((error)=>{
+      console.log(error);
+      throw new InternalServerErrorException("Erreur pendant la sauvegarde du propriétaire de la vehicule");
+     });
+
+    proprietaireVehicule.vehicule = null;
+    vehicule.proprietaireVehicules = [proprietaireVehicule]
+    vehicule = await Vehicule.save(vehicule);
+
+    return vehicule;
+
+  }
+
 
   async createByConducteur(motDto: CreateVehiculeByConducteurDto): Promise<Vehicule> {
     let vehicule: Vehicule = new Vehicule();
@@ -179,12 +205,9 @@ export class VehiculeAdminService {
         console.log(error);
         throw new NotFoundException("Le payement spécifié n'existe pas");
       });
-
-    
   }
 
   remove(id: number) {
-   
       return this.vehiculeRepository.delete(id).catch((error) =>{
         console.log(error);
         throw new NotFoundException("Le payement spécifié n'existe pas");

@@ -61,7 +61,6 @@ export class ConducteurService {
     conducteur. permis=body.permis;
     conducteur.date_optention_permis=body.date_optention_permis;
     conducteur.date_delivrance_ifu=body.date_delivrance_ifu; 
-    conducteur.idCarde=body.idCarde;
     conducteur. ancienIdentifiant=body.ancienIdentifiant;
     // conducteur.idCarde_image = body.profile_image;
     // conducteur.idCarde_image = body.idCarde_image;
@@ -74,6 +73,8 @@ export class ConducteurService {
       password: body.password,
       date_naiss: body.date_naiss, 
       phone:body.phone,
+      idCarde: body.idCarde,
+
       arrondissement: body.arrondissement
     };
 

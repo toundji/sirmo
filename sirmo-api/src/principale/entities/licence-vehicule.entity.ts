@@ -1,15 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Mairie } from './mairie.entity';
 import { Conducteur } from './conducteur.entity';
-import { Payement } from './payement.entity';
 import { Audit } from './audit';
 import { StatusLicence } from 'src/enums/status-licence';
-import { DateTime } from 'luxon/src/datetime';
 import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { Vehicule } from './vehicule.entity';
-import { TypePayement, TypePayementLicence } from 'src/enums/type-payement';
+import { TypePayementLicence } from 'src/enums/type-payement';
 
 
 @Entity("licence_vehicule")
@@ -42,6 +40,9 @@ export class LicenceVehicule extends Audit{
   @Column()
   date_fin:Date;
 
+  @Column()
+  code?: string;
+
   @Expose()
   @ApiProperty({enum: StatusLicence})
  public get status(): StatusLicence{
@@ -64,4 +65,7 @@ export class LicenceVehicule extends Audit{
   @ManyToOne((type) => Mairie, {nullable:false, eager:true})
   mairie: Mairie;
 
+  @BeforeInsert()  async hashPassword() {
+    this.code = Date.now() + "";
+  }
 }

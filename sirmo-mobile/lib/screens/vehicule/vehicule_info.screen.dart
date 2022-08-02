@@ -113,4 +113,5 @@ class _VehiculeInfoScreenState extends State<VehiculeInfoScreen> {
       ),
     );
   }
+
 }

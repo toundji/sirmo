@@ -148,7 +148,6 @@ export class ConducteurAdminService {
 
   async updateConducteur(body: UpdateUserConducteurCompacteDto):Promise<UpdateUserConducteurCompacteDto> {
     const conducteur:Conducteur = await this.conducteurService.findOne(body.id);
-
     conducteur.ifu=body.ifu ?? conducteur.ifu;
     conducteur.nip=body.nip ?? conducteur.nip;
     conducteur.cip=body.cip ?? conducteur.cip;
@@ -173,7 +172,6 @@ export class ConducteurAdminService {
         fs.promises.mkdir(ApiConstante.id_carde_path, { recursive: true }).catch(console.error);
       }
       fs.writeFileSync(ApiConstante.id_carde_path + filename, bitmap);
-
       let id_carde_Image:Fichier = Fichier.create({
         nom:"cate d'identié",
         path: ApiConstante.id_carde_path + filename,
@@ -218,6 +216,7 @@ export class ConducteurAdminService {
     }
     await User.save(conducteur.user);
     await Conducteur.save(conducteur);
+    body["id"] = conducteur.id;
     return body;
   }
 

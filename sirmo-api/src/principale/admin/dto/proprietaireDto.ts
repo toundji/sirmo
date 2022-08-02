@@ -33,9 +33,13 @@ export class ProprietaireDto {
 
     @ApiProperty({required:true})
     @IsString()
-    @IsNotEmpty()
     @IsOptional()
-    profile_image: string;
+    profile_image?: string;
+
+    @ApiProperty({required:true})
+    @IsString()
+    @IsOptional()
+    idCarde_image?: string;
 
 
 //     @ApiProperty({required:true})
