@@ -42,6 +42,7 @@ export class LicenceVehicule extends Audit{
 
   @Column()
   code?: string;
+  
 
   @Expose()
   @ApiProperty({enum: StatusLicence})
