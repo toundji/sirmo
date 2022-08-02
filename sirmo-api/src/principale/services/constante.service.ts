@@ -12,7 +12,7 @@ import { LicenceProperty } from 'src/enums/licence-property';
 @Injectable()
 export class ConstanteService {
   constructor(  @InjectRepository(Constante)  private constanteRepository: Repository<Constante>){}
-  create(createConstanteDto: CreateConstanteDto) {
+  create(createConstanteDto: ConstanteDto) {
     return this.constanteRepository.save(createConstanteDto);
   }
 

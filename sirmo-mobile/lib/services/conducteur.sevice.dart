@@ -59,7 +59,6 @@ class ConducteurService extends ChangeNotifier {
       "ifu": conducteur.ifu,
       "cip": conducteur.cip,
       "nip": conducteur.nip,
-      "idCarde": conducteur.idCarde,
       "permis": conducteur.permis,
       "ancienIdentifiant": conducteur.ancienIdentifiant,
       "userId": 1,

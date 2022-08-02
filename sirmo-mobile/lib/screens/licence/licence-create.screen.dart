@@ -21,21 +21,66 @@ class LicenceCreateScreen extends StatefulWidget {
 }
 
 class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
-  int amount = 2000;
+  int? amount = 2000;
+  GlobalKey<FormFieldState> fieldKey = GlobalKey<FormFieldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppDecore.appBar(context, "Achat de licenece"),
-      body: Center(
-        child: AppDecore.submitButton(
-            context, "Cliquer pour payer votre licence", () {}),
+      body: Column(
+        children: [
+          Flexible(
+              child: Container(
+            height: 100,
+          )),
+          Card(
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 30),
+                  const Text(
+                    "Veuillez renseilller le montant à recharger ",
+                    style: TextStyle(
+                        color: ColorConst.text, fontStyle: FontStyle.italic),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 30, horizontal: 20),
+                    child: TextFormField(
+                      initialValue: "$amount",
+                      key: fieldKey,
+                      onChanged: (value) {
+                        amount = int.tryParse(value);
+                        setState(() {});
+                      },
+                      keyboardType: const TextInputType.numberWithOptions(),
+                      decoration:
+                          AppDecore.input("Montant", prefix: Icons.money),
+                    ),
+                  ),
+                  AppDecore.submitButton(context, "Valider", onSubmit,
+                      onLongPress: null)
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
+  onSubmit() async {
+    if (fieldKey.currentState == null || fieldKey.currentState!.validate()) {
+      await _onPay();
+    }
+  }
+
   Future _onPay() async {
     User? user = context.read<UserService>().user;
-  
 
     PhoneNumber phone =
         await PhoneNumber.getRegionInfoFromPhoneNumber(user!.phone!);

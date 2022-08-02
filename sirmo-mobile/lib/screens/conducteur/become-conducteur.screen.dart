@@ -97,16 +97,6 @@ class _ConducteurBecomeScreenState extends State<ConducteurBecomeScreen> {
                     ),
                     ...displayError("permis"),
                     SizedBox(height: 16),
-                    TextFormField(
-                      initialValue: conducteur.idCarde,
-                      validator: (value) => firstNameValidator(value, 8, 17),
-                      onChanged: (String? value) {
-                        conducteur.idCarde = value?.trim();
-                        resetError('idCarde');
-                      },
-                      decoration:
-                          AppDecore.input("Numéro de la carte d'identité"),
-                    ),
                     ...displayError("idCarde"),
                     SizedBox(height: 16),
                     TextFormField(

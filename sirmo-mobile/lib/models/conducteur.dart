@@ -6,10 +6,10 @@ import 'package:sirmo/models/audit.dart';
 
 import 'amande.dart';
 import 'appreciation.dart';
-import 'licence.dart';
-import 'vehicule.dart';
-import 'user.dart';
 import 'conducteur_vehicule.dart';
+import 'licence.dart';
+import 'user.dart';
+import 'vehicule.dart';
 
 class Conducteur implements Audit {
   User? user;
@@ -30,18 +30,16 @@ class Conducteur implements Audit {
 
   String? permis;
 
-  String? idCarde;
-
   String? statut;
 
   String? ancienIdentifiant;
 
   //licence en cours
-  Licence? licence;
+  // Licence? licence;
 
   Vehicule? vehicule;
 
-  List<Licence>? licences;
+  // List<Licence>? licences;
 
   // List des anciens vehicules conduit
   List<ConducteurVehicule>? conducteurvehicules;
@@ -80,12 +78,11 @@ class Conducteur implements Audit {
     this.compteEcobank,
     this.compteFedapay,
     this.permis,
-    this.idCarde,
     this.statut,
     this.ancienIdentifiant,
-    this.licence,
+    // this.licence,
     this.vehicule,
-    this.licences,
+    // this.licences,
     this.conducteurvehicules,
     this.appreciations,
     this.amandes,
@@ -105,7 +102,6 @@ class Conducteur implements Audit {
     String? compteEcobank,
     String? compteFedapay,
     String? permis,
-    String? idCarde,
     String? statut,
     String? ancienIdentifiant,
     Licence? licence,
@@ -129,12 +125,11 @@ class Conducteur implements Audit {
       compteEcobank: compteEcobank ?? this.compteEcobank,
       compteFedapay: compteFedapay ?? this.compteFedapay,
       permis: permis ?? this.permis,
-      idCarde: idCarde ?? this.idCarde,
       statut: statut ?? this.statut,
       ancienIdentifiant: ancienIdentifiant ?? this.ancienIdentifiant,
-      licence: licence ?? this.licence,
+      // licence: licence ?? this.licence,
       vehicule: vehicule ?? this.vehicule,
-      licences: licences ?? this.licences,
+      // licences: licences ?? this.licences,
       conducteurvehicules: conducteurvehicules ?? this.conducteurvehicules,
       appreciations: appreciations ?? this.appreciations,
       amandes: amandes ?? this.amandes,
@@ -156,12 +151,11 @@ class Conducteur implements Audit {
       'compteEcobank': compteEcobank,
       'compteFedapay': compteFedapay,
       'permis': permis,
-      'idCarde': idCarde,
       'statut': statut,
       'ancienIdentifiant': ancienIdentifiant,
-      'licence': licence?.toMap(),
+      // 'licence': licence?.toMap(),
       'vehicule': vehicule?.toMap(),
-      'licences': licences?.map((x) => x.toMap()).toList(),
+      // 'licences': licences?.map((x) => x.toMap()).toList(),
       'conducteurvehicules':
           conducteurvehicules?.map((x) => x.toMap()).toList(),
       'appreciations': appreciations?.map((x) => x.toMap()).toList(),
@@ -184,15 +178,14 @@ class Conducteur implements Audit {
       compteEcobank: map['compteEcobank'],
       compteFedapay: map['compteFedapay'],
       permis: map['permis'],
-      idCarde: map['idCarde'],
       statut: map['statut'],
       ancienIdentifiant: map['ancienIdentifiant'],
-      licence: map['licence'] != null ? Licence.fromMap(map['licence']) : null,
+      // licence: map['licence'] != null ? Licence.fromMap(map['licence']) : null,
       vehicule:
           map['vehicule'] != null ? Vehicule.fromMap(map['vehicule']) : null,
-      licences: map['licences'] != null
-          ? List<Licence>.from(map['licences']?.map((x) => Licence.fromMap(x)))
-          : null,
+      // licences: map['licences'] != null
+      //     ? List<Licence>.from(map['licences']?.map((x) => Licence.fromMap(x)))
+      //     : null,
       conducteurvehicules: map['conducteurvehicules'] != null
           ? List<ConducteurVehicule>.from(map['conducteurvehicules']
               ?.map((x) => ConducteurVehicule.fromMap(x)))
@@ -221,11 +214,6 @@ class Conducteur implements Audit {
       Conducteur.fromMap(json.decode(source));
 
   @override
-  String toString() {
-    return 'Conducteur(user: $user, id: $id, ifu: $ifu, cip: $cip, nip: $nip, nic: $nic, compteEcobank: $compteEcobank, compteFedapay: $compteFedapay, permis: $permis, idCarde: $idCarde, statut: $statut, ancienIdentifiant: $ancienIdentifiant, licence: $licence, vehicule: $vehicule, licences: $licences, conducteurvehicules: $conducteurvehicules, appreciations: $appreciations, amandes: $amandes, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
-  }
-
-  @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
@@ -239,12 +227,11 @@ class Conducteur implements Audit {
         other.compteEcobank == compteEcobank &&
         other.compteFedapay == compteFedapay &&
         other.permis == permis &&
-        other.idCarde == idCarde &&
         other.statut == statut &&
         other.ancienIdentifiant == ancienIdentifiant &&
-        other.licence == licence &&
+        // other.licence == licence &&
         other.vehicule == vehicule &&
-        listEquals(other.licences, licences) &&
+        // listEquals(other.licences, licences) &&
         listEquals(other.conducteurvehicules, conducteurvehicules) &&
         listEquals(other.appreciations, appreciations) &&
         listEquals(other.amandes, amandes) &&
@@ -265,12 +252,11 @@ class Conducteur implements Audit {
         compteEcobank.hashCode ^
         compteFedapay.hashCode ^
         permis.hashCode ^
-        idCarde.hashCode ^
         statut.hashCode ^
         ancienIdentifiant.hashCode ^
-        licence.hashCode ^
+        // licence.hashCode ^
         vehicule.hashCode ^
-        licences.hashCode ^
+        // licences.hashCode ^
         conducteurvehicules.hashCode ^
         appreciations.hashCode ^
         amandes.hashCode ^
@@ -278,5 +264,10 @@ class Conducteur implements Audit {
         createur_id.hashCode ^
         editeur_id.hashCode ^
         updated_at.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'Conducteur(user: $user, id: $id, ifu: $ifu, cip: $cip, nip: $nip, nic: $nic, compteEcobank: $compteEcobank, compteFedapay: $compteFedapay, permis: $permis, statut: $statut, ancienIdentifiant: $ancienIdentifiant, vehicule: $vehicule, conducteurvehicules: $conducteurvehicules, appreciations: $appreciations, amandes: $amandes, created_at: $created_at, createur_id: $createur_id, editeur_id: $editeur_id, updated_at: $updated_at)';
   }
 }

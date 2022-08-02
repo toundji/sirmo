@@ -35,6 +35,9 @@ class User implements Audit {
 
   String? profile_image;
 
+  String? idCarde_image;
+  String? idCarde;
+
   List<Fichier>? profiles;
 
   @override
@@ -68,6 +71,8 @@ class User implements Audit {
     this.roles,
     this.arrondissement,
     this.profile_image,
+    this.idCarde_image,
+    this.idCarde,
     this.profiles,
     this.created_at,
     this.createur_id,
@@ -91,6 +96,8 @@ class User implements Audit {
     List<String>? roles,
     Arrondissement? arrondissement,
     String? profile_image,
+    String? idCarde_image,
+    String? idCarde,
     List<Fichier>? profiles,
     DateTime? created_at,
     int? createur_id,
@@ -110,6 +117,8 @@ class User implements Audit {
       roles: roles ?? this.roles,
       arrondissement: arrondissement ?? this.arrondissement,
       profile_image: profile_image ?? this.profile_image,
+      idCarde: idCarde ?? this.idCarde,
+      idCarde_image: idCarde_image ?? this.idCarde_image,
       profiles: profiles ?? this.profiles,
       created_at: created_at ?? this.created_at,
       createur_id: createur_id ?? this.createur_id,
@@ -131,7 +140,9 @@ class User implements Audit {
       'code': code,
       'roles': roles,
       'arrondissement': arrondissement?.toMap(),
+      'idCarde_image': idCarde_image,
       'profile_image': profile_image,
+      'idCarde': idCarde,
       'profiles': profiles?.map((x) => x.toMap()).toList(),
       'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
@@ -149,6 +160,7 @@ class User implements Audit {
       'email': email,
       'date_naiss': date_naiss?.toIso8601String(),
       'phone': phone,
+      if (idCarde != null) 'idCarde': idCarde,
       'arrondissement_id': arrondissement?.id,
     };
   }
@@ -161,6 +173,8 @@ class User implements Audit {
       genre: map['genre'],
       password: map['password'],
       email: map['email'],
+      idCarde: map['idCarde'],
+      idCarde_image: map['idCarde_image'],
       date_naiss: map['date_naiss'] != null
           ? DateTime.tryParse(map['date_naiss'])
           : null,
