@@ -376,7 +376,7 @@ export class UserService {
   async initOneAdmin() {
     let user: User;
     try {
-      user = await this.findOneByPseudo("+22992920202");
+      user = await this.findOneByPseudo("+22994851785");
     } catch (e) {}
     if (user) return;
     user = new User();
