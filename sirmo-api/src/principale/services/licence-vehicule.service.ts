@@ -115,7 +115,7 @@ export class LicenceVehiculeService {
     licence.createur_id = createur?.id;
     licence.date_debut = new Date();
     licence.date_fin = new Date(licence.date_debut.getFullYear(), +licenceDuration.valeur+licence.date_debut.getMonth());
-    licence.montant = +licencePrice;
+    licence.montant = +licencePrice.valeur;
 
     const vehicule: Vehicule = await this.vehiculeService.findOne(body.vehicule_id);
 
