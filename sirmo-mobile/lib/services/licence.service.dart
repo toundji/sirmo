@@ -1,11 +1,25 @@
-import 'package:flutter/cupertino.dart';
-import 'package:sirmo/screens/licence/licenece.screen.dart';
+import 'dart:developer';
 
-import '../models/licence.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:sirmo/models/licence_vehicule.dart';
+import 'package:sirmo/services/dio-client.service.dart';
 
 class LicenceService extends ChangeNotifier {
-  Licence? licence;
-  List<Licence>? all;
+  LicenceVehicule? licence;
+  List<LicenceVehicule>? all;
 
-  
+  Future<LicenceVehicule?> pay(int vehiculeId, String translationId) async {
+    var body = {
+      "vehicule_id": vehiculeId,
+      "transaction_id": translationId,
+    };
+    return DioClient().post("licences/fedapay", body: body).then((value) {
+      licence = LicenceVehicule.fromMap(value);
+      notifyListeners();
+      return licence;
+    }).onError((error, stackTrace) {
+      log("$error");
+      throw error ?? "";
+    });
+  }
 }

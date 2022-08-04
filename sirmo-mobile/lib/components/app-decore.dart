@@ -152,12 +152,18 @@ class AppDecore {
     );
   }
 
-  static InputDecoration input(String label,
-      {String? helper, IconData? prefix, IconData? suffix}) {
+  static InputDecoration input(
+    String label, {
+    String? helper,
+    IconData? prefix,
+    IconData? suffix,
+    Widget? suffixWidget,
+    Widget? prefixWidget,
+  }) {
     return InputDecoration(
       helperText: helper,
-      suffixIcon: suffix == null ? null : Icon(suffix),
-      prefixIcon: prefix == null ? null : Icon(prefix),
+      suffixIcon: suffix == null ? suffixWidget : Icon(suffix),
+      prefixIcon: prefix == null ? prefixWidget : Icon(prefix),
       label: Text(label,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.left,
@@ -285,6 +291,4 @@ class AppDecore {
       ),
     );
   }
-
-  
 }

@@ -3,15 +3,23 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:kkiapay_flutter_sdk/kkiapayWebview.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-decore.dart';
+import 'package:sirmo/models/conducteur.dart';
+import 'package:sirmo/models/enums/licence_property.dart';
 import 'package:sirmo/models/licence.dart';
+import 'package:sirmo/models/licence_vehicule.dart';
+import 'package:sirmo/services/conducteur.sevice.dart';
 
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
+import '../../models/constante.dart';
 import '../../models/user.dart';
 import '../../services/compte.service.dart';
+import '../../services/constante.service.dart';
+import '../../services/licence.service.dart';
 import '../../services/user.service.dart';
 import '../../utils/app-util.dart';
 import '../../utils/color-const.dart';
+import '../../utils/size-const.dart';
 
 class LicenceCreateScreen extends StatefulWidget {
   LicenceCreateScreen({Key? key}) : super(key: key);
@@ -23,21 +31,45 @@ class LicenceCreateScreen extends StatefulWidget {
 class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
   int? amount = 2000;
   GlobalKey<FormFieldState> fieldKey = GlobalKey<FormFieldState>();
+  TextEditingController dureeController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+
+  String? errorMessage;
+  PhoneNumber? phone;
+  bool phoneIsValide = false;
+  Map<String, Constante> constantes = {};
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+
+    user = context.read<UserService>().user!;
+    phone = PhoneNumber(isoCode: "BJ", phoneNumber: user.phone);
+
+    context
+        .read<ConstanteService>()
+        .loadAllByName()
+        .then((value) => null)
+        .onError((error, stackTrace) => null);
+  }
 
   @override
   Widget build(BuildContext context) {
+    constantes = context.watch<ConstanteService>().allByName;
+    dureeController.text =
+        constantes[LicenceProperty.DUREE_DUREE]?.valeur ?? '12';
+    amountController.text =
+        constantes[LicenceProperty.DUREE_DUREE]?.valeur ?? '....';
+    amount = int.tryParse("${constantes[LicenceProperty.DUREE_DUREE]?.valeur}");
     return Scaffold(
       appBar: AppDecore.appBar(context, "Achat de licenece"),
       body: Column(
         children: [
-          Flexible(
-              child: Container(
-            height: 100,
-          )),
           Card(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -47,21 +79,46 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
                     style: TextStyle(
                         color: ColorConst.text, fontStyle: FontStyle.italic),
                   ),
+                  const SizedBox(height: 30),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 20),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                     child: TextFormField(
-                      initialValue: "$amount",
-                      key: fieldKey,
-                      onChanged: (value) {
-                        amount = int.tryParse(value);
-                        setState(() {});
-                      },
-                      keyboardType: const TextInputType.numberWithOptions(),
-                      decoration:
-                          AppDecore.input("Montant", prefix: Icons.money),
+                      controller: amountController,
+                      readOnly: true,
+                      decoration: AppDecore.input("Montant",
+                          prefix: Icons.money, suffixWidget: Text("F CFA")),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 20),
+                    child: TextFormField(
+                        controller: dureeController,
+                        readOnly: true,
+                        decoration: AppDecore.input("Durrée",
+                            prefix: Icons.timelapse,
+                            suffixWidget: const Text("mois"))),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: SizeConst.padding + 10),
+                      child: InternationalPhoneNumberInput(
+                        key: fieldKey,
+                        onInputValidated: (value) {
+                          phoneIsValide = value;
+                        },
+                        initialValue: phone,
+                        countries: const ["BJ", "CI"],
+                        errorMessage: "Numméro de téléphone est invalide",
+                        spaceBetweenSelectorAndTextField: 0.0,
+                        validator: phoneValidator,
+                        onInputChanged: onPhoneChanged,
+                        inputDecoration: AppDecore.input("Téléphone * "),
+                        selectorConfig: SelectorConfig(
+                            leadingPadding: SizeConst.padding,
+                            trailingSpace: false,
+                            setSelectorButtonAsPrefixIcon: true),
+                      )),
                   AppDecore.submitButton(context, "Valider", onSubmit,
                       onLongPress: null)
                 ],
@@ -73,18 +130,25 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
     );
   }
 
+  String? phoneValidator(String? value) {
+    if (value == null) return "Le numéro de téléphone est obligatoire";
+    if (!phoneIsValide) return "Le numéro de téléphone est invalide";
+    return null;
+  }
+
+  onPhoneChanged(PhoneNumber? value) {
+    phone = value;
+  }
+
   onSubmit() async {
-    if (fieldKey.currentState == null || fieldKey.currentState!.validate()) {
+    if (amount != null && fieldKey.currentState == null ||
+        fieldKey.currentState!.validate()) {
       await _onPay();
     }
   }
 
   Future _onPay() async {
-    User? user = context.read<UserService>().user;
-
-    PhoneNumber phone =
-        await PhoneNumber.getRegionInfoFromPhoneNumber(user!.phone!);
-    String tel = phone.parseNumber().replaceAll(RegExp(r'[\+,-]'), '');
+    String tel = phone!.parseNumber().replaceAll(RegExp(r'[\+,-]'), '');
     final payer = KKiaPay(
       amount: amount,
       callback: onPaymentSuccess,
@@ -120,13 +184,16 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
 
   Future<void> verifyPayment(String id) async {
     PersonalAlert.showLoading(context, message: "vérification en cours ...");
+    Conducteur conducteur = context.read<ConducteurService>().conducteur!;
     await context
-        .read<CompteService>()
-        .creditAcount(id, 2000)
-        .then((Compte? value) {
+        .read<LicenceService>()
+        .pay(conducteur.vehicule?.id ?? -1, id)
+        .then((LicenceVehicule? value) {
       context.read<UserService>().notifyListeners();
-      PersonalAlert.showSuccess(context, message: "Compte rechargé avec succès")
-          .then((r) {});
+      PersonalAlert.showSuccess(context, message: "Licence payé avec succès")
+          .then((r) {
+        Navigator.pop(context);
+      });
     }).onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "$error");
     });

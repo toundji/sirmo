@@ -5,6 +5,7 @@ import 'package:sirmo/models/vehicule.dart';
 import 'package:sirmo/screens/licence/licence-create.screen.dart';
 import 'package:sirmo/utils/app-util.dart';
 import '../../utils/color-const.dart';
+import '../../utils/network-info.dart';
 
 class VehiculeInfoScreen extends StatefulWidget {
   const VehiculeInfoScreen({
@@ -88,10 +89,8 @@ class _VehiculeInfoScreenState extends State<VehiculeInfoScreen> {
                 ),
                 child: vehicule.image_path == null
                     ? Image.asset("assets/images/onboarding-first.gif")
-                    : Image.asset("assets/images/onboarding-first.gif")
-                //  Image.network(
-                //     "${NetworkInfo.baseUrl}${vehicule.image_path}")
-                ),
+                    : Image.network(
+                        "${NetworkInfo.baseUrl}${vehicule.image_path}")),
           ),
         ),
       );
@@ -113,5 +112,4 @@ class _VehiculeInfoScreenState extends State<VehiculeInfoScreen> {
       ),
     );
   }
-
 }

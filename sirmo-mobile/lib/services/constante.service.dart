@@ -5,7 +5,7 @@ import 'package:sirmo/models/constante.dart';
 
 import 'dio-client.service.dart';
 
-class DepartmentService extends ChangeNotifier {
+class ConstanteService extends ChangeNotifier {
   List<Constante>? all;
   Map<String, Constante> allByName = {};
 

@@ -20,6 +20,7 @@ import 'screens/auth/login.screen.dart';
 import 'screens/home/home.screen.dart';
 import 'services/appreciation.service.dart';
 import 'services/auth.service.dart';
+import 'services/constante.service.dart';
 import 'utils/app-routes.dart';
 import 'utils/network-info.dart';
 
@@ -46,6 +47,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ConducteurService()),
         ChangeNotifierProvider(create: (context) => VehiculeService()),
         ChangeNotifierProvider(create: (context) => AppreciationService()),
+        ChangeNotifierProvider(create: (context) => ConstanteService()),
+        // ChangeNotifierProvider(create: (context) => AppreciationService()),
       ],
       child: MaterialApp(
         title: 'Zem+',

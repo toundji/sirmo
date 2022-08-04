@@ -26,11 +26,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String? errorMessage;
+ 
   String? password;
   String? email;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool saveInfo = false;
+   String? errorMessage;
   PhoneNumber? phone = PhoneNumber(isoCode: "BJ");
   bool phoneisValide = false;
 
