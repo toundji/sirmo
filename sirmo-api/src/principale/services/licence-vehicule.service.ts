@@ -110,13 +110,16 @@ export class LicenceVehiculeService {
      if(body.mairie_id){
        const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
        licence.mairie = mairie;
-       licence.mairie.solde += licence.montant;
+       licence.mairie.solde = licence.mairie.solde+ licence.montant;
      }else{
        licence.mairie = conducteur.mairie;
-       licence.mairie.solde += licence.montant;
+       licence.mairie.solde = licence.mairie.solde + licence.montant;
      }
-     await Mairie.save( licence.mairie );
-
+     await Mairie.save( licence.mairie ).catch((error)=>{
+       console.log(error);
+       throw new InternalServerErrorException("Mise à jour de compte de la mairie. Une erreur s'est produit");
+     });
+     
      licence.createur_id = createur?.id;
 
      return this.licenceRepository.save(licence).catch((error)=>{
@@ -154,8 +157,5 @@ export class LicenceVehiculeService {
         throw new NotFoundException("Le licence spécifiée n'existe pas");
       
       });
-
-
- 
   }
 }
