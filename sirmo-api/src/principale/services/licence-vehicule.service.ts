@@ -15,6 +15,9 @@ import { CreateLicenceDto } from './../createDto/create-licence.dto';
 import { UpdateLicenceDto } from '../updateDto/update-licence.dto';
 import { VehiculeService } from './vehicule.service';
 import { Vehicule } from './../entities/vehicule.entity';
+import { Constante } from '../entities/constante.entity';
+import { ConstanteService } from './constante.service';
+import { LicenceProperty } from 'src/enums/licence-property';
 
 @Injectable()
 export class LicenceVehiculeService {
@@ -24,6 +27,8 @@ export class LicenceVehiculeService {
     private readonly mairieService: MairieService,
     private readonly payementService: PayementService,
     private readonly vehiculeService: VehiculeService,
+    private readonly constanteService: ConstanteService,
+    
 
   ) {}
   async create(body: CreateLicenceDto,  createur:User) {
@@ -97,7 +102,20 @@ export class LicenceVehiculeService {
       throw new BadRequestException("L'id de la transaction est obligatoire");
     }
 
+    const licencePrice:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.PRIX_LICENCE}).catch((error)=>{
+      throw new InternalServerErrorException("Une errerur au prix de la licence s'est produit");
+    })
+    const licenceDuration:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.DUREE_DUREE}).catch((error)=>{
+      throw new InternalServerErrorException("Une errerur liée à la durée de la licence s'est produit");
+    })
+
     const licence:LicenceVehicule = new LicenceVehicule();
+
+    licence.transaction_id = body.transaction_id;
+    licence.createur_id = createur?.id;
+    licence.date_debut = new Date();
+    licence.date_fin = new Date(licence.date_debut.getFullYear(), +licenceDuration.valeur+licence.date_debut.getMonth());
+    licence.montant = +licencePrice;
 
     const vehicule: Vehicule = await this.vehiculeService.findOne(body.vehicule_id);
 
@@ -105,7 +123,6 @@ export class LicenceVehiculeService {
     licence.conducteur = conducteur;
     licence.vehicule = vehicule;
 
-    licence.transaction_id = body.transaction_id;
 
      if(body.mairie_id){
        const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
@@ -119,8 +136,9 @@ export class LicenceVehiculeService {
        console.log(error);
        throw new InternalServerErrorException("Mise à jour de compte de la mairie. Une erreur s'est produit");
      });
+
      
-     licence.createur_id = createur?.id;
+
 
      return this.licenceRepository.save(licence).catch((error)=>{
        console.log(error);
