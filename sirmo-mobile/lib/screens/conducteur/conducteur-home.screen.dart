@@ -5,23 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/models/conducteur.dart';
 import 'package:sirmo/screens/appreciation/appreciation.screen.dart';
-import 'package:sirmo/screens/statistique-conducteur/evaluate-conduteur.screen.dart';
 import 'package:sirmo/screens/statistique-conducteur/statistique-conducteur.screen.dart';
 import 'package:sirmo/screens/vehicule/create-vehicule.dart';
 import 'package:sirmo/screens/potefeuille/portefeuille.component.dart';
 import 'package:sirmo/screens/conducteur/conducteur.drawer.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/services/conducteur.sevice.dart';
-import 'package:sirmo/utils/app-util.dart';
-import 'package:sirmo/utils/network-info.dart';
 
 import '../../components/action-card.dart';
 import '../../components/app-bar.screen.dart';
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
-import '../../services/user.service.dart';
+import '../licence/licence-create.screen.dart';
 import '../vehicule/vehicule_info.screen.dart';
-import 'choice-driver.screen.dart';
 
 class ConducteurHomeScreen extends StatefulWidget {
   ConducteurHomeScreen({Key? key, this.debug = false}) : super(key: key);
@@ -73,7 +69,10 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
                       ? vehiculeCreateScreen()
                       : VehiculeInfoScreen(vehicule: conducteur!.vehicule!),
                 ),
-                const ActionCard(name: "Licence", icon: Icons.edit),
+                ActionCard(
+                    name: "Licence",
+                    icon: Icons.edit,
+                    screen: LicenceCreateScreen()),
               ],
             ),
           ),

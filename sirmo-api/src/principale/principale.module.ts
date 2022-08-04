@@ -76,6 +76,7 @@ import { ConducteurAdminService } from './admin/services/conducteur-admin.servic
 import { LicenceVehiculeService } from './services/licence-vehicule.service';
 import { LicenceVehiculeController } from './controllers/licence-vehicule.controller';
 import { LicenceVehicule } from './entities/licence-vehicule.entity';
+import { ConstanteController } from './controllers/constante.controller';
 
 
 
@@ -155,7 +156,7 @@ import { LicenceVehicule } from './entities/licence-vehicule.entity';
       DepartementController,
       SeedController,
       RolesController,
-
+      ConstanteController,
 
   ],
   providers: [
