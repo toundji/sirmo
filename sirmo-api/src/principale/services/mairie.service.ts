@@ -13,6 +13,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Fichier } from '../entities/fichier.entity';
 import { FichierService } from './fichier.service';
 import { CreateLocalisationDto } from '../createDto/create-localisation.dto';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class MairieService {
@@ -31,10 +32,7 @@ export class MairieService {
     mairie.createur_id = user?.id;
 
   
-     const arrondissement: Arrondissement = await this.arrondissementService.findOne(createMairieDto.arrondissementId).catch((error)=>{
-      throw new NotFoundException("Impossible de trouver l'arrondisement précicser ");
-
-     })
+     const arrondissement: Arrondissement = await this.arrondissementService.findOne(createMairieDto.arrondissementId);
     mairie.arrondissement = arrondissement;
     mairie.commune = arrondissement.commune;
  
@@ -49,7 +47,7 @@ export class MairieService {
     }
     else{
         return await  this.mairieRepository.save(mairie).catch((error)=>{
-          throw new NotFoundException("Problème lor de la création de la mairie. Donnée invalide")
+          throw new NotFoundException("Problème lors de la création de la mairie. Donnée invalide")
         });
     }
 
@@ -85,8 +83,7 @@ export class MairieService {
   
       return this.mairieRepository.save( mairie).catch((error)=>{
         console.log(error);
-        throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-      
+        throw new InternalServerErrorException("Erreur de la mise à jour de la mairie. Assurez vous que vosdonnées son valides");
       });
    
     

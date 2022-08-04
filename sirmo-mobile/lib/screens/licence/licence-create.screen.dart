@@ -60,8 +60,9 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
     dureeController.text =
         constantes[LicenceProperty.DUREE_DUREE]?.valeur ?? '12';
     amountController.text =
-        constantes[LicenceProperty.DUREE_DUREE]?.valeur ?? '....';
-    amount = int.tryParse("${constantes[LicenceProperty.DUREE_DUREE]?.valeur}");
+        constantes[LicenceProperty.PRIX_LICENCE]?.valeur ?? '....';
+    amount =
+        int.tryParse("${constantes[LicenceProperty.PRIX_LICENCE]?.valeur}");
     return Scaffold(
       appBar: AppDecore.appBar(context, "Achat de licenece"),
       body: Column(
@@ -119,8 +120,12 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
                             trailingSpace: false,
                             setSelectorButtonAsPrefixIcon: true),
                       )),
-                  AppDecore.submitButton(context, "Valider", onSubmit,
-                      onLongPress: null)
+                  AppDecore.submitButton(
+                    context,
+                    "Valider",
+                    onSubmit,
+                    onLongPress: onLongPressed,
+                  )
                 ],
               ),
             ),
@@ -144,6 +149,13 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
     if (amount != null && fieldKey.currentState == null ||
         fieldKey.currentState!.validate()) {
       await _onPay();
+    }
+  }
+
+  onLongPressed() async {
+    if (amount != null && fieldKey.currentState == null ||
+        fieldKey.currentState!.validate()) {
+      await verifyPayment("1234567895");
     }
   }
 

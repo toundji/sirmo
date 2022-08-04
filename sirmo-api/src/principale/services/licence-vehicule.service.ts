@@ -98,9 +98,6 @@ export class LicenceVehiculeService {
     }
 
     const licence:LicenceVehicule = new LicenceVehicule();
-     Object.keys(body).forEach((cle) => {
-       licence[cle] = body[cle];
-     });
 
     const vehicule: Vehicule = await this.vehiculeService.findOne(body.vehicule_id);
 
@@ -113,13 +110,12 @@ export class LicenceVehiculeService {
      if(body.mairie_id){
        const mairie: Mairie = await this.mairieService.findOne(body.mairie_id);
        licence.mairie = mairie;
-       mairie.solde += licence.montant;
-       await this.mairieService.update(mairie.id, mairie);
+       licence.mairie.solde += licence.montant;
      }else{
        licence.mairie = conducteur.mairie;
        licence.mairie.solde += licence.montant;
-       await this.mairieService.update(licence.mairie.id, licence.mairie);
      }
+     await Mairie.save( licence.mairie );
 
      licence.createur_id = createur?.id;
 

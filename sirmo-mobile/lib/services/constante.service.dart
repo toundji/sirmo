@@ -11,7 +11,7 @@ class ConstanteService extends ChangeNotifier {
 
   Future<List<Constante>?> loadAll({bool refresh = false}) async {
     if (all == null || all!.isEmpty || refresh) {
-      return await DioClient(auth: false).get("constantes").then((value) {
+      return await DioClient().get("constantes").then((value) {
         List<dynamic> list = value;
         all ??= [];
 
@@ -33,13 +33,13 @@ class ConstanteService extends ChangeNotifier {
 
   Future<Map<String, Constante>?> loadAllByName({bool refresh = false}) async {
     if (allByName.isEmpty || refresh) {
-      return await DioClient(auth: false).get("constantes").then((value) {
+      return await DioClient().get("constantes").then((value) {
         List<dynamic> list = value;
         all ??= [];
 
         list.forEach((element) {
           Constante data = Constante.fromMap(element);
-          all!.add(value);
+          all!.add(data);
           allByName[data.nom!] = data;
         });
         notifyListeners();

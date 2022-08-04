@@ -33,7 +33,7 @@ export class ArrondissementService {
   }
 
   findOne(id: number) {
-   return this.arrondissementRepository.findOne(id).catch((error)=>{
+   return this.arrondissementRepository.findOneOrFail(id).catch((error)=>{
   throw new HttpException(
     "Impossible de trouver l'arrondissement démandé",
     HttpStatus.UNAUTHORIZED,
