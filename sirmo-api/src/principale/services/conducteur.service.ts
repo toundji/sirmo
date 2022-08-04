@@ -202,7 +202,7 @@ export class ConducteurService {
   }
 
   findOne(id: number):Promise<Conducteur> {
-    return this.conducteurRepository.findOneOrFail(id, {relations:["mairie", "vehicule"]}).catch((error)=>{
+    return this.conducteurRepository.findOneOrFail(id, {relations:["mairie", "vehicule", "vehicule.licence"]}).catch((error)=>{
       console.log(error);
       throw new NotFoundException("Le conducteur spécifié n'existe pas");
     });
