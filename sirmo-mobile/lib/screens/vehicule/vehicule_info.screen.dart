@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:sirmo/components/app-decore.dart';
@@ -31,6 +33,7 @@ class _VehiculeInfoScreenState extends State<VehiculeInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("${vehicule.licence}");
     return Scaffold(
       appBar: AppDecore.appBar(context, "Véhicule Info"),
       body: ListView(

@@ -155,7 +155,7 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
   onLongPressed() async {
     if (amount != null && fieldKey.currentState == null ||
         fieldKey.currentState!.validate()) {
-      await verifyPayment("1234567895");
+      await verifyPayment("${DateTime.now()}");
     }
   }
 
@@ -201,9 +201,10 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
         .read<LicenceService>()
         .pay(conducteur.vehicule?.id ?? -1, id)
         .then((LicenceVehicule? value) {
-      context.read<UserService>().notifyListeners();
       PersonalAlert.showSuccess(context, message: "Licence payé avec succès")
           .then((r) {
+        context.read<ConducteurService>().payLicenece(value!);
+
         Navigator.pop(context);
       });
     }).onError((error, stackTrace) {

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sirmo/models/licence_vehicule.dart';
 
 import '../models/conducteur.dart';
 import 'dio-client.service.dart';
@@ -13,6 +14,13 @@ class ConducteurService extends ChangeNotifier {
 
   setConducteur(Conducteur conducteur) {
     this.conducteur = conducteur;
+    notifyListeners();
+  }
+
+  payLicenece(LicenceVehicule licenceVehicule) {
+    conducteur?.vehicule?.licence = licenceVehicule;
+    conducteur!.vehicule!.licences ??= [];
+    conducteur!.vehicule!.licences!.add(licenceVehicule);
     notifyListeners();
   }
 

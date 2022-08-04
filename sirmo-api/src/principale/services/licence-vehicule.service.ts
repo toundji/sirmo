@@ -151,8 +151,8 @@ export class LicenceVehiculeService {
        throw new InternalServerErrorException("Mise à jour de la licence de du véhicule. Une erreur s'est produit, veillez reprendre ou contacter l'administrateur si cella persiste")
      });
      vehicule.licence = null;
-     licence.vehicule = vehicule;
-     return licence;
+     slicence.vehicule = vehicule;
+     return slicence;
   }
 
   findAll() {

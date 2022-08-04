@@ -51,7 +51,7 @@ export class LicenceVehicule extends Audit{
       return StatusLicence.DESACTIVEE;
     }
     const now: Date = new Date();
-    return now > this.date_debut ? StatusLicence.DESACTIVEE: StatusLicence.ACTIVEE;
+    return now > this.date_fin ? StatusLicence.DESACTIVEE: StatusLicence.ACTIVEE;
   }
 
   @JoinColumn({ name: 'conducteur_id'})

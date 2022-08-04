@@ -106,7 +106,7 @@ export class Vehicule extends Audit {
   conducteur: Conducteur;
 
   @ManyToOne((type) => LicenceVehicule,
-  { nullable:true})
+  { nullable:true, eager:true})
   @JoinColumn({ name: 'licence_vehicule_id'})
   licence?:LicenceVehicule;
 
