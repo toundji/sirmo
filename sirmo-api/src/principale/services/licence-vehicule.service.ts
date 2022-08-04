@@ -140,10 +140,19 @@ export class LicenceVehiculeService {
      
 
 
-     return this.licenceRepository.save(licence).catch((error)=>{
+     const slicence:LicenceVehicule = await  this.licenceRepository.save(licence).catch((error)=>{
        console.log(error);
        throw new InternalServerErrorException("Erreur pendant la sauvergarde de la licence. Veillez reprendre ou contacter un administrateur si cela persiste");
      });
+     slicence.vehicule = null;
+     vehicule.licence = slicence;
+     await Vehicule.save(vehicule).catch(error=>{
+       console.log(error);
+       throw new InternalServerErrorException("Mise à jour de la licence de du véhicule. Une erreur s'est produit, veillez reprendre ou contacter l'administrateur si cella persiste")
+     });
+     vehicule.licence = null;
+     licence.vehicule = vehicule;
+     return licence;
   }
 
   findAll() {
