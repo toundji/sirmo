@@ -57,9 +57,6 @@ export class AmandeController {
     return this.amandeService.findAllForConducteur(id);
   }
 
-
-  
-
   @Get(":id")
   findOne(@Param("id") id: number) {
     return this.amandeService.findOne(+id);
