@@ -98,10 +98,18 @@ class Amande implements Audit {
       'payements': payements?.map((x) => x.toMap()).toList(),
       'police': police?.toMap(),
       'conducteur': conducteur?.toMap(),
-      'created_at': created_at?.millisecondsSinceEpoch,
+      'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
-      'updated_at': updated_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at?.toIso8601String(),
+    };
+  }
+
+  Map<String, dynamic> toCreateMap() {
+    return {
+      if (message != null) 'message': message,
+      'typeAmndeIds': typeAmndes?.map((x) => x.id).toList(),
+      'conducteur_id': conducteur?.id,
     };
   }
 

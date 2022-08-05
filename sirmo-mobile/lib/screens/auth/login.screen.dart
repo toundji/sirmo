@@ -9,6 +9,7 @@ import 'package:sirmo/screens/home/home.screen.dart';
 import 'package:sirmo/screens/police/police-home.screen.dart';
 import 'package:sirmo/services/police.service.dart';
 import '../../components/curve_path_clipper.dart';
+import '../../services/conducteur.sevice.dart';
 import '/components/app-decore.dart';
 import '/components/shake-transition.dart';
 import '/screens/auth/register/register.screen.dart';
@@ -193,11 +194,11 @@ class _LoginScreenState extends State<LoginScreen> {
             });
           });
         } else if (value.roles!.contains(UserRole.CONDUCTEUR)) {
-          context.read<PoliceService>().myInfo().then((value) {
+          context.read<ConducteurService>().myInfo().then((value) {
             PersonalAlert.showSuccess(context,
                     message: "Vous êtes connecter avec succès")
                 .then((dialog) {
-              AppUtil.goToScreen(context, PoliceHomeScreen());
+              AppUtil.goToScreen(context, ConducteurHomeScreen());
             });
           }).onError((error, stackTrace) {
             PersonalAlert.showError(context, message: "$error").then((value) {

@@ -24,11 +24,11 @@ class ConducteurService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Conducteur?> myInfo(String nic, {bool refresh = false}) async {
+  Future<Conducteur> myInfo({bool refresh = false}) async {
     return await DioClient().get("conducteurs/my/info").then((value) {
-      Conducteur conducteur = Conducteur.fromMap(value);
+      conducteur = Conducteur.fromMap(value);
       notifyListeners();
-      return conducteur;
+      return conducteur!;
     }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw "$error";

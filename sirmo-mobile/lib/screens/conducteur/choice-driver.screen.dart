@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -79,11 +80,12 @@ class _ChoiceDriverScreenState extends State<ChoiceDriverScreen> {
   }
 
   void onQRViewCreated(QRViewController qrViewController) {
+    // log("qr view is created");
     setState(() {
       this.qrViewController = qrViewController;
     });
     qrViewController.scannedDataStream.listen((barcode) async {
-      if (barcode.code != null && barcode.code!.trim().length == 14) {
+      if (barcode.code != null) {
         qrViewController.stopCamera();
         await submit(barcode.code!.trim());
       }

@@ -105,7 +105,7 @@ export class LicenceVehiculeService {
     const licencePrice:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.PRIX_LICENCE}).catch((error)=>{
       throw new InternalServerErrorException("Une errerur au prix de la licence s'est produit");
     })
-    const licenceDuration:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.DUREE_DUREE}).catch((error)=>{
+    const licenceDuration:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.DUREE_LICENCE}).catch((error)=>{
       throw new InternalServerErrorException("Une errerur liée à la durée de la licence s'est produit");
     })
 

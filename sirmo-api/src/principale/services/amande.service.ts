@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAmandeDto } from '../createDto/create-amande.dto';
@@ -14,6 +14,9 @@ import { PayementService } from './payement.service';
 import { Payement } from './../entities/payement.entity';
 import { ConducteurService } from './conducteur.service';
 import { UpdateAmandeDto } from './../updateDto/update-amande.dto';
+import { Constante } from '../entities/constante.entity';
+import { ConstanteService } from './constante.service';
+import { LicenceProperty } from 'src/enums/licence-property';
 
 
 
@@ -25,27 +28,38 @@ export class AmandeService {
     private readonly conducteurService: ConducteurService,
     private readonly typeAmandeService: TypeAmandeService,
     private readonly payementService: PayementService,
+    private readonly constanteService: ConstanteService,
+
   ) {}
 
   async create(createAmandeDto: CreateAmandeDto, user: User):Promise<Amande>  {
     const amande : Amande = new Amande();
 
-    Object.keys(createAmandeDto).forEach((cle) => {
-      amande[cle] = createAmandeDto[cle];
-    });
-
 
     const police:Police = await this.policeService.findOne(user.id);
     amande.police = police;
+
+
 
     const conducteur: Conducteur = await this.conducteurService.findOne(createAmandeDto.conducteur_id);
     amande.conducteur= conducteur;
 
    const typeAmandes: TypeAmande[] =  await this.typeAmandeService.findBysIds(createAmandeDto.typeAmndeIds);
+   if(typeAmandes.length == 0){
+     throw new BadRequestException("Les types d'amande spécifiés n'existent pas");
+   }
    let montant =0
     typeAmandes.forEach(ele=>{
         montant += ele.montant;
     });
+
+    const amandeDuration:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.DUREE_AMNADE}).catch((error)=>{
+      throw new InternalServerErrorException("Une errerur liée à la durée de l'amande s'est produit");
+    })
+
+    const date: Date = new Date();
+    amande.date_limite = new Date( date.getFullYear(), date.getMonth(), +amandeDuration.valeur+ date.getDate());
+
     amande.montant = montant;
     amande.restant = montant;
 

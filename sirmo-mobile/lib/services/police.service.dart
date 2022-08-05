@@ -17,11 +17,11 @@ class PoliceService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Police?> myInfo({bool refresh = false}) async {
+  Future<Police> myInfo({bool refresh = false}) async {
     return await DioClient().get("polices/my/info").then((value) {
-      Police police = Police.fromMap(value);
+      police = Police.fromMap(value);
       notifyListeners();
-      return police;
+      return police!;
     }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw "Les données que nous avons récues ne sont pas celle que nous espérons";

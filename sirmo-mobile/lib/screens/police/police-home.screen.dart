@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/action-card.dart';
 import 'package:sirmo/components/app-bar.screen.dart';
+import 'package:sirmo/screens/amande_type/selecte_amande_type.screen.dart';
 import 'package:sirmo/screens/conducteur/conducteur.drawer.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/utils/network-info.dart';
@@ -10,6 +11,9 @@ import 'package:sirmo/utils/network-info.dart';
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
 import '../../services/user.service.dart';
+import '../../utils/app-util.dart';
+import '../conducteur/choice-driver.screen.dart';
+import '../statistique-conducteur/evaluate-conduteur.screen.dart';
 
 class PoliceHomeScreen extends StatefulWidget {
   PoliceHomeScreen({Key? key, this.debug = false}) : super(key: key);
@@ -69,10 +73,33 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                ActionCard(name: "Ammande", icon: Icons.motorcycle
+              children: [
+                ActionCard(
+                  name: "Amander",
+                  icon: Icons.edit,
+                  screen: ChoiceDriverScreen(
+                    onSubmit: (conducteur) {
+                      AppUtil.changeToScreen(
+                          context,
+                          SelecteAmandeTypeScreen(
+                            conducteur: conducteur,
+                          ));
+                    },
+                  ),
                 ),
-                ActionCard(name: "Status Conducteur", icon: Icons.edit),
+                ActionCard(
+                  name: "Amandes",
+                  icon: Icons.remove_red_eye,
+                  screen: ChoiceDriverScreen(
+                    onSubmit: (conducteur) {
+                      AppUtil.changeToScreen(
+                          context,
+                          EvaluateConducteurScreen(
+                            conducteur: conducteur,
+                          ));
+                    },
+                  ),
+                ),
               ],
             ),
           ),

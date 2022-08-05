@@ -127,4 +127,43 @@ class PersonalAlert {
       PersonalAlert.context = null;
     }
   }
+
+  static Future dialog(
+    BuildContext context, {
+    IconData? icon,
+    String? title,
+    String? message,
+  }) async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Icon(
+              icon ?? Icons.info,
+              color: ColorConst.primary,
+              size: 54,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title ?? "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConst.primary, fontSize: 18.0),
+                ),
+                SizedBox(height: 16.0),
+                Text(message ?? ''),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "Quiter",
+                    style: TextStyle(color: ColorConst.error),
+                  ))
+            ],
+          );
+        });
+  }
 }

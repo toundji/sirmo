@@ -68,28 +68,28 @@ class TypeAmande implements Audit {
       'montant': montant,
       'description': description,
       'document': document?.toMap(),
-      'created_at': created_at?.millisecondsSinceEpoch,
+      'created_at': created_at?.toIso8601String(),
       'createur_id': createur_id,
       'editeur_id': editeur_id,
-      'updated_at': updated_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at?.toIso8601String(),
     };
   }
 
   factory TypeAmande.fromMap(Map<String, dynamic> map) {
     return TypeAmande(
-      id: map['id']?.toInt(),
+      id: int.tryParse("${map['id']}"),
       nom: map['nom'],
-      montant: map['montant']?.toInt(),
+      montant: int.tryParse("${map['montant']}"),
       description: map['description'],
       document:
           map['document'] != null ? Fichier.fromMap(map['document']) : null,
       created_at: map['created_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'])
+          ? DateTime.tryParse(map['created_at'])
           : null,
       createur_id: map['createur_id']?.toInt(),
       editeur_id: map['editeur_id']?.toInt(),
       updated_at: map['updated_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }

@@ -12,10 +12,6 @@ export class CreateAmandeDto {
   message: string;
 
   @ApiProperty({required:true})
-  @IsDateString({always:true, message:"Veillez indique la date au plus tard que l'amande doit être payer"},)
-  date_limite: Date;
-
-  @ApiProperty({required:true})
   @IsNumber({}, {each:true})
   @IsPositive({each:true})
   typeAmndeIds?: number[];

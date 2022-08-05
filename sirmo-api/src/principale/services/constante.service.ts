@@ -79,8 +79,12 @@ export class ConstanteService {
           nom: LicenceProperty.PRIX_LICENCE,
           valeur:"24000"
         },{
-          nom:LicenceProperty.DUREE_DUREE,
+          nom:LicenceProperty.DUREE_LICENCE,
           valeur:"12"
+        },
+        {
+          nom:LicenceProperty.DUREE_AMNADE,
+          valeur:"30"
         }
       ];
       constantes = Constante.create(list);
