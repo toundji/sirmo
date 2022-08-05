@@ -12,6 +12,7 @@ import 'package:sirmo/services/commune.service.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/services/departement.service.dart';
 import 'package:sirmo/services/licence.service.dart';
+import 'package:sirmo/services/police.service.dart';
 import 'package:sirmo/services/vehicule-service.dart';
 import 'package:sirmo/services/user.service.dart';
 import 'package:sirmo/services/conducteur.sevice.dart';
@@ -50,6 +51,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AppreciationService()),
         ChangeNotifierProvider(create: (context) => ConstanteService()),
         ChangeNotifierProvider(create: (context) => LicenceService()),
+        ChangeNotifierProvider(create: (context) => PoliceService()),
+        // ChangeNotifierProvider(create: (context) => LicenceService()),
         // ChangeNotifierProvider(create: (context) => LicenceService()),
       ],
       child: MaterialApp(

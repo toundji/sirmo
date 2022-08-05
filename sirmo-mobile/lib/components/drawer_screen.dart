@@ -26,7 +26,7 @@ _buildHeader(BuildContext context) {
     accountEmail: Text(""),
     currentAccountPicture: InkWell(
       onTap: () {},
-      child: CircleAvatar(
+      child: const CircleAvatar(
         backgroundColor: Colors.white,
         foregroundImage: AssetImage(
           "assets/logos/logo.png",

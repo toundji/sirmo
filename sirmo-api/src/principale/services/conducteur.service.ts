@@ -240,7 +240,7 @@ export class ConducteurService {
 
   findActifForUser(user_id: number):Promise<Conducteur> {
     const user:User = User.create({id: user_id});
-    return this.conducteurRepository.find({where:{ user: user, statut: StatutConducteur.ACTIF}})
+    return this.conducteurRepository.find({where:{ user: user, statut: StatutConducteur.ACTIF}, relations:["vehicule"]})
     .then((conducteurs:Conducteur[])=>{
       if(conducteurs.length>0)return conducteurs[0];
       throw new NotFoundException();

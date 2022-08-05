@@ -17,7 +17,7 @@ class UserService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> login(String phone, String password) async {
+  Future<User> login(String phone, String password) async {
     var body = {
       "username": phone,
       "password": password,
@@ -29,7 +29,7 @@ class UserService extends ChangeNotifier {
 
       user = User.fromMap(value["user"]);
 
-      return user;
+      return user!;
     }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw "Les données que nous avons récues ne sont pas celle que nous espérons";

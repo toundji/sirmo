@@ -45,13 +45,19 @@ class _VehiculeInfoScreenState extends State<VehiculeInfoScreen> {
               children: [
                 const Text("Status : "),
                 Text(
-                  vehicule.licence?.status ?? 'Pas de Licence',
+                  vehicule.licence?.date_fin == null
+                      ? 'Pas de Licence'
+                      : DateTime.now().isBefore(vehicule.licence!.date_fin!)
+                          ? "Activée"
+                          : "Expirée",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontSize: 18,
-                      color: vehicule.licence?.status != null
-                          ? ColorConst.primary
-                          : ColorConst.error,
+                      color: vehicule.licence?.date_fin == null ||
+                              DateTime.now()
+                                  .isAfter(vehicule.licence!.date_fin!)
+                          ? ColorConst.error
+                          : ColorConst.primary,
                       fontWeight: FontWeight.bold),
                 ),
               ],

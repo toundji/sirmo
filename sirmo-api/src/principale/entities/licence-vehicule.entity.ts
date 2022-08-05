@@ -4,10 +4,10 @@ import { Mairie } from './mairie.entity';
 import { Conducteur } from './conducteur.entity';
 import { Audit } from './audit';
 import { StatusLicence } from 'src/enums/status-licence';
-import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { Vehicule } from './vehicule.entity';
 import { TypePayementLicence } from 'src/enums/type-payement';
+import { Expose } from 'class-transformer';
 
 
 @Entity("licence_vehicule")

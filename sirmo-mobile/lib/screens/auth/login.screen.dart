@@ -3,7 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:sirmo/models/enums/user_role.dart';
+import 'package:sirmo/screens/conducteur/conducteur-home.screen.dart';
 import 'package:sirmo/screens/home/home.screen.dart';
+import 'package:sirmo/screens/police/police-home.screen.dart';
+import 'package:sirmo/services/police.service.dart';
 import '../../components/curve_path_clipper.dart';
 import '/components/app-decore.dart';
 import '/components/shake-transition.dart';
@@ -26,12 +30,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
- 
   String? password;
   String? email;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool saveInfo = false;
-   String? errorMessage;
+  String? errorMessage;
   PhoneNumber? phone = PhoneNumber(isoCode: "BJ");
   bool phoneisValide = false;
 
@@ -175,11 +178,41 @@ class _LoginScreenState extends State<LoginScreen> {
           .read<UserService>()
           .login("${phone?.dialCode}${phone?.parseNumber()}", password!)
           .then((value) {
-        PersonalAlert.showSuccess(context,
-                message: "Vous êtes connecter avec succès")
-            .then(
-          (value) => AppUtil.goToScreen(context, HomeScreen()),
-        );
+        if (value.roles!.contains(UserRole.POLICE)) {
+          context.read<PoliceService>().myInfo().then((value) {
+            PersonalAlert.showSuccess(context,
+                    message: "Vous êtes connecter avec succès")
+                .then((dialog) {
+              AppUtil.goToScreen(context, PoliceHomeScreen());
+            });
+          }).onError((error, stackTrace) {
+            PersonalAlert.showError(context, message: "$error").then((value) {
+              setState(() {
+                errorMessage = "$error";
+              });
+            });
+          });
+        } else if (value.roles!.contains(UserRole.CONDUCTEUR)) {
+          context.read<PoliceService>().myInfo().then((value) {
+            PersonalAlert.showSuccess(context,
+                    message: "Vous êtes connecter avec succès")
+                .then((dialog) {
+              AppUtil.goToScreen(context, PoliceHomeScreen());
+            });
+          }).onError((error, stackTrace) {
+            PersonalAlert.showError(context, message: "$error").then((value) {
+              setState(() {
+                errorMessage = "$error";
+              });
+            });
+          });
+        } else {
+          PersonalAlert.showSuccess(context,
+                  message: "Vous êtes connecter avec succès")
+              .then((dialog) {
+            AppUtil.goToScreen(context, HomeScreen());
+          });
+        }
       }).onError((error, stackTrace) {
         PersonalAlert.showError(context, message: "$error").then((value) {});
       });
