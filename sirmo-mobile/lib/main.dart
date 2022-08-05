@@ -7,6 +7,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sirmo/screens/welcome/onboarding-first.dart';
+import 'package:sirmo/services/amande.service.dart';
 import 'package:sirmo/services/arrondissement.service.dart';
 import 'package:sirmo/services/commune.service.dart';
 import 'package:sirmo/services/compte.service.dart';
@@ -54,7 +55,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => LicenceService()),
         ChangeNotifierProvider(create: (context) => PoliceService()),
         ChangeNotifierProvider(create: (context) => TypeAmandeService()),
-        // ChangeNotifierProvider(create: (context) => LicenceService()),
+        ChangeNotifierProvider(create: (context) => AmandeService()),
+        // ChangeNotifierProvider(create: (context) => AmandeService()),
+        // ChangeNotifierProvider(create: (context) => AmandeService()),
       ],
       child: MaterialApp(
         title: 'Zem+',

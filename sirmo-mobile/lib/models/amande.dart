@@ -115,13 +115,13 @@ class Amande implements Audit {
 
   factory Amande.fromMap(Map<String, dynamic> map) {
     return Amande(
-      id: map['id']?.toInt(),
+      id: int.tryParse("${map['id']}"),
       message: map['message'],
-      montant: map['montant']?.toInt(),
+      montant: int.tryParse("${map['montant']}"),
       date_limite: map['date_limite'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['date_limite'])
+          ? DateTime.tryParse(map['date_limite'])
           : null,
-      restant: map['restant']?.toInt(),
+      restant: int.tryParse("${map['restant']}"),
       typeAmndes: map['typeAmndes'] != null
           ? List<TypeAmande>.from(
               map['typeAmndes']?.map((x) => TypeAmande.fromMap(x)))

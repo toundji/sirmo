@@ -35,11 +35,10 @@ class AmandeService extends ChangeNotifier {
     return all!;
   }
 
-  Future<Amande?> createAmande(
-      Amande amande, File? file) async {
+  Future<Amande?> createAmande(Amande amande) async {
     dynamic body = amande.toCreateMap();
     log("$body");
-    Amande appreciate = await DioClient()
+    return DioClient()
         .post(
       "amandes",
       body: body,
@@ -54,30 +53,6 @@ class AmandeService extends ChangeNotifier {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw error ??
           "Les données que nous avons récues ne sont pas celle que nous espérons";
-    });
-    if (file != null) {
-      return await updateAmandeImage(appreciate.id!, file);
-    }
-    return appreciate;
-  }
-
-  Future<Amande> updateAmandeImage(int id, File file) async {
-    FormData body = FormData.fromMap(
-      {
-        'image': await MultipartFile.fromFile(file.path),
-      },
-    );
-
-    return await DioClient(headers: {'Accept': 'application/json'})
-        .post("amandes/$id/images", body: body)
-        .then((value) {
-      log("$value");
-      Amande app = Amande.fromMap(value);
-
-      return app;
-    }).onError((error, stackTrace) {
-      log("$error");
-      throw error ?? "";
     });
   }
 

@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsNumber,  IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString } from 'class-validator';
 import { IsPositive } from 'class-validator';
 
 export class CreateAmandeDto {

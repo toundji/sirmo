@@ -51,6 +51,13 @@ export class AmandeController {
     return this.amandeService.findAllForConducteur(id);
   }
 
+
+  @Get("conducteurs/:id/unsolve")
+  findAllUnsolveForConducteur(@Param("id") id:number):Promise<Amande[]>{
+    return this.amandeService.findAllForConducteur(id);
+  }
+
+
   
 
   @Get(":id")

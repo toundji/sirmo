@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { CreateAmandeDto } from '../createDto/create-amande.dto';
 import { Amande } from '../entities/amande.entity';
 import { Police } from '../entities/police.entity';
@@ -63,7 +63,6 @@ export class AmandeService {
     amande.montant = montant;
     amande.restant = montant;
 
-    
       return this.amandeRepository.save(amande).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
@@ -153,6 +152,15 @@ export class AmandeService {
         console.log(error);
         throw new BadRequestException("Une erreur s'est produit. Vuilez contacter un administrateur");
         
+      });
+  }
+
+  findAllUnsolveForConducteur(conducteur_id:number) {
+    return this.amandeRepository.find(
+      {where:{conducteur:  Conducteur.create(
+        {id: conducteur_id}), restant: MoreThan(0)}, relations: ["typeAmndes", "payements", "police"], loadEagerRelations:false}).catch((error)=>{
+        console.log(error);
+        throw new BadRequestException("Une erreur s'est produit. Vuilez contacter un administrateur");
       });
   }
 

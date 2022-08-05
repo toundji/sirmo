@@ -4,6 +4,7 @@ import 'package:sirmo/models/amande.dart';
 
 import 'package:sirmo/models/conducteur.dart';
 import 'package:sirmo/models/type-amande.dart';
+import 'package:sirmo/services/amande.service.dart';
 import 'package:sirmo/services/type-amande.service.dart';
 
 import '../../components/app-decore.dart';
@@ -77,9 +78,7 @@ class _SelecteAmandeTypeScreenState extends State<SelecteAmandeTypeScreen> {
       floatingActionButton: amande.typeAmndes!.isEmpty
           ? null
           : FloatingActionButton.extended(
-              onPressed: () {
-                AppUtil.goToScreen(context, LicenceCreateScreen());
-              },
+              onPressed: submit,
               label: const Text(
                 "Prendre Licence",
                 style: TextStyle(
@@ -89,6 +88,18 @@ class _SelecteAmandeTypeScreenState extends State<SelecteAmandeTypeScreen> {
               ),
             ),
     );
+  }
+
+  submit() async {
+    PersonalAlert.showLoading(context);
+    await context.read<AmandeService>().createAmande(amande).then((value) {
+      PersonalAlert.showSuccess(context, message: "Amande créer avec succès")
+          .then((value) {
+        Navigator.pop(context);
+      });
+    }).onError((error, stackTrace) {
+      PersonalAlert.showError(context, message: "$error");
+    });
   }
 
   Widget amandeTypeWidget(TypeAmande type) {
