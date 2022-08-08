@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sirmo/components/action-card.dart';
 import 'package:sirmo/components/app-bar.screen.dart';
 import 'package:sirmo/screens/amande_type/selecte_amande_type.screen.dart';
+import 'package:sirmo/screens/amandes/amande.screen.dart';
 import 'package:sirmo/screens/conducteur/conducteur.drawer.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/utils/network-info.dart';
@@ -94,7 +95,7 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
                     onSubmit: (conducteur) {
                       AppUtil.changeToScreen(
                           context,
-                          EvaluateConducteurScreen(
+                          AmandeScreen(
                             conducteur: conducteur,
                           ));
                     },

@@ -65,7 +65,6 @@ export class AmandeController {
   @Put(":id")
   updat(@Param("id") id: number, @Body() amande: UpdateAmandeDto,  @Req() request) {
     const user: User = request.user;
-
     return this.amandeService.update(+id, amande, user);
   }
 

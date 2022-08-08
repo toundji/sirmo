@@ -151,4 +151,5 @@ class _SelecteAmandeTypeScreenState extends State<SelecteAmandeTypeScreen> {
       ),
     );
   }
+
 }
