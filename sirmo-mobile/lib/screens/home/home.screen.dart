@@ -72,12 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(height: 16),
-          InkWell(
-              onTap: () {
-                log("${NetworkInfo.headers}");
-              },
-              child: const Text("Cliquer pour débuger")),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(

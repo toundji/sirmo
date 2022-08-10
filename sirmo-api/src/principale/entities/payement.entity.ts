@@ -33,9 +33,8 @@ export class Payement extends Audit{
   @Column()
   type:TypePayement
 
-  @Column()
+  @Column({nullable:true})
   info: string
-
 
   @Column()
   operation:TypeOperation
@@ -49,4 +48,5 @@ export class Payement extends Audit{
 
    @Column({nullable:true, name: "entity_id"})
    entityId: number;
-}
+
+  }
