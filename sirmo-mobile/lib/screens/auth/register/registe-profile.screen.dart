@@ -73,11 +73,11 @@ class _RegistreProfileScreenState extends State<RegistreProfileScreen> {
           child: AppBar(
             iconTheme:
                 Theme.of(context).iconTheme.copyWith(color: ColorConst.white),
-            title: Text(
-              AppUtil.appName,
-              textScaleFactor: 1.2,
-              style: TextStyle(
-                color: ColorConst.white,
+            title: Container(
+              child: Image.asset(
+                "assets/logos/logo.png",
+                width: 150,
+                fit: BoxFit.fitWidth,
               ),
             ),
             centerTitle: true,

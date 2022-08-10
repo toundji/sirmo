@@ -20,7 +20,6 @@ import '../licence/licence-create.screen.dart';
 import '../vehicule/vehicule_info.screen.dart';
 
 class ConducteurHomeScreen extends StatefulWidget {
-
   ConducteurHomeScreen({Key? key, this.debug = false}) : super(key: key);
   static const String routeName = "home";
   static String debugRouteName = "home/debug";
@@ -44,7 +43,7 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
         .loadCompte()
         .then((value) {})
         .onError((error, stackTrace) {
-      PersonalAlert.showError(context, message: "êrror");
+      PersonalAlert.showError(context, message: "error");
     });
   }
 
@@ -53,7 +52,8 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
     conducteur = context.read<ConducteurService>().conducteur;
 
     return Scaffold(
-      appBar: AppAppBar(context),
+      appBar: AppAppBar(context,
+          auto: false, leading: const Text("Conducteur", maxLines: 1)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -100,7 +100,7 @@ class _ConducteurHomeScreenState extends State<ConducteurHomeScreen> {
           PortefeuilleComponent(),
         ],
       ),
-      drawer: ConducteurDrawer(),
+      // drawer: ConducteurDrawer(),
     );
   }
 }

@@ -12,16 +12,19 @@ import '../utils/color-const.dart';
 import '../utils/network-info.dart';
 import 'curve_path_clipper.dart';
 
-PreferredSize AppAppBar(BuildContext context) {
+PreferredSize AppAppBar(BuildContext context,
+    {bool auto = true, Widget? leading}) {
   User? user = context.read<UserService>().user;
   return PreferredSize(
     preferredSize: Size(MediaQuery.of(context).size.width, 150),
     child: ClipPath(
       clipper: CurvePathClipper(),
       child: AppBar(
+        automaticallyImplyLeading: auto,
+        title: leading,
         iconTheme:
             Theme.of(context).iconTheme.copyWith(color: ColorConst.white),
-        centerTitle: true,
+        centerTitle: false,
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 14, top: 5, bottom: 5),
@@ -31,7 +34,7 @@ PreferredSize AppAppBar(BuildContext context) {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.white.withOpacity(0.6))),
             child: MaterialButton(
-              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 1),
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
               onPressed: () => AppUtil.goToScreen(context, ProfileScreen()),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -56,16 +59,12 @@ PreferredSize AppAppBar(BuildContext context) {
         bottom: PreferredSize(
           preferredSize: Size(50, 100),
           child: Container(
-            margin: const EdgeInsets.only(bottom: 50),
-            child: Text(
-              AppUtil.appName,
-              textScaleFactor: 1.2,
-              style: const TextStyle(
-                  color: ColorConst.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
+              margin: const EdgeInsets.only(bottom: 0),
+              child: Image.asset(
+                "assets/logos/logo.png",
+                width: 150,
+                fit: BoxFit.fitWidth,
+              )),
         ),
       ),
     ),

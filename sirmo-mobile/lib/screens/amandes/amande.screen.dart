@@ -5,6 +5,7 @@ import 'package:sirmo/components/app-decore.dart';
 import 'package:sirmo/models/amande.dart';
 import 'package:sirmo/models/conducteur.dart';
 import 'package:sirmo/services/amande.service.dart';
+import 'package:sirmo/utils/app-date.dart';
 
 import '../../components/personal_alert.dart';
 import '../../utils/color-const.dart';
@@ -26,20 +27,22 @@ class _AmandeScreenState extends State<AmandeScreen> {
     return Scaffold(
       appBar: AppDecore.appBar(context, "Amandes"),
       body: FutureBuilder<List<Amande>>(
-        future: context.read<AmandeService>().loadAll(widget.conducteur),
+        future: context
+            .read<AmandeService>()
+            .loadAll(widget.conducteur, refresh: true),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else if (snapshot.hasData) {
             if (snapshot.data!.isEmpty) {
-              return const Text("Aucune Amaande trouvée");
+              return const Text("Le conducteur n'a aucun amande");
             } else {
               return Column(
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Text(
-                      "Selectionner les amandes appliquées au zem",
+                      "Voici la liste des amandes du conducteur",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18),
                     ),
@@ -48,7 +51,7 @@ class _AmandeScreenState extends State<AmandeScreen> {
                     child: ListView.builder(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 16.0),
-                        itemCount: snapshot.data!.length,
+                        itemCount: snapshot.data?.length ?? 0,
                         itemBuilder: (context, index) {
                           return amandeWidget(snapshot.data![index]);
                         }),
@@ -76,17 +79,18 @@ class _AmandeScreenState extends State<AmandeScreen> {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          "${amande.created_at}",
+          amande.date_limite == null
+              ? ""
+              : AppDate.dayDateFormatString.format(amande.date_limite!),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
         onLongPress: () => PersonalAlert.dialog(context,
             title: "${amande.montant ?? ""}", message: "$amande"),
-        trailing: const Icon(
-          Icons.thumb_up,
-          color: ColorConst.primary,
-        ),
+        trailing: amande.montant != null && amande.montant! <= 0
+            ? Icon(Icons.thumb_up, color: ColorConst.primary)
+            : Icon(Icons.thumb_down, color: ColorConst.error),
       ),
     );
   }

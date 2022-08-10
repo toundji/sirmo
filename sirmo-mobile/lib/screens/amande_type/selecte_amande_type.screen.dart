@@ -37,7 +37,7 @@ class _SelecteAmandeTypeScreenState extends State<SelecteAmandeTypeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppDecore.appBar(context, "Types Amandes"),
+      appBar: AppDecore.appBar(context, "Types d'amandes"),
       body: Center(
         child: FutureBuilder<List<TypeAmande>?>(
           future: context.read<TypeAmandeService>().loadAll(),
@@ -80,7 +80,7 @@ class _SelecteAmandeTypeScreenState extends State<SelecteAmandeTypeScreen> {
           : FloatingActionButton.extended(
               onPressed: submit,
               label: const Text(
-                "Prendre Licence",
+                "Valider",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -93,7 +93,7 @@ class _SelecteAmandeTypeScreenState extends State<SelecteAmandeTypeScreen> {
   submit() async {
     PersonalAlert.showLoading(context);
     await context.read<AmandeService>().createAmande(amande).then((value) {
-      PersonalAlert.showSuccess(context, message: "Amande créer avec succès")
+      PersonalAlert.showSuccess(context, message: "Amande créée avec succès")
           .then((value) {
         Navigator.pop(context);
       });
@@ -151,5 +151,4 @@ class _SelecteAmandeTypeScreenState extends State<SelecteAmandeTypeScreen> {
       ),
     );
   }
-
 }

@@ -114,15 +114,15 @@ export class PayementService {
     driverPay.compte = driverCompte;
     driverPay.solde = driverCompte.montant;
 
-      await this.payementRepository.save(driverPay).catch(error=>{
-        console.log(error);
-        throw new InternalServerErrorException("Nous ne parvenon pas à enrégistrer le payement pour le conducteur")
-      });
+    await this.payementRepository.save(driverPay).catch(error=>{
+      console.log(error);
+      throw new InternalServerErrorException("Nous ne parvenons pas à sauvegarder le payement dans l'historique du conducteur")
+    });
 
-      return this.payementRepository.save(payement).catch(error=>{
-        console.log(error);
-        throw new InternalServerErrorException("Nous ne parvenon pas à enrégistrer le payement")
-      });
+    return this.payementRepository.save(payement).catch(error=>{
+      console.log(error);
+      throw new InternalServerErrorException("Nous ne parvenons pas à sauvegarder le payement dans l'historique du conducteur")
+    });
 
   }
 

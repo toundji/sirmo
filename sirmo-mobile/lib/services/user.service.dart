@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/user.dart';
 import '../utils/network-info.dart';
@@ -26,6 +27,8 @@ class UserService extends ChangeNotifier {
         .post("auth/login", body: body)
         .then((value) {
       NetworkInfo.token = value["token"];
+      FlutterSecureStorage storage = new FlutterSecureStorage();
+      storage.write(key: "token", value: NetworkInfo.token);
 
       user = User.fromMap(value["user"]);
 
@@ -95,6 +98,19 @@ class UserService extends ChangeNotifier {
         .then((value) {
       log("$value");
       return value;
+    }).onError((error, stackTrace) {
+      log("Erreure lors de la mise à jour du logo",
+          error: error, stackTrace: stackTrace);
+      throw error ?? "";
+    });
+  }
+
+  Future<User?> profile() async {
+    return await DioClient().get("users/profile/info").then((value) {
+      log("$value");
+      user = User.fromMap(value);
+      notifyListeners();
+      return value!;
     }).onError((error, stackTrace) {
       log("Erreure lors de la mise à jour du logo",
           error: error, stackTrace: stackTrace);

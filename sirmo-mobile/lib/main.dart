@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
+import 'package:sirmo/models/enums/user_role.dart';
+import 'package:sirmo/screens/police/police-home.screen.dart';
 
 import 'package:sirmo/screens/welcome/onboarding-first.dart';
 import 'package:sirmo/services/amande.service.dart';
@@ -20,6 +22,7 @@ import 'package:sirmo/services/user.service.dart';
 import 'package:sirmo/services/conducteur.sevice.dart';
 import 'package:sirmo/utils/color-const.dart';
 
+import 'models/user.dart';
 import 'screens/auth/login.screen.dart';
 import 'screens/home/home.screen.dart';
 import 'services/appreciation.service.dart';
@@ -60,66 +63,61 @@ class MyApp extends StatelessWidget {
         // ChangeNotifierProvider(create: (context) => AmandeService()),
       ],
       child: MaterialApp(
-        title: 'Zem+',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          primaryColor: ColorConst.primary,
-        ),
-        routes: routes,
-        initialRoute: OnboardingFirst.routeName,
-        // onGenerateInitialRoutes: (settings) {
-        //   return [MaterialPageRoute(builder: (_) => authGuard)];
-        // },
-      ),
+          title: 'Zem+',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.green,
+            primaryColor: ColorConst.primary,
+          ),
+          home: FutureBuilder<Widget>(
+            future: getScreen(context),
+            builder: (context, snapshot) {
+              if (snapshot.data != null) {
+                return snapshot.data!;
+              }
+              return OnboardingFirst();
+            },
+          )),
     );
   }
-}
 
-enum AuthState {
-  PENDING,
-  AUTHENTICATED,
-  UNAUTHENTICATED,
-  UNSIGNED,
-}
-
-StreamBuilder authGuard = StreamBuilder(
-  stream: Auth.authState$,
-  builder: (context, snapshot) {
-    switch (snapshot.data) {
-      case AuthState.PENDING:
+  Future<Widget> getScreen(BuildContext context) async {
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+    String? token = await storage.read(key: "token");
+    if (token == null || token.isEmpty) {
+      return OnboardingFirst();
+    } else if (Jwt.isExpired(token)) {
+      return LoginScreen();
+    } else {
+      User? user = await context.read<UserService>().profile().then((value) {
+        return value;
+      }).onError((error, stackTrace) {
+        return null;
+      });
+      if (user == null) {
         return LoginScreen();
-      case AuthState.UNSIGNED:
-        return LoginScreen();
-      case AuthState.UNAUTHENTICATED:
-        return LoginScreen();
-      case AuthState.AUTHENTICATED:
-        context.read<AuthService>().loadUserInfo();
-        return HomeScreen();
-      default:
-        return LoginScreen();
+      }
+      if (UserRole.isConducteur(user)) {
+        return await context
+            .read<ConducteurService>()
+            .myInfo()
+            .then<Widget>((value) {
+          return PoliceHomeScreen();
+        }).onError((error, stackTrace) {
+          return HomeScreen();
+        });
+      }
+      if (UserRole.isPolice(user)) {
+        return await context
+            .read<PoliceService>()
+            .myInfo()
+            .then<Widget>((value) {
+          return PoliceHomeScreen();
+        }).onError((error, stackTrace) {
+          return HomeScreen();
+        });
+      }
+      return HomeScreen();
     }
-  },
-);
-
-class Auth {
-  static Stream<AuthState> authState$ =
-      Stream<AuthState>.fromFuture(getAuthSate());
-}
-
-Future<AuthState> getAuthSate() async {
-  String? token = await const FlutterSecureStorage().read(key: "token");
-  if (token == null || token.isEmpty) {
-    log("token not found");
-
-    return AuthState.UNAUTHENTICATED;
   }
-  if (Jwt.isExpired(token)) {
-    log("token is expiered");
-    const FlutterSecureStorage().delete(key: "token");
-    return AuthState.UNAUTHENTICATED;
-  }
-
-  NetworkInfo.token = token;
-  return AuthState.AUTHENTICATED;
 }

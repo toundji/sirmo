@@ -35,7 +35,7 @@ class _VehiculeInfoScreenState extends State<VehiculeInfoScreen> {
   Widget build(BuildContext context) {
     log("${vehicule.licence}");
     return Scaffold(
-      appBar: AppDecore.appBar(context, "Véhicule Info"),
+      appBar: AppDecore.appBar(context, "Info Véhicule"),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         children: [
@@ -43,7 +43,7 @@ class _VehiculeInfoScreenState extends State<VehiculeInfoScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text("Status : "),
+                const Text("Licence : "),
                 Text(
                   vehicule.licence?.date_fin == null
                       ? 'Pas de Licence'

@@ -1,25 +1,17 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sirmo/components/unbuild.screen.dart';
-import 'package:sirmo/screens/conducteur/become-conducteur.screen.dart';
-import 'package:sirmo/screens/conducteur/conducteur-home.screen.dart';
+import 'package:sirmo/screens/profile/profile.screen.dart';
 
 import '../../models/app-menu-item.dart';
 import '../../models/user.dart';
 import '../../services/user.service.dart';
-import '../../utils/app-routes.dart';
-import '../../utils/app-util.dart';
 import '../../utils/color-const.dart';
-import '../home/home.screen.dart';
 
-class ConducteurDrawer extends StatefulWidget {
-  ConducteurDrawer({Key? key}) : super(key: key);
+class PoliceDrawer extends StatefulWidget {
+  PoliceDrawer({Key? key}) : super(key: key);
 
   @override
-  _ConducteurDrawerState createState() => _ConducteurDrawerState();
+  _PoliceDrawerState createState() => _PoliceDrawerState();
 }
 
 _buildHeader(BuildContext context) {
@@ -28,7 +20,7 @@ _buildHeader(BuildContext context) {
     accountEmail: Text(""),
     currentAccountPicture: InkWell(
       onTap: () {},
-      child: CircleAvatar(
+      child: const CircleAvatar(
         backgroundColor: Colors.white,
         foregroundImage: AssetImage(
           "assets/logos/logo.png",
@@ -40,7 +32,7 @@ _buildHeader(BuildContext context) {
   );
 }
 
-class _ConducteurDrawerState extends State<ConducteurDrawer> {
+class _PoliceDrawerState extends State<PoliceDrawer> {
   List<AppMenuItem>? menus;
 
   User? user;
@@ -72,51 +64,14 @@ class _ConducteurDrawerState extends State<ConducteurDrawer> {
 
   adminMenu(User? user) {
     menus = [
-      if (user != null && !user.hasRole("conducteur"))
-        AppMenuItem(
-          title: "Devinir Conducteur",
-          leading: const Icon(
-            Icons.motorcycle,
-            color: ColorConst.primary,
-          ),
-          screen: ConducteurBecomeScreen(),
+      AppMenuItem(
+        title: "Profile",
+        leading: const Icon(
+          Icons.badge,
+          color: ColorConst.primary,
         ),
-      AppMenuItem(
-          title: "Mairie",
-          leading: const Icon(
-            Icons.policy,
-            color: ColorConst.primary,
-          ),
-          page: UnbuildScreen.routeName),
-      AppMenuItem(
-          title: "Licences",
-          leading: const Icon(
-            Icons.badge,
-            color: ColorConst.primary,
-          ),
-          page: UnbuildScreen.routeName),
-      AppMenuItem(
-          title: "Amande",
-          leading: const Icon(
-            Icons.low_priority,
-            color: ColorConst.primary,
-          ),
-          page: UnbuildScreen.routeName),
-      AppMenuItem(
-          title: "vehicule",
-          leading: const Icon(
-            Icons.motorcycle,
-            color: ColorConst.primary,
-          ),
-          page: UnbuildScreen.routeName),
-      AppMenuItem(
-          title: "Appréciation",
-          leading: const Icon(
-            CupertinoIcons.hand_thumbsup,
-            color: ColorConst.primary,
-          ),
-          page: UnbuildScreen.routeName),
-      AppMenuItem.devMenu,
+        screen: ProfileScreen(),
+      ),
     ];
   }
 }

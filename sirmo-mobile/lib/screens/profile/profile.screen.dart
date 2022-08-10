@@ -17,7 +17,7 @@ import 'reset_password.screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
-  static const String routeName = "/profile";
+  static const String routeName = "/profil";
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text("Profil"),
         elevation: 0.0,
         centerTitle: true,
       ),

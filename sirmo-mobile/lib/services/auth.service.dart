@@ -54,6 +54,9 @@ class AuthService extends ChangeNotifier {
         .post("users/register", body: body)
         .then((value) {
       NetworkInfo.token = value["token"];
+      FlutterSecureStorage storage = new FlutterSecureStorage();
+      storage.write(key: "token", value: NetworkInfo.token);
+
       user = User.fromMap(value["user"]);
       return user;
     }).onError((error, stackTrace) {

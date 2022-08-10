@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,10 +6,7 @@ import 'package:sirmo/components/unbuild.screen.dart';
 import '../../models/app-menu-item.dart';
 import '../../models/user.dart';
 import '../../services/user.service.dart';
-import '../../utils/app-routes.dart';
-import '../../utils/app-util.dart';
 import '../../utils/color-const.dart';
-import '../home/home.screen.dart';
 import 'become-conducteur.screen.dart';
 
 class ConducteurDrawer extends StatefulWidget {
@@ -27,7 +22,7 @@ _buildHeader(BuildContext context) {
     accountEmail: Text(""),
     currentAccountPicture: InkWell(
       onTap: () {},
-      child: CircleAvatar(
+      child: const CircleAvatar(
         backgroundColor: Colors.white,
         foregroundImage: AssetImage(
           "assets/logos/logo.png",

@@ -62,8 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBar(context),
-      drawer: UserDrawer(),
+      appBar: AppAppBar(context,
+          leading: const Text(
+            "User",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          auto: false),
+      // drawer: UserDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

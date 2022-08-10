@@ -35,6 +35,28 @@ class AmandeService extends ChangeNotifier {
     return all!;
   }
 
+  Future<List<Amande>> loadActifAmande(Conducteur conducteur,
+      {bool refresh = false}) async {
+    if (all == null || all!.isEmpty || refresh) {
+      await DioClient()
+          .get("amandes/conducteurs/${conducteur.id}/unsolve")
+          .then((value) {
+        List list = value;
+        all = list.map((e) {
+          Amande amande = Amande.fromMap(e);
+          amande.conducteur = conducteur;
+          return amande;
+        }).toList();
+        notifyListeners();
+        return all!;
+      }).onError((error, stackTrace) {
+        log("$error");
+        throw error ?? "Une erreur s'est produit";
+      });
+    }
+    return all!;
+  }
+
   Future<Amande?> createAmande(Amande amande) async {
     dynamic body = amande.toCreateMap();
     log("$body");

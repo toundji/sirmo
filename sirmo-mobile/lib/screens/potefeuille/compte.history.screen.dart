@@ -36,7 +36,7 @@ class _CompteHistoryScreenState extends State<CompteHistoryScreen> {
   Widget build(BuildContext context) {
     histories = context.watch<CompteService>().histories;
     return Scaffold(
-      appBar: AppDecore.appBar(context, "Historiques du compte"),
+      appBar: AppDecore.appBar(context, "Historique du compte"),
       body: histories == null
           ? Center(
               child: errorMessage == null

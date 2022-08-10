@@ -6,6 +6,7 @@ import 'package:sirmo/components/app-bar.screen.dart';
 import 'package:sirmo/screens/amande_type/selecte_amande_type.screen.dart';
 import 'package:sirmo/screens/amandes/amande.screen.dart';
 import 'package:sirmo/screens/conducteur/conducteur.drawer.dart';
+import 'package:sirmo/screens/police/police.drawer.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/utils/network-info.dart';
 
@@ -15,6 +16,8 @@ import '../../services/user.service.dart';
 import '../../utils/app-util.dart';
 import '../conducteur/choice-driver.screen.dart';
 import '../statistique-conducteur/evaluate-conduteur.screen.dart';
+import '../statistique-conducteur/statistique-conducteur.screen.dart';
+import '../vehicule/vehicule_info.screen.dart';
 
 class PoliceHomeScreen extends StatefulWidget {
   PoliceHomeScreen({Key? key, this.debug = false}) : super(key: key);
@@ -66,7 +69,12 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBar(context),
+      appBar: AppAppBar(context,
+          leading: const Text(
+            "Police",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          auto: false),
       body: Column(
         children: [
           SizedBox(height: 16),
@@ -104,18 +112,57 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              ActionCard(name: "Status", icon: Icons.info),
-              ActionCard(name: "Apprecier", icon: CupertinoIcons.star),
+            children: [
+              ActionCard(
+                name: "Véhicule",
+                icon: CupertinoIcons.eye,
+                screen: ChoiceDriverScreen(
+                  onSubmit: (conducteur) {
+                    AppUtil.changeToScreen(context,
+                        VehiculeInfoScreen(vehicule: conducteur.vehicule!));
+                  },
+                ),
+              ),
             ],
           ),
+
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ActionCard(
+                name: "Statistique du Conducteur",
+                icon: CupertinoIcons.eye,
+                screen: ChoiceDriverScreen(
+                  onSubmit: (conducteur) {
+                    AppUtil.changeToScreen(
+                        context,
+                        StatistiqueConducteurScreen(
+                          conducteur: conducteur,
+                        ));
+                  },
+                ),
+              ),
+              ActionCard(
+                name: "Evaluer Conducteur",
+                icon: Icons.edit,
+                screen: ChoiceDriverScreen(
+                  onSubmit: (conducteur) {
+                    AppUtil.changeToScreen(context,
+                        EvaluateConducteurScreen(conducteur: conducteur));
+                  },
+                ),
+              ),
+            ],
+          ),
+
           // portefeuile,
         ],
       ),
-      drawer: ConducteurDrawer(),
+      // drawer: PoliceDrawer(),
     );
   }
 }

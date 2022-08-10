@@ -40,14 +40,14 @@ class _PayConducteurScreenState extends State<PayConducteurScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppDecore.appBar(context, "Payer Le Conducteur"),
+      appBar: AppDecore.appBar(context, "Payer le conducteur"),
       extendBody: true,
       body: SingleChildScrollView(
         child: Column(
           children: [
             profile,
             const Text(
-              "Veuillez renseilller le montant à recharger ",
+              "Veuillez renseilller le montant à payer ",
               style: TextStyle(
                   color: ColorConst.text, fontStyle: FontStyle.italic),
             ),

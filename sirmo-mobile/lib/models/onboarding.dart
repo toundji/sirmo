@@ -21,7 +21,8 @@ class Onboarding {
   static Onboarding get second {
     return Onboarding(
         title: "Mairie",
-        content: "Obtenez les information sur les conducteurs de votre commune",
+        content:
+            "Obtenez les informations sur les conducteurs de votre commune",
         image: "assets/images/onboarding-second.gif");
   }
 
