@@ -1,15 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
-import 'package:sirmo/models/enums/user_role.dart';
 import 'package:sirmo/screens/auth/splash.screen.dart';
-import 'package:sirmo/screens/police/police-home.screen.dart';
 
-import 'package:sirmo/screens/welcome/onboarding-first.dart';
 import 'package:sirmo/services/amande.service.dart';
 import 'package:sirmo/services/arrondissement.service.dart';
 import 'package:sirmo/services/commune.service.dart';
@@ -29,7 +22,7 @@ import 'services/constante.service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

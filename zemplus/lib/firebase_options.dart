@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '877866277570',
     projectId: 'sirmo-736ef',
     authDomain: 'sirmo-736ef.firebaseapp.com',
+    databaseURL: 'https://sirmo-736ef-default-rtdb.firebaseio.com',
     storageBucket: 'sirmo-736ef.appspot.com',
     measurementId: 'G-GLGEX7WCY7',
   );
@@ -61,6 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:877866277570:android:e5fe8339eda4487791795b',
     messagingSenderId: '877866277570',
     projectId: 'sirmo-736ef',
+    databaseURL: 'https://sirmo-736ef-default-rtdb.firebaseio.com',
     storageBucket: 'sirmo-736ef.appspot.com',
   );
 
@@ -69,6 +71,7 @@ class DefaultFirebaseOptions {
     appId: '1:877866277570:ios:024fa213ead27be391795b',
     messagingSenderId: '877866277570',
     projectId: 'sirmo-736ef',
+    databaseURL: 'https://sirmo-736ef-default-rtdb.firebaseio.com',
     storageBucket: 'sirmo-736ef.appspot.com',
     iosClientId: '877866277570-b2qbevsjo0dlrbl6uogstmj4d5kncft5.apps.googleusercontent.com',
     iosBundleId: 'com.example.sirmo',
