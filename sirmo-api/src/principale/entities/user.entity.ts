@@ -22,6 +22,9 @@ export class User extends Audit{
   @Column({ nullable: false })
   prenom: string;
 
+  @Column({ nullable: true })
+  token: string;
+
   @Column({nullable:true})
   genre: Genre;
 

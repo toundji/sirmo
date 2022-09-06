@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/models/enums/user_role.dart';
+import 'package:sirmo/screens/auth/splash.screen.dart';
 import 'package:sirmo/screens/police/police-home.screen.dart';
 
 import 'package:sirmo/screens/welcome/onboarding-first.dart';
@@ -22,16 +23,16 @@ import 'package:sirmo/services/user.service.dart';
 import 'package:sirmo/services/conducteur.sevice.dart';
 import 'package:sirmo/utils/color-const.dart';
 
-import 'models/user.dart';
-import 'screens/auth/login.screen.dart';
-import 'screens/home/home.screen.dart';
 import 'services/appreciation.service.dart';
 import 'services/auth.service.dart';
 import 'services/constante.service.dart';
-import 'utils/app-routes.dart';
-import 'utils/network-info.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async{
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -69,55 +70,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green,
             primaryColor: ColorConst.primary,
           ),
-          home: FutureBuilder<Widget>(
-            future: getScreen(context),
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                return snapshot.data!;
-              }
-              return OnboardingFirst();
-            },
-          )),
+          home: const SplashScreen()),
     );
-  }
-
-  Future<Widget> getScreen(BuildContext context) async {
-    FlutterSecureStorage storage = new FlutterSecureStorage();
-    String? token = await storage.read(key: "token");
-    if (token == null || token.isEmpty) {
-      return OnboardingFirst();
-    } else if (Jwt.isExpired(token)) {
-      return LoginScreen();
-    } else {
-      User? user = await context.read<UserService>().profile().then((value) {
-        return value;
-      }).onError((error, stackTrace) {
-        return null;
-      });
-      if (user == null) {
-        return LoginScreen();
-      }
-      if (UserRole.isConducteur(user)) {
-        return await context
-            .read<ConducteurService>()
-            .myInfo()
-            .then<Widget>((value) {
-          return PoliceHomeScreen();
-        }).onError((error, stackTrace) {
-          return HomeScreen();
-        });
-      }
-      if (UserRole.isPolice(user)) {
-        return await context
-            .read<PoliceService>()
-            .myInfo()
-            .then<Widget>((value) {
-          return PoliceHomeScreen();
-        }).onError((error, stackTrace) {
-          return HomeScreen();
-        });
-      }
-      return HomeScreen();
-    }
   }
 }

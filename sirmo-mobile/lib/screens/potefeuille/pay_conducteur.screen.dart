@@ -54,11 +54,20 @@ class _PayConducteurScreenState extends State<PayConducteurScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               child: TextFormField(
-                initialValue: "$amount",
                 key: fieldKey,
                 onChanged: (value) {
                   amount = int.tryParse(value);
                   setState(() {});
+                },
+                validator: (value) {
+                  int? number = value == null ? null : int.tryParse(value);
+                  if (number == null) {
+                    return null;
+                  }
+                  if (number < 150) {
+                    return "Le montant minimale requise est 150";
+                  }
+                  return null;
                 },
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: AppDecore.input("Montant", prefix: Icons.money),

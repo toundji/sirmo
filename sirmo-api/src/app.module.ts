@@ -7,6 +7,7 @@ import ormConfig from './config/ormconfig';
 
 import { PrincipaleModule } from './principale/principale.module';
 import { AuthModule } from './auth/auth.module';
+import { ApiFirebaseModule } from './firebase/api-firebase.module';
 
 
 
@@ -14,6 +15,8 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormConfig),
+    ApiFirebaseModule,
+
     PrincipaleModule,
     AuthModule,
   ],

@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { compare } from "bcrypt";
+import { LoginDto } from "src/auth/dto/login.dto";
 import { User } from "src/principale/entities/user.entity";
 import { UserService } from "src/principale/services/user.service";
 import { PayloadDto } from "./../../dto/payload.dto";
@@ -24,8 +25,8 @@ export class AuthService {
     }
     return user;
   }
-  async login({ username, password }: any) {
-    const user = await this.userService.findOneByPseudo(username);
+  async login(body: LoginDto) {
+    const user = await this.userService.findOneByPseudo(body.username);
 
     if (!user) {
       throw new UnauthorizedException(
@@ -33,12 +34,18 @@ export class AuthService {
       );
     }
 
-    const areEqual = await compare(password, user.password);
+
+    const areEqual = await compare(body.password, user.password);
     if (!areEqual) {
       throw new HttpException(
         "Nom d'utilisateur ou mot de passe invalide ",
         HttpStatus.UNAUTHORIZED,
       );
+    }
+
+    if(body.token && user.token != body.token){
+      user.token = body.token;
+      await User.save(user);
     }
 
     // return user;

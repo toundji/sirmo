@@ -1,10 +1,19 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class LoginDto {
+  
   @ApiProperty({required:true})
-  @IsNotEmpty() readonly username: string;
+  @IsNotEmpty()
+  readonly username: string;
+
   @ApiProperty({required:true})
-  @IsNotEmpty() readonly password: string;
+  @IsNotEmpty() 
+  readonly password: string;
+
+  @ApiProperty({required:true})
+  @IsString()
+  @IsNotEmpty()
+  readonly  token:string;
 }

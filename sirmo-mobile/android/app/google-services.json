@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "877866277570",
+    "project_id": "sirmo-736ef",
+    "storage_bucket": "sirmo-736ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877866277570:android:e5fe8339eda4487791795b",
+        "android_client_info": {
+          "package_name": "com.example.sirmo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877866277570-f4bh2onnq5pjed5mae0m9ae2948k2sbl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPwFroAbktFHgJczR6oCsDdLsrmAX7RqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "877866277570-f4bh2onnq5pjed5mae0m9ae2948k2sbl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

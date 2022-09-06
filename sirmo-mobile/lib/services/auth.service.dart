@@ -9,6 +9,7 @@ import 'package:sirmo/models/user.dart';
 import 'package:sirmo/utils/network-info.dart';
 import 'package:sirmo/utils/request.exception.dart';
 
+import '../models/auth_storage.dart';
 import '../models/login.dart';
 import 'dio-client.service.dart';
 
@@ -31,13 +32,18 @@ class AuthService extends ChangeNotifier {
   Future<User?> login(Login login) async {
     return await DioClient(auth: false)
         .post("auth/login", body: login.toMap())
-        .then((value) {
+        .then((value) async {
       log("$value");
       User? user = User.fromMap(value['user']);
       NetworkInfo.token = value["token"];
-      FlutterSecureStorage storage = new FlutterSecureStorage();
-      storage.write(key: "token", value: NetworkInfo.token);
+
       this.user = user;
+
+      FlutterSecureStorage storage = const FlutterSecureStorage();
+      AuthStorage auth =
+          AuthStorage(token: NetworkInfo.token, roles: user.roles);
+      await storage.write(key: "authStorage", value: auth.toJson());
+
       return user;
     }).onError((error, stackTrace) {
       log("Erreur de récupération de l'utilisateur courant",
@@ -52,10 +58,10 @@ class AuthService extends ChangeNotifier {
     var body = user.toCreateMap();
     return await DioClient(auth: false)
         .post("users/register", body: body)
-        .then((value) {
+        .then((value) async {
       NetworkInfo.token = value["token"];
       FlutterSecureStorage storage = new FlutterSecureStorage();
-      storage.write(key: "token", value: NetworkInfo.token);
+      await storage.write(key: "token", value: NetworkInfo.token);
 
       user = User.fromMap(value["user"]);
       return user;

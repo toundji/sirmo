@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sirmo/models/auth_storage.dart';
 
 import '../models/user.dart';
 import '../utils/network-info.dart';
@@ -19,21 +20,39 @@ class UserService extends ChangeNotifier {
   }
 
   Future<User> login(String phone, String password) async {
+    String? token = await FirebaseMessaging.instance.getToken();
+
     var body = {
       "username": phone,
       "password": password,
+      "token": token
     };
     return await DioClient(auth: false)
         .post("auth/login", body: body)
-        .then((value) {
+        .then((value) async {
       NetworkInfo.token = value["token"];
-      FlutterSecureStorage storage = new FlutterSecureStorage();
-      storage.write(key: "token", value: NetworkInfo.token);
-
       user = User.fromMap(value["user"]);
+
+      FlutterSecureStorage storage = FlutterSecureStorage();
+      AuthStorage auth =
+          AuthStorage(token: NetworkInfo.token, roles: user?.roles);
+      await storage.write(key: "authStorage", value: auth.toJson());
 
       return user!;
     }).onError((error, stackTrace) {
+      log("Error de conexion ", error: error, stackTrace: stackTrace);
+      throw "Les données que nous avons récues ne sont pas celle que nous espérons";
+    });
+  }
+
+  Future<dynamic>  resetToken()async {
+        String? token = await FirebaseMessaging.instance.getToken();
+      if(user.token == token){
+        return "";
+      }
+      var body = { "token": token };
+    return await DioClient().put("users/reset/token", body: body)
+        .then((value) { return value; }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw "Les données que nous avons récues ne sont pas celle que nous espérons";
     });
@@ -106,11 +125,11 @@ class UserService extends ChangeNotifier {
   }
 
   Future<User?> profile() async {
-    return await DioClient().get("users/profile/info").then((value) {
-      log("$value");
+    return await DioClient().get("users/my/info").then((value) {
       user = User.fromMap(value);
+      log("$value");
       notifyListeners();
-      return value!;
+      return user!;
     }).onError((error, stackTrace) {
       log("Erreure lors de la mise à jour du logo",
           error: error, stackTrace: stackTrace);

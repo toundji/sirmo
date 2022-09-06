@@ -147,6 +147,12 @@ export class UserService {
     
   }
 
+
+  updateTokent(token:string, user:User):Promise<User>{
+    user.token = token;
+    return User.save(user);
+  }
+
   async updateProfile(id: number, @UploadedFile() profile, createur: User) {
     const user: User = await this.findOne(id);
     console.log(profile);

@@ -25,7 +25,6 @@ export class Payement extends Audit{
   @Column()
   montant:number;
 
-
   //SOLDE APRES L'OPERATION
   @Column()
   solde:number;

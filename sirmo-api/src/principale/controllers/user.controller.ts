@@ -24,6 +24,7 @@ import { ChangeEmailDto } from '../createDto/change-emeail.dto';
 import { ProprietaireDto } from '../admin/dto/proprietaireDto';
 import { NotFoundException } from '@nestjs/common';
 import { ApiConstante } from '../utilis/api-constantes';
+import { TokenDto } from '../createDto/token-dto';
 
 
 
@@ -62,6 +63,14 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: number):Promise<User> {
     return this.userService.findOne(+id);
+  }
+
+  @ApiBearerAuth("token")
+  @UseGuards(JwtAuthGuard)
+  @Post("reset/token")
+  resetToken(@Body() body: TokenDto, @Req() request):Promise<User> {
+    const user: User = request.user;
+    return this.userService.updateTokent(body.token, user);
   }
 
   @ApiBearerAuth("token")

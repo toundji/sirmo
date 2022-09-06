@@ -29,6 +29,9 @@ class User implements Audit {
 
   String? code;
 
+  String? token;
+
+
   List<String>? roles;
 
   Arrondissement? arrondissement;
@@ -36,6 +39,7 @@ class User implements Audit {
   String? profile_image;
 
   String? idCarde_image;
+  
   String? idCarde;
 
   List<Fichier>? profiles;
@@ -67,6 +71,7 @@ class User implements Audit {
     this.email,
     this.date_naiss,
     this.phone,
+    this.token,
     this.code,
     this.roles,
     this.arrondissement,
@@ -93,6 +98,7 @@ class User implements Audit {
     DateTime? date_naiss,
     String? tel,
     String? code,
+    String? token,
     List<String>? roles,
     Arrondissement? arrondissement,
     String? profile_image,
@@ -114,6 +120,7 @@ class User implements Audit {
       date_naiss: date_naiss ?? this.date_naiss,
       phone: tel ?? this.phone,
       code: code ?? this.code,
+      token: token?? this.token,
       roles: roles ?? this.roles,
       arrondissement: arrondissement ?? this.arrondissement,
       profile_image: profile_image ?? this.profile_image,
@@ -139,6 +146,7 @@ class User implements Audit {
       'phone': phone,
       'code': code,
       'roles': roles,
+      'token' : token,
       'arrondissement': arrondissement?.toMap(),
       'idCarde_image': idCarde_image,
       'profile_image': profile_image,
@@ -154,6 +162,7 @@ class User implements Audit {
   Map<String, dynamic> toCreateMap() {
     return {
       'nom': nom,
+      'token': token,
       'prenom': prenom,
       'genre': genre,
       'password': password,
@@ -179,6 +188,7 @@ class User implements Audit {
           ? DateTime.tryParse(map['date_naiss'])
           : null,
       phone: map['phone'],
+      token: map['token'],
       code: map['code'],
       roles: List<String>.from(map['roles']),
       arrondissement: map['arrondissement'] != null
@@ -222,6 +232,7 @@ class User implements Audit {
         other.date_naiss == date_naiss &&
         other.phone == phone &&
         other.code == code &&
+        other.token == token &&
         listEquals(other.roles, roles) &&
         other.arrondissement == arrondissement &&
         other.profile_image == profile_image &&
@@ -243,6 +254,7 @@ class User implements Audit {
         date_naiss.hashCode ^
         phone.hashCode ^
         code.hashCode ^
+        token.hashCode ^
         roles.hashCode ^
         arrondissement.hashCode ^
         profile_image.hashCode ^

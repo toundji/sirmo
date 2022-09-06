@@ -17,6 +17,8 @@ import { UpdateAmandeDto } from './../updateDto/update-amande.dto';
 import { Constante } from '../entities/constante.entity';
 import { ConstanteService } from './constante.service';
 import { LicenceProperty } from 'src/enums/licence-property';
+import * as admin from 'firebase-admin';
+
 
 
 
@@ -38,8 +40,6 @@ export class AmandeService {
 
     const police:Police = await this.policeService.findOne(user.id);
     amande.police = police;
-
-
 
     const conducteur: Conducteur = await this.conducteurService.findOne(createAmandeDto.conducteur_id);
     amande.conducteur= conducteur;
@@ -69,6 +69,29 @@ export class AmandeService {
   
       });
 
+  }
+
+  
+  async notifyUser(token:string, data:any){
+    const messaging = admin.messaging();
+    const registra_token: string = "csGli4CdSnm5UPiasDfBV_:APA91bHnZjz585dD390Oy0yiyxEai5OXDdSBMJmNBK2X1_r2a2RFsOpfoLmAPnP0l7Bk9tCt6fPRU6zFdrGZym4GHFRkpZwN-wZOgZaAK66HzJKHJMpC90cxmlpV1l2QDLBcbjEem8Rw";
+    
+    const message = {
+      notification: {
+        title: 'Amande',
+        body: 'Vous avez été amandé',
+        data: data
+      },
+      token: token
+    };
+   
+    return await messaging.send(message)
+      .then((response) => {
+        console.log('Successfully sent message:', response);
+      }).catch((error) => {
+        console.log('Error sending message:', error);
+        throw new BadRequestException("Nous ne parvenons pas à notifyer à l'utilisteur",error.message);
+      });
   }
 
   async createByAdmin(createAmandeDto: CreateAmandeDto, user: User):Promise<Amande>  {
