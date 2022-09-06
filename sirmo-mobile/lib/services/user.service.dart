@@ -10,6 +10,9 @@ import '../models/user.dart';
 import '../utils/network-info.dart';
 import 'dio-client.service.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class UserService extends ChangeNotifier {
   User? user;
   List<User>? all = [];
@@ -22,11 +25,7 @@ class UserService extends ChangeNotifier {
   Future<User> login(String phone, String password) async {
     String? token = await FirebaseMessaging.instance.getToken();
 
-    var body = {
-      "username": phone,
-      "password": password,
-      "token": token
-    };
+    var body = {"username": phone, "password": password, "token": token};
     return await DioClient(auth: false)
         .post("auth/login", body: body)
         .then((value) async {
@@ -45,14 +44,15 @@ class UserService extends ChangeNotifier {
     });
   }
 
-  Future<dynamic>  resetToken()async {
-        String? token = await FirebaseMessaging.instance.getToken();
-      if(user.token == token){
-        return "";
-      }
-      var body = { "token": token };
-    return await DioClient().put("users/reset/token", body: body)
-        .then((value) { return value; }).onError((error, stackTrace) {
+  Future<dynamic> resetToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    if (user.token == token) {
+      return "";
+    }
+    var body = {"token": token};
+    return await DioClient().put("users/reset/token", body: body).then((value) {
+      return value;
+    }).onError((error, stackTrace) {
       log("Error de conexion ", error: error, stackTrace: stackTrace);
       throw "Les données que nous avons récues ne sont pas celle que nous espérons";
     });
