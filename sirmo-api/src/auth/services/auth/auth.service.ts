@@ -35,10 +35,11 @@ export class AuthService {
       notification: {
         title: 'Connexion',
         body: 'Vous êtes connecté avec',
-        data: data
       },
       token: token
     };
+    
+    console.log(token);
    
     return await messaging.send(message)
       .then((response) => {

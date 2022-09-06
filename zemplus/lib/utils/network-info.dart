@@ -1,5 +1,5 @@
 class NetworkInfo {
-  static String baseUrl = "http://192.168.1.131:3000/api/";
+  static String baseUrl = "http://192.168.1.128:3000/api/";
   // static String baseUrl = "https://sirmo-api.herokuapp.com/api/";
 
   static String? token;

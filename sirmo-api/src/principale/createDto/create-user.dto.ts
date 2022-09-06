@@ -44,6 +44,7 @@ export class CreateUserDto {
     @ApiProperty({required:true})
     @IsString()
     @IsNotEmpty()
+    @IsOptional()
     readonly  token:string;
 }
 
