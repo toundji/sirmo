@@ -1,7 +1,8 @@
-import 'dart:developer';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-bar.screen.dart';
 import 'package:sirmo/screens/potefeuille/pay_conducteur.screen.dart';
@@ -15,17 +16,15 @@ import '../../components/action-card.dart';
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
 import '../../models/notifcation_badge.dart';
+import '../../models/push_notis.dart';
 import '../../models/user.dart';
 import '../../services/user.service.dart';
 import '../conducteur/choice-driver.screen.dart';
 import '../statistique-conducteur/statistique-conducteur.screen.dart';
 
-import 'package:overlay_support/overlay_support.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'package:sirmo/models/push_notis.dart';
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, this.debug = false}) : super(key: key);
@@ -38,27 +37,18 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-}
-
 class _HomeScreenState extends State<HomeScreen> {
   Compte? compte;
   User? user;
 
-  late final FirebaseMessaging _messaging;
-  late int _totalNotifications;
+  FirebaseMessaging? _messaging;
+  int _totalNotifications = 0;
   PushNotification? _notificationInfo;
 
   @override
   void initState() {
     super.initState();
     user = context.read<UserService>().user;
-
-    late int _totalNotifications;
-    PushNotification? _notificationInfo;
-
-    loadMyConducteurList();
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notification = PushNotification(
@@ -71,6 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
 
+    checkForInitialMessage();
+    registerNotification();
+
     context
         .read<CompteService>()
         .loadCompte()
@@ -78,9 +71,14 @@ class _HomeScreenState extends State<HomeScreen> {
         .onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "êrror");
     });
+  }
 
-    checkForInitialMessage();
-    registerNotification();
+  loadMyConducteurList() {
+    context
+        .read<ConducteurService>()
+        .loadMyConducteurList(user!.id!)
+        .then((value) {})
+        .onError((error, stackTrace) {});
   }
 
   checkForInitialMessage() async {
@@ -108,14 +106,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _messaging = FirebaseMessaging.instance;
 
     // 3. On iOS, this helps to take the user permissions
-    NotificationSettings settings = await _messaging.requestPermission(
+    NotificationSettings? settings = await _messaging?.requestPermission(
       alert: true,
       badge: true,
       provisional: false,
       sound: true,
     );
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    if (settings?.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         // Parse the message received
@@ -144,14 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
       print('User declined or has not accepted permission');
     }
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  loadMyConducteurList() {
-    context
-        .read<ConducteurService>()
-        .loadMyConducteurList(user!.id!)
-        .then((value) {})
-        .onError((error, stackTrace) {});
   }
 
   @override
