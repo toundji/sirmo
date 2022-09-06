@@ -6,6 +6,7 @@ import { AuthService } from "./services/auth/auth.service";
 import { JwtStrategy } from "./services/jwt.strategy";
 import { AuthController } from "./controllers/auth/auth.controller";
 import "dotenv/config";
+import { ApiFirebaseModule } from "src/firebase/api-firebase.module";
 
 @Module({
   imports: [

@@ -14,8 +14,8 @@ const ormConfig: TypeOrmOptionsFactory | any = {
 
     synchronize: true,
 
-    url: process.env.DB_URL,
-    ssl: { rejectUnauthorized: false },
+    // url: process.env.DB_URL,
+    // ssl: { rejectUnauthorized: false },
 
     migrations: ["dist/migrations/*.js"],
     cli: {

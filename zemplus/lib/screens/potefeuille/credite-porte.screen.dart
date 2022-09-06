@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:kkiapay_flutter_sdk/kkiapayWebview.dart';
 import 'package:provider/provider.dart';
+
 import 'package:sirmo/components/app-decore.dart';
 import 'package:sirmo/models/compte.dart';
 import 'package:sirmo/services/compte.service.dart';
 import 'package:sirmo/services/user.service.dart';
 import 'package:sirmo/utils/color-const.dart';
+import 'package:kkiapay_flutter_sdk/kkiapay/view/widget_builder_view.dart';
 
 import '../../components/personal_alert.dart';
 import '../../models/user.dart';
@@ -96,7 +97,7 @@ class _CreditPortefeuilleScreenState extends State<CreditPortefeuilleScreen> {
         await PhoneNumber.getRegionInfoFromPhoneNumber(user!.phone!);
     String tel = phone.parseNumber().replaceAll(RegExp(r'[\+,-]'), '');
     final payer = KKiaPay(
-      amount: amount,
+      amount: amount ?? 20200,
       callback: onPaymentSuccess,
       apikey: AppUtil.kikiapayKey,
       phone: tel,

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:kkiapay_flutter_sdk/kkiapayWebview.dart';
+import 'package:kkiapay_flutter_sdk/kkiapay/view/widget_builder_view.dart';
 import 'package:provider/provider.dart';
 import 'package:sirmo/components/app-decore.dart';
 import 'package:sirmo/models/conducteur.dart';
 import 'package:sirmo/models/enums/licence_property.dart';
-import 'package:sirmo/models/licence.dart';
 import 'package:sirmo/models/licence_vehicule.dart';
 import 'package:sirmo/services/conducteur.sevice.dart';
 
 import '../../components/personal_alert.dart';
-import '../../models/compte.dart';
 import '../../models/constante.dart';
 import '../../models/user.dart';
-import '../../services/compte.service.dart';
 import '../../services/constante.service.dart';
 import '../../services/licence.service.dart';
 import '../../services/user.service.dart';
@@ -162,7 +159,7 @@ class _LicenceCreateScreenState extends State<LicenceCreateScreen> {
   Future _onPay() async {
     String tel = phone!.parseNumber().replaceAll(RegExp(r'[\+,-]'), '');
     final payer = KKiaPay(
-      amount: amount,
+      amount: amount ?? 0,
       callback: onPaymentSuccess,
       apikey: AppUtil.kikiapayKey,
       phone: tel,

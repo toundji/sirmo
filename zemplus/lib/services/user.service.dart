@@ -46,7 +46,7 @@ class UserService extends ChangeNotifier {
 
   Future<dynamic> resetToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
-    if (user.token == token) {
+    if (user?.token == token) {
       return "";
     }
     var body = {"token": token};

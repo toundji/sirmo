@@ -73,9 +73,7 @@ export class AmandeService {
 
   
   async notifyUser(token:string, data:any){
-    const messaging = admin.messaging();
-    const registra_token: string = "csGli4CdSnm5UPiasDfBV_:APA91bHnZjz585dD390Oy0yiyxEai5OXDdSBMJmNBK2X1_r2a2RFsOpfoLmAPnP0l7Bk9tCt6fPRU6zFdrGZym4GHFRkpZwN-wZOgZaAK66HzJKHJMpC90cxmlpV1l2QDLBcbjEem8Rw";
-    
+    const messaging = admin.messaging();    
     const message = {
       notification: {
         title: 'Amande',
