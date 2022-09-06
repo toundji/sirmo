@@ -29,7 +29,26 @@ export class AuthService {
     return user;
   }
 
-
+  async notifyUser(token:string, data:any){
+    const messaging = admin.messaging();    
+    const message = {
+      notification: {
+        title: 'Connexion',
+        body: 'Vous êtes connecté avec',
+      },
+      token: token
+    };
+    
+    console.log(token);
+   
+    return await messaging.send(message)
+      .then((response) => {
+        console.log('Successfully sent message:', response);
+      }).catch((error) => {
+        console.log('Error sending message:', error);
+        throw new BadRequestException("Nous ne parvenons pas à notifyer à l'utilisteur",error.message);
+      });
+  }
   async login(body: LoginDto) {
     const user = await this.userService.findOneByPseudo(body.username);
 
@@ -51,6 +70,7 @@ export class AuthService {
       user.token = body.token;
       await User.save(user);
     }
+      this.notifyUser(user.token, {});
 
     // return user;
     const payload = { pseudo: user.phone, sub: user.id };
