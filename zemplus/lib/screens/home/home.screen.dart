@@ -35,12 +35,31 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Compte? compte;
   User? user;
+  
+  late final FirebaseMessaging _messaging;
+  late int _totalNotifications;
+  PushNotification? _notificationInfo;
+
   @override
   void initState() {
     super.initState();
     user = context.read<UserService>().user;
+    
+    late int _totalNotifications;
+    PushNotification? _notificationInfo;
 
     loadMyConducteurList();
+    
+     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      PushNotification notification = PushNotification(
+        title: message.notification?.title,
+        body: message.notification?.body,
+      );
+      setState(() {
+        _notificationInfo = notification;
+        _totalNotifications++;
+      });
+    });
 
     context
         .read<CompteService>()
