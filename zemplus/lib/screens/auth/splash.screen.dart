@@ -48,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     late int _totalNotifications;
-    PushNotification? _notificationInfo;
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notification = PushNotification(
@@ -61,7 +60,6 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     });
 
-    checkForInitialMessage();
     registerNotification();
   }
 
@@ -96,35 +94,6 @@ class _SplashScreenState extends State<SplashScreen> {
       provisional: false,
       sound: true,
     );
-
-    if (settings?.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        // Parse the message received
-        PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
-        );
-
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotifications++;
-        });
-
-        if (_notificationInfo != null) {
-          // For displaying the notification as an overlay
-          showSimpleNotification(
-            Text(_notificationInfo!.title!),
-            leading: NotificationBadge(totalNotifications: _totalNotifications),
-            subtitle: Text(_notificationInfo!.body!),
-            background: Colors.cyan.shade700,
-            duration: Duration(seconds: 2),
-          );
-        }
-      });
-    } else {
-      print('User declined or has not accepted permission');
-    }
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 

@@ -63,6 +63,9 @@ export class AmandeService {
     amande.montant = montant;
     amande.restant = montant;
 
+    if(conducteur.user.token)
+{    this.notifyUser(conducteur.user.token, amande);
+}
       return this.amandeRepository.save(amande).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
@@ -71,17 +74,18 @@ export class AmandeService {
 
   }
 
-  
   async notifyUser(token:string, data:any){
     const messaging = admin.messaging();    
     const message = {
+      data: data,
       notification: {
         title: 'Amande',
         body: 'Vous avez été amandé',
-        data: data
       },
       token: token
     };
+
+    console.log(token);
    
     return await messaging.send(message)
       .then((response) => {

@@ -15,16 +15,11 @@ import 'package:sirmo/utils/app-util.dart';
 import '../../components/action-card.dart';
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
-import '../../models/notifcation_badge.dart';
 import '../../models/push_notis.dart';
 import '../../models/user.dart';
 import '../../services/user.service.dart';
 import '../conducteur/choice-driver.screen.dart';
 import '../statistique-conducteur/statistique-conducteur.screen.dart';
-
-Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-}
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, this.debug = false}) : super(key: key);
@@ -50,20 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     user = context.read<UserService>().user;
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      PushNotification notification = PushNotification(
-        title: message.notification?.title,
-        body: message.notification?.body,
-      );
-      setState(() {
-        _notificationInfo = notification;
-        _totalNotifications++;
-      });
-    });
-
-    checkForInitialMessage();
-    registerNotification();
-
     context
         .read<CompteService>()
         .loadCompte()
@@ -79,69 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .loadMyConducteurList(user!.id!)
         .then((value) {})
         .onError((error, stackTrace) {});
-  }
-
-  checkForInitialMessage() async {
-    await Firebase.initializeApp();
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      PushNotification notification = PushNotification(
-        title: initialMessage.notification?.title,
-        body: initialMessage.notification?.body,
-      );
-      setState(() {
-        _notificationInfo = notification;
-        _totalNotifications++;
-      });
-    }
-  }
-
-  void registerNotification() async {
-    // 1. Initialize the Firebase app
-    await Firebase.initializeApp();
-
-    // 2. Instantiate Firebase Messaging
-    _messaging = FirebaseMessaging.instance;
-
-    // 3. On iOS, this helps to take the user permissions
-    NotificationSettings? settings = await _messaging?.requestPermission(
-      alert: true,
-      badge: true,
-      provisional: false,
-      sound: true,
-    );
-
-    if (settings?.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        // Parse the message received
-        PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
-        );
-
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotifications++;
-        });
-
-        if (_notificationInfo != null) {
-          // For displaying the notification as an overlay
-          showSimpleNotification(
-            Text(_notificationInfo!.title!),
-            leading: NotificationBadge(totalNotifications: _totalNotifications),
-            subtitle: Text(_notificationInfo!.body!),
-            background: Colors.cyan.shade700,
-            duration: Duration(seconds: 2),
-          );
-        }
-      });
-    } else {
-      print('User declined or has not accepted permission');
-    }
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
   @override

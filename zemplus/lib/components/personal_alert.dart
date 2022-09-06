@@ -75,6 +75,37 @@ class PersonalAlert {
     });
   }
 
+  static void popUp(
+    BuildContext context, {
+    String title = "Succès",
+    message = "Opération effectuée avec succès",
+    int? duration = 2,
+  }) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Icon(
+              Icons.check_circle_outline,
+              color: ColorConst.primary,
+              size: 54,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: ColorConst.primary, fontSize: 18.0),
+                ),
+                SizedBox(height: 16.0),
+                Text(message),
+              ],
+            ),
+          );
+        });
+  }
+
   static Future showError(
     BuildContext context, {
     String title = "Erreur",
