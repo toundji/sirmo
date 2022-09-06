@@ -3,6 +3,7 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
+    "assets": ["firebase.json"],
     "plugins": [ "@nestjs/swagger/plugin"]
   }
 }

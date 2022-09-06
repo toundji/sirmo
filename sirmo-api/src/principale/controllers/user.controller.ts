@@ -47,7 +47,7 @@ export class UserController {
   @Post("register")
   async register(@Body() body: CreateUserDto):Promise<LoginRespo> {
      await this.userService.register(body);
-     return await this.authService.login({"username": body.phone, "password": body.password})
+     return await this.authService.login({username: body.phone, password: body.password, token: body.token})
   }
 
   @ApiBearerAuth("token")

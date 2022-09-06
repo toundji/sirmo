@@ -34,7 +34,6 @@ export class AuthService {
       );
     }
 
-
     const areEqual = await compare(body.password, user.password);
     if (!areEqual) {
       throw new HttpException(

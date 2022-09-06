@@ -8,6 +8,7 @@ import ormConfig from './config/ormconfig';
 import { PrincipaleModule } from './principale/principale.module';
 import { AuthModule } from './auth/auth.module';
 import { ApiFirebaseModule } from './firebase/api-firebase.module';
+import { ConfigModule } from '@nestjs/config';
 
 
 
@@ -15,6 +16,10 @@ import { ApiFirebaseModule } from './firebase/api-firebase.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormConfig),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    
     ApiFirebaseModule,
 
     PrincipaleModule,

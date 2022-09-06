@@ -11,7 +11,7 @@ import * as path from 'path';
 export class ApiFirebaseModule {
     constructor(configService: ConfigService) {
         admin.initializeApp({
-          credential: admin.credential.cert(path.join(__dirname, '../firebase.spec.json')),
+          credential: admin.credential.cert(path.join(__dirname, '../firebase.json')),
           databaseURL: configService.get<string>('FIREBASE_DABASE_URL'),
         })
       }

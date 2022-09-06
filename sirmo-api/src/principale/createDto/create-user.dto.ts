@@ -40,5 +40,10 @@ export class CreateUserDto {
     @IsNumber()
     @IsPositive()
     arrondissement_id: number;
+
+    @ApiProperty({required:true})
+    @IsString()
+    @IsNotEmpty()
+    readonly  token:string;
 }
 
