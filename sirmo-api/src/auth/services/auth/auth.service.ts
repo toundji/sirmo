@@ -36,7 +36,8 @@ export class AuthService {
         title: 'Connexion',
         body: 'Vous êtes connecté avec',
       },
-      token: token
+      token: token,
+      data: data
     };
     
     console.log(token);
