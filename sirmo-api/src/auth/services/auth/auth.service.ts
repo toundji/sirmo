@@ -78,6 +78,7 @@ export class AuthService {
     return { user: user, token: token };
   }
 
+  
   logout({ pseudo, sub }: PayloadDto) {
     const payload = { pseudo, sub };
     this.valideUser(payload);
