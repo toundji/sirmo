@@ -104,7 +104,7 @@ export class AmandeService {
       notification: {
         title: 'Amandé de ' + data.montant + " f",
         body: "Le conducteur " + userame + " a été amandé de 5000 f",
-        imageUrl: ""
+        imageUrl: "https://sirmo-api.herokuapp.com/api/files/api/logo.png"
       },
       tokens: tokens
     };
@@ -138,6 +138,7 @@ export class AmandeService {
       notification: {
         title: 'Amande',
         body: 'Vous avez été amandé de ' + data.montant + " f",
+        imageUrl: "https://sirmo-api.herokuapp.com/api/files/api/logo.png"
       },
       token: token
     };

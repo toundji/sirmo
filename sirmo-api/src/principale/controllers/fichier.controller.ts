@@ -95,6 +95,12 @@ export class FichierController {
   }
 
   @Public()
+  @Get('api/:name')
+  async getProjetFiles(@Param('name') name: string, @Res() res) {
+    return res.sendFile("files/api/"+name, { root: './' })
+  }
+
+  @Public()
   @Get('vehicules/:name')
   async getVehicule(@Param('name') name: string, @Res() res) {
     return res.sendFile("files/vehicules/"+name, { root: './' })
