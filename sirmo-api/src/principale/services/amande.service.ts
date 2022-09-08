@@ -18,8 +18,8 @@ import { Constante } from '../entities/constante.entity';
 import { ConstanteService } from './constante.service';
 import { LicenceProperty } from 'src/enums/licence-property';
 import * as admin from 'firebase-admin';
-
-
+import { UserService } from './user.service';
+import { ILike } from 'typeorm';
 
 
 @Injectable()
@@ -31,6 +31,8 @@ export class AmandeService {
     private readonly typeAmandeService: TypeAmandeService,
     private readonly payementService: PayementService,
     private readonly constanteService: ConstanteService,
+    private readonly userService: UserService,
+
 
   ) {}
 
@@ -50,7 +52,7 @@ export class AmandeService {
    }
    let montant =0
    amande.typeAmandes.forEach(ele=>{
-        montant += ele.montant;
+      montant += ele.montant;
     });
 
     const amandeDuration:Constante = await this.constanteService.searchFirst({nom: LicenceProperty.DUREE_AMNADE}).catch((error)=>{
@@ -63,12 +65,57 @@ export class AmandeService {
     amande.montant = montant;
     amande.restant = montant;
 
-    if(conducteur.user.token && conducteur.user.token.length>0){    
-      this.notifyUser(conducteur.user.token, amande);
-    }
-      return this.amandeRepository.save(amande).catch((error)=>{
+  
+    
+     const  amandeS = await this.amandeRepository.save(amande).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
+      });
+      if(conducteur.user.token && conducteur.user.token.length>0){    
+        this.notifyUser(conducteur.user.token, amandeS);
+      }
+      this.notifyAdmin(amandeS, user.nom + " " + user.prenom);
+
+      return amandeS;
+
+  }
+
+  async notifyAdmin(data:Amande,  userame:string){
+    const users:User[] = await User.find({where:{ roles: ILike("%ADMIN%")}});
+    let tokens = users.map(u=>u.token);
+    tokens = tokens.filter(element=> element && element.length>0);
+    if(!tokens || tokens.length<1){
+      return;
+    }
+
+    const messaging = admin.messaging(); 
+    const body = {
+          id: data.id+"",
+          message : data.message + "",
+          montant: data.montant + "",
+          code: data.code +"",
+          date_limite: data.date_limite.toDateString() ,
+          restant: data.restant + "",
+          typeAmndes: data.typeAmandes.map(element=>element.nom + element.description ).toString()
+    };
+    
+    const message = {
+      data: body,
+      notification: {
+        title: 'Amandé de ' + data.montant + " f",
+        body: "Le conducteur " + userame + " a été amandé de 5000 f" 
+      },
+      tokens: tokens
+    };
+
+    console.log(tokens);
+   
+    return await messaging.sendMulticast(message)
+      .then((response) => {
+        console.log('Successfully sent message:', response);
+      }).catch((error) => {
+        console.log('Error sending message:', error);
+        throw new BadRequestException("Nous ne parvenons pas à notifyer à l'utilisteur",error.message);
       });
 
   }
@@ -76,6 +123,7 @@ export class AmandeService {
   async notifyUser(token:string, data:Amande){
     const messaging = admin.messaging(); 
     const body = {
+          id: data.id+"",
           message : data.message + "",
           montant: data.montant + "",
           code: data.code +"",
