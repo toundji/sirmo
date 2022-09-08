@@ -88,7 +88,7 @@ export class AmandeService {
       data: body,
       notification: {
         title: 'Amande',
-        body: 'Vous avez été amandé',
+        body: 'Vous avez été amandé de ' + data.montant + " f",
       },
       token: token
     };
