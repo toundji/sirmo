@@ -84,6 +84,8 @@ export class AmandeService {
     const users:User[] = await User.find({where:{ roles: ILike("%ADMIN%")}});
     let tokens = users.map(u=>u.token);
     tokens = tokens.filter(element=> element && element.length>0);
+    console.log(tokens)
+
     if(!tokens || tokens.length<1){
       return;
     }
