@@ -27,8 +27,6 @@ import { compare, hash } from "bcrypt";
 import { ChangeEmailDto } from "../createDto/change-emeail.dto";
 import { UserDG_Dto } from '../admin/dto/user-dg.dto';
 import { ProprietaireDto } from '../admin/dto/proprietaireDto';
-import  * as path from 'path';
-import { ApiConstante } from './../utilis/api-constantes';
 
 @Injectable()
 export class UserService {
@@ -408,6 +406,5 @@ export class UserService {
     const compte:Compte = Compte.create({user:u, montant:0});
     Compte.save(compte);
     return u;
-
   }
 }
