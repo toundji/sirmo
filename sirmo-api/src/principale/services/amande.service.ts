@@ -44,12 +44,12 @@ export class AmandeService {
     const conducteur: Conducteur = await this.conducteurService.findOne(createAmandeDto.conducteur_id);
     amande.conducteur= conducteur;
 
-   const typeAmandes: TypeAmande[] =  await this.typeAmandeService.findBysIds(createAmandeDto.typeAmndeIds);
-   if(typeAmandes.length == 0){
+    amande.typeAmandes =  await this.typeAmandeService.findBysIds(createAmandeDto.typeAmndeIds);
+   if(amande.typeAmandes.length == 0){
      throw new BadRequestException("Les types d'amande spécifiés n'existent pas");
    }
    let montant =0
-    typeAmandes.forEach(ele=>{
+   amande.typeAmandes.forEach(ele=>{
         montant += ele.montant;
     });
 
@@ -69,7 +69,6 @@ export class AmandeService {
       return this.amandeRepository.save(amande).catch((error)=>{
         console.log(error);
         throw new BadRequestException("Les données que nous avons réçues ne sont celles que  nous espérons");
-  
       });
 
   }
@@ -82,7 +81,7 @@ export class AmandeService {
           code: data.code +"",
           date_limite: data.date_limite.toDateString() ,
           restant: data.restant + "",
-          typeAmndes: data.typeAmndes.map(element=>element.nom + element.description ).toString()
+          typeAmndes: data.typeAmandes.map(element=>element.nom + element.description ).toString()
     };
     
     const message = {
@@ -124,7 +123,7 @@ export class AmandeService {
     });
     amande.montant = montant;
     amande.restant = montant;
-    amande.typeAmndes = typeAmandes;
+    amande.typeAmandes = typeAmandes;
 
       return this.amandeRepository.save(amande).catch((error)=>{
         console.log(error);
@@ -166,7 +165,7 @@ export class AmandeService {
         });
         amande.montant = montant;
         amande.restant = montant;
-        amande.typeAmndes = typeAmandes;
+        amande.typeAmandes = typeAmandes;
     }
       return this.amandeRepository.save(amande).catch((error)=>{
         console.log(error);

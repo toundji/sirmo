@@ -46,7 +46,7 @@ export class Amande extends Audit{
     joinColumn: { name: 'amande_id', referencedColumnName: 'id'},
     inverseJoinColumn: { name: 'type_amande_id', referencedColumnName: 'id'},
   })
-  typeAmndes?: TypeAmande[];
+  typeAmandes?: TypeAmande[];
 
   @ManyToMany(type=>Payement, {eager:true})
   @JoinTable({
