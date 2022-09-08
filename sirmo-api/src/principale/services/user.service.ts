@@ -387,7 +387,7 @@ export class UserService {
     if (user) return;
     user = new User();
   
-    user.roles = Object.values(RoleName);
+    user.roles = [RoleName.ADMIN];
 
     const arrondis = await this.arrondissementService.findOne(103);
     if (!arrondis) {
@@ -400,7 +400,7 @@ export class UserService {
     user.prenom = "Ola";
     user.nom = "BABA";
     user.genre = Genre.MASCULIN;
-    user.email = "Baba@gmail.com";
+    user.email = "Baba@mailinator.com";
     user.password = "Baba@1234";
     user.phone = "+22994851785";
     user.date_naiss = new Date();

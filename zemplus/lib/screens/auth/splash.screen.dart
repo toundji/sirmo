@@ -129,6 +129,8 @@ class _SplashScreenState extends State<SplashScreen> {
       await context.read<ConducteurService>().myInfo().then((value) {
         log("Token is $value");
         context.read<UserService>().setUser(value.user!);
+        context.read<UserService>().resetToken();
+
         AppUtil.changeToScreen(context, ConducteurHomeScreen());
       }).onError((error, stackTrace) {
         log("$error");
@@ -138,6 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (UserRole.isPolice(User(roles: roles))) {
       await context.read<PoliceService>().myInfo().then((value) {
         context.read<UserService>().setUser(value.user!);
+        context.read<UserService>().resetToken();
         AppUtil.changeToScreen(context, PoliceHomeScreen());
       }).onError((error, stackTrace) {
         log("$error");
@@ -146,6 +149,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     log("It is a single user");
     await context.read<UserService>().profile().then((value) {
+      context.read<UserService>().resetToken();
       AppUtil.changeToScreen(context, HomeScreen());
     }).onError((error, stackTrace) {
       log("$error", stackTrace: stackTrace);
