@@ -103,7 +103,8 @@ export class AmandeService {
       data: body,
       notification: {
         title: 'Amandé de ' + data.montant + " f",
-        body: "Le conducteur " + userame + " a été amandé de 5000 f" 
+        body: "Le conducteur " + userame + " a été amandé de 5000 f",
+        imageUrl: ""
       },
       tokens: tokens
     };
