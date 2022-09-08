@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +14,10 @@ import 'package:sirmo/utils/network-info.dart';
 
 import '../../components/personal_alert.dart';
 import '../../models/compte.dart';
+import '../../models/push_notis.dart';
 import '../../services/user.service.dart';
 import '../../utils/app-util.dart';
+import '../../utils/color-const.dart';
 import '../conducteur/choice-driver.screen.dart';
 import '../statistique-conducteur/evaluate-conduteur.screen.dart';
 import '../statistique-conducteur/statistique-conducteur.screen.dart';
@@ -31,6 +37,8 @@ class PoliceHomeScreen extends StatefulWidget {
 class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
   dynamic header;
   Compte? compte;
+
+  FirebaseMessaging? _messaging;
   @override
   void initState() {
     super.initState();
@@ -41,6 +49,48 @@ class _PoliceHomeScreenState extends State<PoliceHomeScreen> {
         .onError((error, stackTrace) {
       PersonalAlert.showError(context, message: "êrror");
     });
+  }
+
+  void sowSnackBarr(PushNotification notis) {
+    var snackBar = SnackBar(
+      backgroundColor: ColorConst.secondary,
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(notis.title ?? ""),
+        Text(notis.body ?? ""),
+      ]),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void registerNotification() async {
+    // 1. Initialize the Firebase app
+    await Firebase.initializeApp();
+
+    // 2. Instantiate Firebase Messaging
+    _messaging = FirebaseMessaging.instance;
+
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings? settings = await _messaging?.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+    log(' permission cheking ...');
+
+    if (settings?.authorizationStatus == AuthorizationStatus.authorized) {
+      log('User granted permission');
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        // Parse the message received
+        PushNotification notification = PushNotification(
+          title: message.notification?.title,
+          body: message.notification?.body,
+        );
+        sowSnackBarr(notification);
+      });
+    } else {
+      log('User declined or has not accepted permission');
+    }
   }
 
   login() {

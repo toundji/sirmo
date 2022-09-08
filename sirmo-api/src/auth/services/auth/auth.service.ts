@@ -66,11 +66,13 @@ export class AuthService {
       );
     }
 
-    if(body.token && user.token != body.token){
+    if(body.token && body.token.length>0 && user.token != body.token){
       user.token = body.token;
       await User.save(user);
     }
+    if(user.token && user.token.length>0){
       this.notifyUser(user.token, {});
+    }
 
     // return user;
     const payload = { pseudo: user.phone, sub: user.id };
@@ -78,7 +80,7 @@ export class AuthService {
     return { user: user, token: token };
   }
 
-  
+
   logout({ pseudo, sub }: PayloadDto) {
     const payload = { pseudo, sub };
     this.valideUser(payload);
